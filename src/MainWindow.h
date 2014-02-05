@@ -10,7 +10,7 @@
 
 #include <QtGui/QMainWindow>
 
-class DspCircuit;
+class QCircuit;
 
 namespace Ui {
     class MainWindow;
@@ -28,7 +28,7 @@ private slots:
     
 private:
     Ui::MainWindow* ui;
-    DspCircuit* m_Circuit;
+    QCircuit* m_Circuit;
 };
 
 #endif	/* _MAINWINDOW_H */
