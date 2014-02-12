@@ -9,11 +9,15 @@
 #include "ui_MainWindow.h"
 
 #include <DSPatch.h>
-#include "core/QCircuit.h"
-#include "core/QComponent.h"
+#include "../core/QCircuit.h"
+#include "../core/QComponent.h"
 
-#include "common/Timer.h"
-#include "common/Console.h"
+#include "../loader/CircuitLoaderFromFBP.h"
+
+#include "../common/Timer.h"
+#include "../common/UDPEmitter.h"
+#include "../common/UDPReceiver.h"
+#include "../common/Console.h"
 
 MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::MainWindow), m_Circuit(NULL)
@@ -24,15 +28,12 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     // CREATE CIRCUIT 
     //------------------------------------------------------------------
 
-    m_Circuit = new QCircuit();
-
-    Timer* timer = new Timer();
-    Console* console = new Console();
-
-    m_Circuit->AddComponent(timer, "TIMER");
-    m_Circuit->AddComponent(console, "CONSOLE");
-
-    m_Circuit->ConnectOutToIn("TIMER.TIME", "CONSOLE.MESSAGE");
+    CircuitLoaderFromFBP loader;
+    loader.addComponentClass("Timer", Timer::staticMetaObject);
+    loader.addComponentClass("Console", Console::staticMetaObject);
+    loader.addComponentClass("UDPEmitter", UDPEmitter::staticMetaObject);
+    loader.addComponentClass("UDPReceiver", UDPReceiver::staticMetaObject);
+    m_Circuit = loader.loadFromFile("../source/resources/demo.fbp");
 
     connect(ui->buttonTrigger, SIGNAL(clicked()), this, SLOT(launchCircuit()));
 }

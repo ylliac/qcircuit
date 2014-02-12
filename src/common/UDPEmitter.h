@@ -8,14 +8,16 @@
 #ifndef UDPEMITTER_H
 #define	UDPEMITTER_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "../core/QComponent.h"
 
 class QUdpSocket;
 
-class UDPEmitter : public DspComponent {
-public:
-    UDPEmitter();
+class UDPEmitter : public QComponent{
+    Q_OBJECT
+    Q_CLASSINFO("IN", "IN")
+    
+public:    
+    Q_INVOKABLE UDPEmitter();
     virtual ~UDPEmitter();
 
 protected:

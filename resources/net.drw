@@ -1,0 +1,13 @@
+<?xml version="1.0"?> 
+<net> <desc></desc> <complang>Java</complang> <clicktogrid/> <blocks><block> <x> 172 </x> <y> 129 </y> <id> 1 </id> <type>B</type> <width>92</width> <height>64</height> <description>Source
+_Timer_</description> </block> 
+<block> <x> 370 </x> <y> 129 </y> <id> 5 </id> <type>B</type> <width>92</width> <height>64</height> <description>Send
+_UDPEmitter_</description> </block> 
+<block> <x> 172 </x> <y> 245 </y> <id> 8 </id> <type>B</type> <width>92</width> <height>64</height> <description>Receive
+_UDPReceiver_</description> </block> 
+<block> <x> 370 </x> <y> 245 </y> <id> 9 </id> <type>B</type> <width>92</width> <height>64</height> <description>Display
+_Console_</description> </block> 
+</blocks> <connections>
+<connection> <fromx>218</fromx> <fromy>128</fromy> <tox>324</tox> <toy>128</toy> <fromid>1</fromid> <toid>5</toid> <id>1</id> <upstreamport>TIME</upstreamport><downstreamport>IN</downstreamport><fromside> R </fromside><toside> L </toside></connection> 
+<connection> <fromx>218</fromx> <fromy>244</fromy> <tox>324</tox> <toy>244</toy> <fromid>8</fromid> <toid>9</toid> <id>10</id> <upstreamport>OUT</upstreamport><downstreamport>MESSAGE</downstreamport><fromside> R </fromside><toside> L </toside></connection> 
+</connections> </net>

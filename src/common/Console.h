@@ -15,7 +15,7 @@ class Console : public QComponent {
     Q_CLASSINFO("MESSAGE", "IN")
     
 public:
-    Console();
+    Q_INVOKABLE Console();
     virtual ~Console();
         
 protected:

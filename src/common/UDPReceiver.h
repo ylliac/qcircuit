@@ -8,19 +8,19 @@
 #ifndef UDPRECEIVER_H
 #define	UDPRECEIVER_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "../core/QComponent.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QStack>
 
 class QUdpSocket;
 
-class UDPReceiver : public QObject, public DspComponent {
+class UDPReceiver : public QComponent{
     Q_OBJECT
+    Q_CLASSINFO("OUT", "OUT")
     
-public:
-    UDPReceiver();
+public:    
+    Q_INVOKABLE UDPReceiver();
     virtual ~UDPReceiver();
 
 protected:

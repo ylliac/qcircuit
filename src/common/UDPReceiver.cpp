@@ -14,18 +14,10 @@
 
 UDPReceiver::UDPReceiver()
 {
-    //------------------------------------------------------------------
-    // INPUTS 
-    //------------------------------------------------------------------
-    //NONE
-
-    //------------------------------------------------------------------
-    // OUTPUTS 
-    //------------------------------------------------------------------
-    AddOutput_("OUT");
+    createInOutFromMetadata();
     
     udpSocket = new QUdpSocket();
-    udpSocket->bind(45454, QUdpSocket::ShareAddress);
+    udpSocket->bind(4444, QUdpSocket::ShareAddress);
     
     connect(udpSocket, SIGNAL(readyRead()),this, SLOT(processPendingDatagrams()));
 }
@@ -46,7 +38,7 @@ void UDPReceiver::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
         outputs.SetValue("OUT", outData);
 
         //TODO ACY TEST LOG
-        std::cout << "UDPReceiver just sent the data: " << outData << std::endl;
+//        std::cout << "UDPReceiver just sent the data: " << outData << std::endl;
     }
 }
 

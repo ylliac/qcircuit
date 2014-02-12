@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>158</width>
+    <height>162</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,39 +16,27 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="labelDebug">
-      <property name="text">
-       <string>DEBUG</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListWidget" name="listDebug"/>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelInfo">
-      <property name="text">
-       <string>INFO</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListWidget" name="listInfo"/>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelWarn">
-      <property name="text">
-       <string>WARN</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListWidget" name="listWarn"/>
-    </item>
-    <item>
      <widget class="QPushButton" name="buttonTrigger">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>19</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background: orange;</string>
+      </property>
       <property name="text">
-       <string>GO</string>
+       <string>LAUNCH
+CIRCUIT</string>
       </property>
      </widget>
     </item>
@@ -59,7 +47,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>158</width>
      <height>21</height>
     </rect>
    </property>

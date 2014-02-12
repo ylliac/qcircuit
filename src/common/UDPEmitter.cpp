@@ -14,15 +14,7 @@
 
 UDPEmitter::UDPEmitter()
 {
-    //------------------------------------------------------------------
-    // INPUTS 
-    //------------------------------------------------------------------
-    AddInput_("IN");
-
-    //------------------------------------------------------------------
-    // OUTPUTS 
-    //------------------------------------------------------------------
-    //NONE
+    createInOutFromMetadata();    
     
     udpSocket = new QUdpSocket();
 }
@@ -49,10 +41,10 @@ void UDPEmitter::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
                 datagram.data(),
                 datagram.size(),
                 QHostAddress::Broadcast,
-                45454);
+                4444);
         
         //TODO ACY TEST LOG
-        std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
+//        std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
     }
 }
 
