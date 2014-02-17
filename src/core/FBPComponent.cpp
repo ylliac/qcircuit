@@ -13,6 +13,7 @@
 #include <iostream>
 
 FBPComponent::FBPComponent()
+: selfStarting(false)
 {
     qRegisterMetaType<QVariant > ("QVariant");
     setTerminationEnabled(true);
@@ -69,16 +70,33 @@ FBPOutputPort* FBPComponent::addOutputPort(QString name)
 
 FBPInputPort* FBPComponent::getInputPort(QString name)
 {
-    return inputPorts.value(name);
+    FBPInputPort* result = NULL;
+    
+    if(inputPorts.contains(name))
+    {
+        result = inputPorts.value(name);
+    }
+    
+    return result;
 }
 
 FBPOutputPort* FBPComponent::getOutputPort(QString name)
 {
-    return outputPorts.value(name);
+    FBPOutputPort* result = NULL;
+    
+    if(outputPorts.contains(name))
+    {
+        result = outputPorts.value(name);
+    }
+    
+    return result;
 }
 
 void FBPComponent::activate()
 {
+    //TODO ACY
+    std::cout << "[LOG] " << "Activate component " << metaObject()->className() << std::endl;
+    
     if (isFinished())
     {
         return;
@@ -92,7 +110,13 @@ void FBPComponent::activate()
 
 void FBPComponent::run()
 {
+    //TODO ACY
+    std::cout << "[LOG] " << "Execute component " << metaObject()->className() << std::endl;
+    
     execute();
+    
+    //TODO ACY
+    std::cout << "[LOG] " << "Terminate component " << metaObject()->className() << std::endl;
 }
 
 QVariant FBPComponent::receive(QString name)
@@ -108,5 +132,15 @@ int FBPComponent::received(QString name)
 void FBPComponent::send(QString name, QVariant value)
 {
     getOutputPort(name)->send(value);
+}
+
+bool FBPComponent::isSelfStarting()
+{
+    return selfStarting;
+}
+
+void FBPComponent::setSelfStarting(bool value)
+{
+    selfStarting = value;
 }
 

@@ -14,7 +14,7 @@
 
 UDPReceiver::UDPReceiver()
 {
-    createInOutFromMetadata();
+    addOutputPort("OUT");
     
     udpSocket = new QUdpSocket();
     udpSocket->bind(4444, QUdpSocket::ShareAddress);
@@ -27,7 +27,7 @@ UDPReceiver::~UDPReceiver()
     delete udpSocket;
 }
 
-void UDPReceiver::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void UDPReceiver::execute()
 {
     if(!stack.isEmpty())
     {
@@ -35,7 +35,7 @@ void UDPReceiver::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
         // SEND VIA UDP
         //------------------------------------------------------------------
         int outData = stack.pop();
-        outputs.SetValue("OUT", outData);
+        send("OUT", QVariant(outData));
 
         //TODO ACY TEST LOG
 //        std::cout << "UDPReceiver just sent the data: " << outData << std::endl;

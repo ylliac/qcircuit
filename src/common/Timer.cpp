@@ -12,7 +12,8 @@
 Timer::Timer()
 : timer(NULL)
 {
-    createInOutFromMetadata();
+    addOutputPort("TIME");
+    setSelfStarting(true);
 }
 
 Timer::~Timer()
@@ -20,18 +21,19 @@ Timer::~Timer()
     delete timer;
 }
 
-void Timer::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void Timer::execute()
 {
     if(timer == NULL){
         timer = new QTime();
         timer->start();
     }
     
-    int elapsed = timer->elapsed();
-    if(elapsed > 1000)
+    while(true)
     {
-        outputs.SetValue("TIME", elapsed);
-        timer->start();
+        int elapsed = timer->elapsed();
+        send("TIME", elapsed);
+        
+        sleep(1000);
     }
 }
 

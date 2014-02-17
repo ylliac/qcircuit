@@ -1,14 +1,14 @@
 /* 
- * File:   CircuitLoaderFromFBP.cpp
+ * File:   NetworkLoaderFromFBP.cpp
  * Author: acailly
  * 
- * Created on 7 février 2014, 18:37
+ * Created on 17 février 2014, 14:50
  */
 
-#include "CircuitLoaderFromFBP.h"
+#include "NetworkLoaderFromFBP.h"
 
-#include "../core/QCircuit.h"
-#include "core/QComponent.h"
+#include "../core/FBPComponent.h"
+#include "../core/FBPNetwork.h"
 
 #include <iostream>
 
@@ -18,17 +18,17 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
 
-CircuitLoaderFromFBP::CircuitLoaderFromFBP()
+NetworkLoaderFromFBP::NetworkLoaderFromFBP()
 {
 }
 
-CircuitLoaderFromFBP::~CircuitLoaderFromFBP()
+NetworkLoaderFromFBP::~NetworkLoaderFromFBP()
 {
 }
 
-QCircuit* CircuitLoaderFromFBP::loadFromFile(QString filePath) const
+FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath) const
 {
-    QCircuit* result = new QCircuit();
+    FBPNetwork* result = new FBPNetwork();
 
     //TODO ACY 
     ////Example : ComponentName ( ComponentClass )
@@ -67,10 +67,10 @@ QCircuit* CircuitLoaderFromFBP::loadFromFile(QString filePath) const
 
             QString source = QString("%1.%2").arg(sourceComponentName).arg(sourceComponentOutput);
             QString target = QString("%1.%2").arg(targetComponentName).arg(targetComponentInput);
-            bool check = result->ConnectOutToIn(source, target);
+            bool check = result->connect(source, target);
             if(!check)
             {
-                std::cout << "ERROR - Can't add connection: " << source.toStdString() << " --> " << target.toStdString() << std::endl;                        
+                std::cerr << "ERROR - Can't add connection: " << source.toStdString() << " --> " << target.toStdString() << std::endl;                        
             }
         }
         //------------------------------------------------------------------
@@ -84,15 +84,11 @@ QCircuit* CircuitLoaderFromFBP::loadFromFile(QString filePath) const
             if(m_ComponentClasses.contains(componentClass))
             {
                 const QMetaObject metaObject = m_ComponentClasses.value(componentClass);
-                QComponent* newComponent = qobject_cast<QComponent*>(metaObject.newInstance());
-                bool check = result->AddComponent(newComponent, componentName.toStdString());
-                if(!check)
-                {
-                    std::cout << "ERROR - Can't add component: " << componentName.toStdString() << std::endl;                        
-                }
+                FBPComponent* newComponent = qobject_cast<FBPComponent*>(metaObject.newInstance());
+                result->addComponent(newComponent, componentName);
             }
             else{
-                std::cout << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
+                std::cerr << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
             }
         }
     }
@@ -100,7 +96,8 @@ QCircuit* CircuitLoaderFromFBP::loadFromFile(QString filePath) const
     return result;
 }
 
-void CircuitLoaderFromFBP::addComponentClass(QString className, QMetaObject metaObject)
+void NetworkLoaderFromFBP::addComponentClass(QString className, QMetaObject metaObject)
 {
     m_ComponentClasses.insert(className, metaObject);
 }
+

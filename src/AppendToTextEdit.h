@@ -8,18 +8,17 @@
 #ifndef APPENDTOTEXTEDIT_H
 #define	APPENDTOTEXTEDIT_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "core/FBPComponent.h"
 
 class QListWidget;
 
-class AppendToTextEdit : public DspComponent{
+class AppendToTextEdit : public FBPComponent{
 public:
     AppendToTextEdit(QListWidget* textEdit);
     virtual ~AppendToTextEdit();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
     
 private:
     QListWidget* m_TextEdit;

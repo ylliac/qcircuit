@@ -14,36 +14,25 @@ Reader::Reader()
     //------------------------------------------------------------------
     // INPUTS 
     //------------------------------------------------------------------
-    AddInput_("IN");
+    addInputPort("IN");
 
     //------------------------------------------------------------------
     // OUTPUTS 
     //------------------------------------------------------------------
     //NONE
-    
-    m_Timer.start();
 }
 
 Reader::~Reader()
 {
 }
 
-void Reader::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void Reader::execute()
 {    
-//    if(m_Timer.elapsed() > 5000)
-//    {
+    //------------------------------------------------------------------
+    // READ 
+    //------------------------------------------------------------------    
+    int inValue = receive("IN").toInt();
     
-//        std::cout << "Reader ticks!" << std::endl;        
-        
-        //------------------------------------------------------------------
-        // READ 
-        //------------------------------------------------------------------    
-        int inValue = -1;
-        if(inputs.GetValue("IN", inValue))
-        {        
-            //TODO ACY TEST LOG
-            std::cout << "Reader just read the number: " << inValue << std::endl;        
-        }
-        
-//    }
+    //TODO ACY TEST LOG
+    std::cout << "Reader just read the number: " << inValue << std::endl;        
 }

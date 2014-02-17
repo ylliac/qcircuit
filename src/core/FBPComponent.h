@@ -28,6 +28,8 @@ public:
     FBPInputPort* getInputPort(QString name);
     FBPOutputPort* getOutputPort(QString name);
     
+    bool isSelfStarting();
+    
 public slots:
     void activate();
     
@@ -38,36 +40,15 @@ protected:
     QVariant receive(QString name);
     int received(QString name);
     void send(QString name, QVariant value);
+    
+    void setSelfStarting(bool value);
         
 private:
     QMap<QString, FBPInputPort*> inputPorts;
     QMap<QString, FBPOutputPort*> outputPorts;
+    bool selfStarting;
         
 };
-
-//------------------------------------------------------------------
-// MACROS 
-//------------------------------------------------------------------
-
-//SEND
-
-#define FBP_SEND(outPortName, value) \
-    send(#outPortName, value)
-
-//RECEIVED
-
-#define FBP_RECEIVED(inPortName) \
-    received(#inPortName)
-
-//RECEIVE
-
-#define FBP_RECEIVE(inPortName) \
-    receive(#inPortName)
-
-//CONNECT
-
-#define FBP_CONNECT(source, outPortName, target, inPortName) \
-    connect(source->getOutputPort(#outPortName), SIGNAL(send(QVariant)), target->getInputPort(#inPortName), SLOT(receive(QVariant)))
 
 #endif	/* FBPCOMPONENT_H */
 

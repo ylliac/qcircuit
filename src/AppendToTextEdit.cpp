@@ -19,7 +19,7 @@ AppendToTextEdit::AppendToTextEdit(QListWidget* textEdit)
     //------------------------------------------------------------------
     // INPUTS 
     //------------------------------------------------------------------
-    AddInput_("IN");
+    addInputPort("IN");
 
     //------------------------------------------------------------------
     // OUTPUTS 
@@ -31,15 +31,12 @@ AppendToTextEdit::~AppendToTextEdit()
 {
 }
 
-void AppendToTextEdit::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void AppendToTextEdit::execute()
 {
-    QString inData;
-    if (inputs.GetValue("IN", inData))
-    {
-        m_TextEdit->addItem(inData);    
+    QString inData = receive("IN").toString();
+    m_TextEdit->addItem(inData);    
         
-        //TODO ACY TEST LOG
-        std::cout << "AppendToTextEdit just dispayed the data: " << inData.toStdString() << std::endl;
-    }
+    //TODO ACY TEST LOG
+    std::cout << "AppendToTextEdit just dispayed the data: " << inData.toStdString() << std::endl;    
 }
 

@@ -23,10 +23,10 @@ void Test::execute()
 {
     while (true)
     {
-        QVariant value = FBP_RECEIVE(IN);
+        QVariant value = receive("IN");
         
         std::cout << "RECEIVED: " << value.toString().toStdString() << std::endl;
 
-        FBP_SEND(OUT, value);
+        send("OUT", value);
     }
 }

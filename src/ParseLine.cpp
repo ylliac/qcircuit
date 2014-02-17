@@ -17,38 +17,36 @@ ParseLine::ParseLine()
     //------------------------------------------------------------------
     // INPUTS 
     //------------------------------------------------------------------
-    AddInput_("LINE");
+    addInputPort("LINE");
 
     //------------------------------------------------------------------
     // OUTPUTS 
     //------------------------------------------------------------------
-    AddOutput_("KEY");
-    AddOutput_("VALUE");
+    addOutputPort("KEY");
+    addOutputPort("VALUE");
 }
 
 ParseLine::~ParseLine()
 {
 }
 
-void ParseLine::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void ParseLine::execute()
 {
     //------------------------------------------------------------------
     // READ THE LINE
     //------------------------------------------------------------------
-    QString inLine;
-    QString outKey;
-    if (inputs.GetValue("LINE", inLine) && !outputs.GetValue("KEY", outKey))
-    {
-        QStringList splittedLine = inLine.split("=");
-
-        //------------------------------------------------------------------
-        // SEND THE KEY AND THE VALUE 
-        //------------------------------------------------------------------
-        outputs.SetValue("KEY", splittedLine.at(0));
-        outputs.SetValue("VALUE", splittedLine.at(1));
+    QString inLine = receive("LINE").toString();
+    QString outKey = receive("KEY").toString();
         
-        //TODO ACY TEST LOG
+    QStringList splittedLine = inLine.split("=");
+
+    //------------------------------------------------------------------
+    // SEND THE KEY AND THE VALUE 
+    //------------------------------------------------------------------
+    send("KEY", splittedLine.at(0));
+    send("VALUE", splittedLine.at(1));
+
+    //TODO ACY TEST LOG
 //        std::cout << "ParseLine just sent the key: " << splittedLine.at(0).toStdString() << std::endl;
 //        std::cout << "ParseLine just sent the value: " << splittedLine.at(1).toStdString() << std::endl;
-    }
 }

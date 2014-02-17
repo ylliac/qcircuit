@@ -24,14 +24,16 @@ ReadTextFile::ReadTextFile(QString filePath)
     //------------------------------------------------------------------
     // OUTPUTS 
     //------------------------------------------------------------------
-    AddOutput_("OUT");
+    addOutputPort("OUT");
+    
+    setSelfStarting(true);
 }
 
 ReadTextFile::~ReadTextFile()
 {
 }
 
-void ReadTextFile::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void ReadTextFile::execute()
 {
     //------------------------------------------------------------------
     // READ THE FILE CONTENT 
@@ -58,15 +60,13 @@ void ReadTextFile::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
     //------------------------------------------------------------------
     // SEND LINES ONE BY ONE 
     //------------------------------------------------------------------
-    QString currentValue;
-    bool hasValue = outputs.GetValue("OUT", currentValue);
-    if (!m_FileContent.isEmpty() && !hasValue)
+    if (!m_FileContent.isEmpty())
     {
         //------------------------------------------------------------------
         // Send the content 
         //------------------------------------------------------------------
         QString outputValue = m_FileContent.first();
-        outputs.SetValue("OUT", outputValue);
+        send("OUT", outputValue);
         m_FileContent.removeFirst();
         
         //TODO ACY TEST LOG

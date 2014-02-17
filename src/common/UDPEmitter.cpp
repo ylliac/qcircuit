@@ -11,10 +11,11 @@
 
 #include <QtNetwork/QUdpSocket>
 #include <QtCore/QByteArray>
+#include <QtCore/QVariant>
 
 UDPEmitter::UDPEmitter()
 {
-    createInOutFromMetadata();    
+    addInputPort("IN"); 
     
     udpSocket = new QUdpSocket();
 }
@@ -24,27 +25,25 @@ UDPEmitter::~UDPEmitter()
     delete udpSocket;
 }
 
-void UDPEmitter::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void UDPEmitter::execute()
 {
     //------------------------------------------------------------------
     // READ THE LINE
     //------------------------------------------------------------------
-    int inData;
-    if (inputs.GetValue("IN", inData))
-    {
-        //------------------------------------------------------------------
-        // SEND VIA UDP
-        //------------------------------------------------------------------
-        //TODO ACY
-        QByteArray datagram = QByteArray::number(inData);
-        udpSocket->writeDatagram(
-                datagram.data(),
-                datagram.size(),
-                QHostAddress::Broadcast,
-                4444);
-        
-        //TODO ACY TEST LOG
+    int inData = receive("IN").toInt();
+    
+    //------------------------------------------------------------------
+    // SEND VIA UDP
+    //------------------------------------------------------------------
+    //TODO ACY
+    QByteArray datagram = QByteArray::number(inData);
+    udpSocket->writeDatagram(
+            datagram.data(),
+            datagram.size(),
+            QHostAddress::Broadcast,
+            4444);
+
+    //TODO ACY TEST LOG
 //        std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
-    }
 }
 

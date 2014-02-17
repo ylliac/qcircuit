@@ -8,22 +8,21 @@
 #ifndef TIMER_H
 #define	TIMER_H
 
-#include "../core/QComponent.h"
+#include "../core/FBPComponent.h"
 
 #include <QtCore/QMetaType>
 
 class QTime;
 
-class Timer : public QComponent{
+class Timer : public FBPComponent{
     Q_OBJECT
-    Q_CLASSINFO("TIME", "OUT")
     
 public:    
     Q_INVOKABLE Timer();
     virtual ~Timer();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
     
 private:
     QTime* timer;

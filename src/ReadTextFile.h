@@ -8,19 +8,18 @@
 #ifndef READTEXTFILE_H
 #define	READTEXTFILE_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
-
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-class ReadTextFile : public DspComponent{
+#include "core/FBPComponent.h"
+
+class ReadTextFile : public FBPComponent{
 public:
     ReadTextFile(QString filePath);
     virtual ~ReadTextFile();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
     
 private:
     QString m_FilePath;

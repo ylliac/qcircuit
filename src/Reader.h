@@ -8,21 +8,15 @@
 #ifndef READER_H
 #define	READER_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "core/FBPComponent.h"
 
-#include <QtCore/QTime>
-
-class Reader : public DspComponent{
+class Reader : public FBPComponent{
 public:
     Reader();
     virtual ~Reader();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
-    
-private:
-    QTime m_Timer;
+    virtual void execute();
 
 };
 

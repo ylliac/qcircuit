@@ -8,23 +8,22 @@
 #ifndef UDPRECEIVER_H
 #define	UDPRECEIVER_H
 
-#include "../core/QComponent.h"
+#include "../core/FBPComponent.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QStack>
 
 class QUdpSocket;
 
-class UDPReceiver : public QComponent{
+class UDPReceiver : public FBPComponent{
     Q_OBJECT
-    Q_CLASSINFO("OUT", "OUT")
     
 public:    
     Q_INVOKABLE UDPReceiver();
     virtual ~UDPReceiver();
 
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
     
 private slots:
     void processPendingDatagrams();

@@ -17,20 +17,16 @@ IIP::IIP()
     //------------------------------------------------------------------
     // OUTPUTS 
     //------------------------------------------------------------------
-    AddOutput_("OUT");
+    addOutputPort("OUT");
     
-    sent = false;
+    setSelfStarting(true);
 }
 
 IIP::~IIP()
 {
 }
 
-void IIP::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
+void IIP::execute()
 {
-    if(!sent)
-    {
-        outputs.SetValue("OUT", 12);
-        sent = true;
-    }
+    send("OUT", 12);
 }

@@ -8,18 +8,17 @@
 #ifndef CONSOLE_H
 #define	CONSOLE_H
 
-#include "../core/QComponent.h"
+#include "../core/FBPComponent.h"
 
-class Console : public QComponent {
+class Console : public FBPComponent {
     Q_OBJECT
-    Q_CLASSINFO("MESSAGE", "IN")
     
 public:
     Q_INVOKABLE Console();
     virtual ~Console();
         
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
 
 };
 

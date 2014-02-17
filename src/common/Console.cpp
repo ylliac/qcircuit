@@ -8,24 +8,20 @@
 #include "Console.h"
 
 #include <iostream>
+#include <QtCore/QVariant>
 
 Console::Console()
 {
-    createInOutFromMetadata();
+    addInputPort("MESSAGE");
 }
 
 Console::~Console()
 {
 }
 
-void Console::Process_(DspSignalBus& inputs, DspSignalBus& outputs)
-{
-    QString output;
-    
-    int integer;
-    if(inputs.GetValue("MESSAGE", integer)){
-        output = QString::number(integer);
-    }
+void Console::execute()
+{    
+    QString output = receive("MESSAGE").toString();
     
     if(!output.isEmpty())
     {

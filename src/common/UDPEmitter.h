@@ -8,20 +8,19 @@
 #ifndef UDPEMITTER_H
 #define	UDPEMITTER_H
 
-#include "../core/QComponent.h"
+#include "../core/FBPComponent.h"
 
 class QUdpSocket;
 
-class UDPEmitter : public QComponent{
+class UDPEmitter : public FBPComponent{
     Q_OBJECT
-    Q_CLASSINFO("IN", "IN")
     
 public:    
     Q_INVOKABLE UDPEmitter();
     virtual ~UDPEmitter();
 
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
     
 private:
     QUdpSocket* udpSocket;

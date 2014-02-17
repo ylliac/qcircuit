@@ -10,7 +10,7 @@
 
 #include <QtGui/QMainWindow>
 
-class QCircuit;
+class FBPNetwork;
 
 namespace Ui {
     class MainWindow;
@@ -24,11 +24,11 @@ public:
     virtual ~MainWindow();
     
 private slots:
-    void launchCircuit();
+    void launchNetwork();
     
 private:
     Ui::MainWindow* ui;
-    QCircuit* m_Circuit;
+    FBPNetwork* m_Network;
 };
 
 #endif	/* _MAINWINDOW_H */

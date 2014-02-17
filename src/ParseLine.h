@@ -8,16 +8,15 @@
 #ifndef PARSELINE_H
 #define	PARSELINE_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "core/FBPComponent.h"
 
-class ParseLine : public DspComponent{
+class ParseLine : public FBPComponent{
 public:
     ParseLine();
     virtual ~ParseLine();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
+    virtual void execute();
 
 };
 

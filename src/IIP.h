@@ -8,20 +8,15 @@
 #ifndef IIP_H
 #define	IIP_H
 
-#include <dspatch/DspComponent.h>
-#include <dspatch/DspSignalBus.h>
+#include "core/FBPComponent.h"
 
-class IIP : public DspComponent{
+class IIP : public FBPComponent{
 public:
     IIP();
     virtual ~IIP();
     
 protected:
-    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
-    
-private:
-    bool sent;
-
+    virtual void execute();
 };
 
 #endif	/* IIP_H */
