@@ -18,6 +18,7 @@
 #include "../common/UDPEmitter.h"
 #include "../common/UDPReceiver.h"
 #include "../common/Console.h"
+#include "common/Test.h"
 
 MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::MainWindow), m_Circuit(NULL)
@@ -48,6 +49,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::launchCircuit()
 {
-    m_Circuit->StartAutoTick();
-    m_Circuit->SetThreadCount(4);
+//    m_Circuit->StartAutoTick();
+//    m_Circuit->SetThreadCount(4);
+    
+    //TODO ACY
+    Test* test = new Test();
+    for (int i = 0; i < 100; i++)
+    {
+        Sleep(1000);
+        test->getInputPort("IN")->onReceive(QVariant(i));
+    }
 }
