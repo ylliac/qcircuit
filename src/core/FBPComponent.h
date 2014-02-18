@@ -8,7 +8,7 @@
 #ifndef FBPCOMPONENT_H
 #define	FBPCOMPONENT_H
 
-#include <QtCore/QThread>
+#include <QtCore/QFuture>
 #include <QtCore/QQueue>
 #include <QtCore/QVariant>
 
@@ -31,13 +31,13 @@ public:
     bool isSelfStarting();
     
     bool isRunning();
-    bool wait();
+    void wait();
     
 public slots:
     void activate();
     
 protected:
-    Q_INVOKABLE virtual void execute()=0;    
+    virtual void execute()=0;    
     
     QVariant receive(QString name);
     int received(QString name);
@@ -49,8 +49,7 @@ private:
     QMap<QString, FBPInputPort*> inputPorts;
     QMap<QString, FBPOutputPort*> outputPorts;
     bool selfStarting;
-    QThread* thread;
-        
+    QFuture<void> future;
 };
 
 #endif	/* FBPCOMPONENT_H */

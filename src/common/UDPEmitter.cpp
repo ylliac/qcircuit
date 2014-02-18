@@ -26,9 +26,7 @@ UDPEmitter::~UDPEmitter()
 }
 
 void UDPEmitter::execute()
-{
-    //TODO ACY TEST LOG
-    std::cout << "UDPEmitter execute" << std::endl;
+{       
     
     if(udpSocket == NULL)
     {
@@ -53,8 +51,5 @@ void UDPEmitter::execute()
 
     //TODO ACY TEST LOG
     std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
-        
-    //TODO ACY TEST LOG
-    std::cout << "UDPEmitter finish" << std::endl;
 }
 

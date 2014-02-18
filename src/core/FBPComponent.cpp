@@ -10,6 +10,7 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QMetaObject>
 #include <QtCore/QMetaProperty>
+#include <QtCore/QtConcurrentRun>
 #include <iostream>
 
 FBPComponent::FBPComponent()
@@ -18,10 +19,6 @@ FBPComponent::FBPComponent()
     setObjectName(metaObject()->className());
     
     qRegisterMetaType<QVariant > ("QVariant");
-    
-    thread = new QThread();
-    thread->setObjectName(metaObject()->className());
-    moveToThread(thread);
 }
 
 FBPComponent::~FBPComponent()
@@ -29,9 +26,10 @@ FBPComponent::~FBPComponent()
     //------------------------------------------------------------------
     // STOP THREAD 
     //------------------------------------------------------------------
-    if(!thread->isFinished())
+    if(!future.isFinished())
     {
-        thread->terminate();
+        future.cancel();
+        future.waitForFinished();
     }
         
     //------------------------------------------------------------------
@@ -113,11 +111,9 @@ void FBPComponent::activate()
 //        return;
 //    }
 
-    if (!thread->isRunning())
+    if (!future.isRunning())
     {
-        thread->start(QThread::NormalPriority);
-        bool check = QMetaObject::invokeMethod(this, "execute");
-        Q_ASSERT(check);
+        future = QtConcurrent::run(this, &FBPComponent::execute);
     }
 }
 
@@ -146,14 +142,14 @@ void FBPComponent::setSelfStarting(bool value)
     selfStarting = value;
 }
 
-bool FBPComponent::wait()
+void FBPComponent::wait()
 {
-    return thread->wait();
+    future.waitForFinished();
 }
 
 bool FBPComponent::isRunning()
 {
-    return thread->isRunning();
+    return future.isRunning();
 }
 
 
