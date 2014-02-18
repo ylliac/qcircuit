@@ -7,6 +7,7 @@
 
 #include "Timer.h"
 
+#include <iostream>
 #include <QtCore/QTime>
 
 Timer::Timer()
@@ -23,6 +24,10 @@ Timer::~Timer()
 
 void Timer::execute()
 {
+ 
+    //TODO ACY
+//    std::cout << "[LOG] " << "Execute component " << metaObject()->className() << std::endl;   
+    
     if(timer == NULL){
         timer = new QTime();
         timer->start();
@@ -31,9 +36,19 @@ void Timer::execute()
     while(true)
     {
         int elapsed = timer->elapsed();
-        send("TIME", elapsed);
         
-        sleep(1000);
+        if(elapsed > 1000)
+        {
+            send("TIME", elapsed);
+            timer->start();
+            
+            
+            //TODO ACY
+            std::cout << "Timer sent " << elapsed << std::endl; 
+        }
     }
+    
+    //TODO ACY
+//    std::cout << "[LOG] " << "Terminate component " << metaObject()->className() << std::endl;    
 }
 

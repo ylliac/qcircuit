@@ -71,7 +71,15 @@ bool FBPNetwork::connect(FBPComponent* source, QString outPortName, FBPComponent
         return false;
     }
     
-    return QObject::connect(output, SIGNAL(sent(QVariant)), input, SLOT(onReceive(QVariant)));
+    //TODO ACY
+    std::cout << "[LOG] " 
+            << "Connecting " << source->metaObject()->className()
+            << "." << outPortName.toStdString()
+            << " --> " << target->metaObject()->className()
+            << "." << inPortName.toStdString()
+            << std::endl;
+    
+    return QObject::connect(output, SIGNAL(sent(QVariant)), input, SLOT(onReceive(QVariant)), Qt::DirectConnection);
 }
 
 bool FBPNetwork::connect(QString source, QString outPortName, QString target, QString inPortName)
@@ -139,7 +147,7 @@ void FBPNetwork::initiate()
         if(component->isSelfStarting())
         {
             //TODO ACY
-            std::cout << "[LOG] " << "Autostarting component " << component->metaObject()->className() << std::endl;
+//            std::cout << "[LOG] " << "Autostarting component " << component->metaObject()->className() << std::endl;
 
             component->activate();
         }
@@ -148,13 +156,22 @@ void FBPNetwork::initiate()
 
 void FBPNetwork::waitForAll()
 {
-    QList<FBPComponent*> components = componentMap.values();
-    foreach(FBPComponent* component, components)
-    {        
-        //TODO ACY
-        std::cout << "[LOG] " << "Waiting for component " << component->metaObject()->className() << std::endl;
-            
-        component->wait();
+    bool retest = true;
+    while(retest){
+        retest = false;
+        
+        QList<FBPComponent*> components = componentMap.values();
+        foreach(FBPComponent* component, components)
+        {        
+            //TODO ACY
+//            std::cout << "[LOG] " << "Waiting for component " << component->metaObject()->className() << std::endl;
+
+            retest |= component->isRunning();
+            component->wait();
+        }
     }
+    
+    //TODO ACY
+//    std::cout << "[LOG] " << "Everything is finished" << std::endl;
 }
 

@@ -15,7 +15,7 @@
 #include "FBPInputPort.h"
 #include "FBPOutputPort.h"
 
-class FBPComponent : public QThread {
+class FBPComponent : public QObject {
     Q_OBJECT
     
 public:
@@ -30,12 +30,14 @@ public:
     
     bool isSelfStarting();
     
+    bool isRunning();
+    bool wait();
+    
 public slots:
     void activate();
     
 protected:
-    virtual void run();
-    virtual void execute()=0;    
+    Q_INVOKABLE virtual void execute()=0;    
     
     QVariant receive(QString name);
     int received(QString name);
@@ -47,6 +49,7 @@ private:
     QMap<QString, FBPInputPort*> inputPorts;
     QMap<QString, FBPOutputPort*> outputPorts;
     bool selfStarting;
+    QThread* thread;
         
 };
 

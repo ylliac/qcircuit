@@ -15,8 +15,13 @@
 FBPComponent::FBPComponent()
 : selfStarting(false)
 {
+    setObjectName(metaObject()->className());
+    
     qRegisterMetaType<QVariant > ("QVariant");
-    setTerminationEnabled(true);
+    
+    thread = new QThread();
+    thread->setObjectName(metaObject()->className());
+    moveToThread(thread);
 }
 
 FBPComponent::~FBPComponent()
@@ -24,11 +29,11 @@ FBPComponent::~FBPComponent()
     //------------------------------------------------------------------
     // STOP THREAD 
     //------------------------------------------------------------------
-    if(!isFinished())
+    if(!thread->isFinished())
     {
-        terminate();
+        thread->terminate();
     }
-    
+        
     //------------------------------------------------------------------
     // INPUT PORTS 
     //------------------------------------------------------------------
@@ -53,9 +58,13 @@ FBPComponent::~FBPComponent()
 FBPInputPort* FBPComponent::addInputPort(QString name)
 {
     FBPInputPort* port = new FBPInputPort(name);
+//    port->moveToThread(thread);
     inputPorts.insert(port->getName(), port);
 
-    Q_ASSERT(QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate())));
+    //TODO ACY
+//    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()));
+    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()), Qt::DirectConnection);
+    Q_ASSERT(check);
 
     return port;
 }
@@ -63,6 +72,7 @@ FBPInputPort* FBPComponent::addInputPort(QString name)
 FBPOutputPort* FBPComponent::addOutputPort(QString name)
 {
     FBPOutputPort* port = new FBPOutputPort(name);
+//    port->moveToThread(thread);
     outputPorts.insert(port->getName(), port);
 
     return port;
@@ -95,28 +105,20 @@ FBPOutputPort* FBPComponent::getOutputPort(QString name)
 void FBPComponent::activate()
 {
     //TODO ACY
-    std::cout << "[LOG] " << "Activate component " << metaObject()->className() << std::endl;
-    
-    if (isFinished())
-    {
-        return;
-    }
+//    std::cout << "[LOG] " << "Activate component " << metaObject()->className() << std::endl;
+        
+    //TODO ACY Pourquoi ne le lancer qu'une seule fois
+//    if (isFinished())
+//    {
+//        return;
+//    }
 
-    if (!isRunning())
+    if (!thread->isRunning())
     {
-        start(QThread::NormalPriority);
+        thread->start(QThread::NormalPriority);
+        bool check = QMetaObject::invokeMethod(this, "execute");
+        Q_ASSERT(check);
     }
-}
-
-void FBPComponent::run()
-{
-    //TODO ACY
-    std::cout << "[LOG] " << "Execute component " << metaObject()->className() << std::endl;
-    
-    execute();
-    
-    //TODO ACY
-    std::cout << "[LOG] " << "Terminate component " << metaObject()->className() << std::endl;
 }
 
 QVariant FBPComponent::receive(QString name)
@@ -143,4 +145,15 @@ void FBPComponent::setSelfStarting(bool value)
 {
     selfStarting = value;
 }
+
+bool FBPComponent::wait()
+{
+    return thread->wait();
+}
+
+bool FBPComponent::isRunning()
+{
+    return thread->isRunning();
+}
+
 

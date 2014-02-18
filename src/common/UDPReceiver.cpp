@@ -15,11 +15,13 @@
 UDPReceiver::UDPReceiver()
 {
     addOutputPort("OUT");
+    setSelfStarting(true);
     
     udpSocket = new QUdpSocket();
     udpSocket->bind(4444, QUdpSocket::ShareAddress);
     
-    connect(udpSocket, SIGNAL(readyRead()),this, SLOT(processPendingDatagrams()));
+    bool check = connect(udpSocket, SIGNAL(readyRead()),this, SLOT(processPendingDatagrams()));
+    Q_ASSERT(check);
 }
 
 UDPReceiver::~UDPReceiver()
@@ -29,16 +31,19 @@ UDPReceiver::~UDPReceiver()
 
 void UDPReceiver::execute()
 {
-    if(!stack.isEmpty())
+    while(true)
     {
-        //------------------------------------------------------------------
-        // SEND VIA UDP
-        //------------------------------------------------------------------
-        int outData = stack.pop();
-        send("OUT", QVariant(outData));
+        if(!stack.isEmpty())
+        {
+            //------------------------------------------------------------------
+            // SEND VIA UDP
+            //------------------------------------------------------------------
+            int outData = stack.pop();
+            send("OUT", QVariant(outData));
 
-        //TODO ACY TEST LOG
-//        std::cout << "UDPReceiver just sent the data: " << outData << std::endl;
+            //TODO ACY TEST LOG
+            std::cout << "UDPReceiver just sent the data: " << outData << std::endl;
+        }
     }
 }
 

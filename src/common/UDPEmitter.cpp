@@ -17,7 +17,7 @@ UDPEmitter::UDPEmitter()
 {
     addInputPort("IN"); 
     
-    udpSocket = new QUdpSocket();
+    udpSocket = NULL;
 }
 
 UDPEmitter::~UDPEmitter()
@@ -27,6 +27,14 @@ UDPEmitter::~UDPEmitter()
 
 void UDPEmitter::execute()
 {
+    //TODO ACY TEST LOG
+    std::cout << "UDPEmitter execute" << std::endl;
+    
+    if(udpSocket == NULL)
+    {
+        udpSocket = new QUdpSocket();
+    }
+    
     //------------------------------------------------------------------
     // READ THE LINE
     //------------------------------------------------------------------
@@ -44,6 +52,9 @@ void UDPEmitter::execute()
             4444);
 
     //TODO ACY TEST LOG
-//        std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
+    std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
+        
+    //TODO ACY TEST LOG
+    std::cout << "UDPEmitter finish" << std::endl;
 }
 
