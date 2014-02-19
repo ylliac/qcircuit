@@ -33,23 +33,36 @@ void UDPEmitter::execute()
         udpSocket = new QUdpSocket();
     }
     
-    //------------------------------------------------------------------
-    // READ THE LINE
-    //------------------------------------------------------------------
-    int inData = receive("IN").toInt();
+    QVariant packet;
+    while(receive("IN", packet))
+    {
+        //------------------------------------------------------------------
+        // READ THE LINE
+        //------------------------------------------------------------------
+        int inData = packet.toInt();
+
+        //------------------------------------------------------------------
+        // SEND VIA UDP
+        //------------------------------------------------------------------
+        QByteArray datagram = QByteArray::number(inData);
+        qint64 result = udpSocket->writeDatagram(
+                datagram.data(),
+                datagram.size(),
+                QHostAddress::Broadcast,
+                4444);
+        Q_ASSERT(result != -1);
+
+        //TODO ACY TEST LOG
+        std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
+    }
     
-    //------------------------------------------------------------------
-    // SEND VIA UDP
-    //------------------------------------------------------------------
-    //TODO ACY
-    QByteArray datagram = QByteArray::number(inData);
-    udpSocket->writeDatagram(
+    //EOF
+    QByteArray datagram;
+    qint64 result = udpSocket->writeDatagram(
             datagram.data(),
             datagram.size(),
             QHostAddress::Broadcast,
             4444);
-
-    //TODO ACY TEST LOG
-    std::cout << "UDPEmitter just sent the data: " << inData << std::endl;
+    Q_ASSERT(result != -1);
 }
 

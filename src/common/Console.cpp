@@ -21,11 +21,15 @@ Console::~Console()
 
 void Console::execute()
 {    
-    QString output = receive("MESSAGE").toString();
-    
-    if(!output.isEmpty())
+    QVariant packet;
+    while(receive("MESSAGE", packet))
     {
-        std::cout << "Console: " << output.toStdString() << std::endl;
+        QString output = packet.toString();
+
+        if(!output.isEmpty())
+        {
+            std::cout << "Console: " << output.toStdString() << std::endl;
+        }
     }
 }
 

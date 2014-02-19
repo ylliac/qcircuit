@@ -13,8 +13,10 @@
 #include <QtCore/QtConcurrentRun>
 #include <iostream>
 
-FBPComponent::FBPComponent()
-: selfStarting(false)
+FBPComponent::FBPComponent(QObject* parent)
+: QObject(parent),
+selfStarting(false),
+state(NOT_STARTED)
 {
     setObjectName(metaObject()->className());
     
@@ -56,12 +58,9 @@ FBPComponent::~FBPComponent()
 FBPInputPort* FBPComponent::addInputPort(QString name)
 {
     FBPInputPort* port = new FBPInputPort(name);
-//    port->moveToThread(thread);
     inputPorts.insert(port->getName(), port);
 
-    //TODO ACY
-//    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()));
-    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()), Qt::DirectConnection);
+    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()));
     Q_ASSERT(check);
 
     return port;
@@ -70,7 +69,6 @@ FBPInputPort* FBPComponent::addInputPort(QString name)
 FBPOutputPort* FBPComponent::addOutputPort(QString name)
 {
     FBPOutputPort* port = new FBPOutputPort(name);
-//    port->moveToThread(thread);
     outputPorts.insert(port->getName(), port);
 
     return port;
@@ -101,25 +99,33 @@ FBPOutputPort* FBPComponent::getOutputPort(QString name)
 }
 
 void FBPComponent::activate()
-{
-    //TODO ACY
-//    std::cout << "[LOG] " << "Activate component " << metaObject()->className() << std::endl;
-        
-    //TODO ACY Pourquoi ne le lancer qu'une seule fois
-//    if (isFinished())
-//    {
-//        return;
-//    }
-
-    if (!future.isRunning())
+{        
+    if (state == NOT_STARTED)
     {
-        future = QtConcurrent::run(this, &FBPComponent::execute);
+        future = QtConcurrent::run(this, &FBPComponent::execute0);
     }
+}
+
+void FBPComponent::execute0()
+{
+    state = ACTIVATED;
+    emit activated();
+    
+    execute();
+    
+    state = FINISHED;
+    emit finished();
 }
 
 QVariant FBPComponent::receive(QString name)
 {
     return getInputPort(name)->pop();
+}
+
+bool FBPComponent::receive(QString name, QVariant& outData)
+{
+    outData = getInputPort(name)->pop();
+    return outData.isValid();
 }
 
 int FBPComponent::received(QString name)
@@ -147,9 +153,14 @@ void FBPComponent::wait()
     future.waitForFinished();
 }
 
-bool FBPComponent::isRunning()
+bool FBPComponent::isActive()
 {
-    return future.isRunning();
+    return state == ACTIVATED;
+}
+
+bool FBPComponent::isFinished()
+{
+    return state == FINISHED;
 }
 
 

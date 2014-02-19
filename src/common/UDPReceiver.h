@@ -30,7 +30,7 @@ private slots:
     
 private:
     QUdpSocket* udpSocket;
-    QStack<int> stack;
+    QStack<QVariant> stack;
 };
 
 #endif	/* UDPRECEIVER_H */

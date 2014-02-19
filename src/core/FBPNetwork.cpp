@@ -10,13 +10,22 @@
 #include <iostream>
 
 #include <QtCore/QStringList>
+#include <QtCore/QEventLoop>
 
-FBPNetwork::FBPNetwork()
+FBPNetwork::FBPNetwork(QObject* parent)
+: FBPComponent(parent)
 {
+    activeComponentCounter = new Counter(this);
 }
 
 FBPNetwork::~FBPNetwork()
-{
+{    
+    //Delete components
+    QList<FBPComponent*> components = componentMap.values();
+    foreach(FBPComponent* component, components)
+    {        
+        delete component;
+    }
 }
 
 void FBPNetwork::execute()
@@ -43,6 +52,11 @@ void FBPNetwork::addComponent(FBPComponent* component, QString name)
 {
     Q_ASSERT(!componentMap.contains(name));
     componentMap.insert(name, component);
+    
+    bool check = QObject::connect(component, SIGNAL(activated()), activeComponentCounter, SLOT(increase()));
+    Q_ASSERT(check);
+    check = QObject::connect(component, SIGNAL(finished()), activeComponentCounter, SLOT(decrease()));
+    Q_ASSERT(check);
 }
 
 void FBPNetwork::initialize(QVariant value, FBPComponent* target, QString inPortName)
@@ -70,14 +84,6 @@ bool FBPNetwork::connect(FBPComponent* source, QString outPortName, FBPComponent
     if(input == NULL){
         return false;
     }
-    
-    //TODO ACY
-    std::cout << "[LOG] " 
-            << "Connecting " << source->metaObject()->className()
-            << "." << outPortName.toStdString()
-            << " --> " << target->metaObject()->className()
-            << "." << inPortName.toStdString()
-            << std::endl;
     
     return QObject::connect(output, SIGNAL(sent(QVariant)), input, SLOT(onReceive(QVariant)), Qt::DirectConnection);
 }
@@ -134,9 +140,13 @@ void FBPNetwork::go()
     //------------------------------------------------------------------
     initiate();
 
-    // Wait until every component is finished
+    // Event loop (used to enable the signal / slot mechanism)
+    // Stop when no component is active
     //------------------------------------------------------------------
-    waitForAll();    
+    QEventLoop* eventLoop = new QEventLoop(this);
+    bool check = QObject::connect(activeComponentCounter, SIGNAL(zero()), eventLoop, SLOT(quit()));
+    Q_ASSERT(check);
+    eventLoop->exec();
 }
 
 void FBPNetwork::initiate()
@@ -146,32 +156,8 @@ void FBPNetwork::initiate()
     {
         if(component->isSelfStarting())
         {
-            //TODO ACY
-//            std::cout << "[LOG] " << "Autostarting component " << component->metaObject()->className() << std::endl;
-
             component->activate();
         }
     }
-}
-
-void FBPNetwork::waitForAll()
-{
-    bool retest = true;
-    while(retest){
-        retest = false;
-        
-        QList<FBPComponent*> components = componentMap.values();
-        foreach(FBPComponent* component, components)
-        {        
-            //TODO ACY
-//            std::cout << "[LOG] " << "Waiting for component " << component->metaObject()->className() << std::endl;
-
-            retest |= component->isRunning();
-            component->wait();
-        }
-    }
-    
-    //TODO ACY
-//    std::cout << "[LOG] " << "Everything is finished" << std::endl;
 }
 

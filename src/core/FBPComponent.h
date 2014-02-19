@@ -19,7 +19,15 @@ class FBPComponent : public QObject {
     Q_OBJECT
     
 public:
-    FBPComponent();
+    enum State
+    {
+        NOT_STARTED,
+        ACTIVATED,
+        FINISHED
+    };
+    
+public:
+    FBPComponent(QObject* parent = NULL);
     virtual ~FBPComponent();
         
     FBPInputPort* addInputPort(QString name);
@@ -30,26 +38,36 @@ public:
     
     bool isSelfStarting();
     
-    bool isRunning();
+    bool isActive();
+    bool isFinished();
     void wait();
     
 public slots:
     void activate();
     
+signals:
+    void activated();
+    void finished();
+    
 protected:
     virtual void execute()=0;    
     
     QVariant receive(QString name);
+    bool receive(QString name, QVariant& outData);
     int received(QString name);
     void send(QString name, QVariant value);
     
     void setSelfStarting(bool value);
         
 private:
+    void execute0();    
+    
     QMap<QString, FBPInputPort*> inputPorts;
     QMap<QString, FBPOutputPort*> outputPorts;
     bool selfStarting;
+    
     QFuture<void> future;
+    State state;
 };
 
 #endif	/* FBPCOMPONENT_H */

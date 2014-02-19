@@ -19,6 +19,10 @@
 #include "../common/Console.h"
 #include "../common/Test.h"
 
+#include <QtCore/QtConcurrentRun>
+
+#include <iostream>
+
 MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::MainWindow), m_Network(NULL)
 {
@@ -34,6 +38,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     loader.addComponentClass("UDPEmitter", UDPEmitter::staticMetaObject);
     loader.addComponentClass("UDPReceiver", UDPReceiver::staticMetaObject);
     m_Network = loader.loadFromFile("../source/resources/demo.fbp");
+    m_Network->setParent(this);
 
     connect(ui->buttonTrigger, SIGNAL(clicked()), this, SLOT(launchNetwork()));
 }
@@ -46,5 +51,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::launchNetwork()
 {
-    m_Network->go();
+    m_Network->go();    
+            
+    //TODO ACY
+    std::cout << "End of Network" << std::endl; 
+    
+//    QtConcurrent::run(m_Network, &FBPNetwork::go);
 }

@@ -9,13 +9,13 @@
 #define	FBPNETWORK_H
 
 #include "FBPComponent.h"
-
+#include "Counter.h"
 
 class FBPNetwork : public FBPComponent {
     Q_OBJECT
     
 public:
-    FBPNetwork();
+    FBPNetwork(QObject* parent = NULL);
     virtual ~FBPNetwork();
     
     //COMPONENT
@@ -46,6 +46,7 @@ private:
     void waitForAll();
     
     QMap<QString, FBPComponent*> componentMap;
+    Counter* activeComponentCounter;
 
 };
 

@@ -23,17 +23,15 @@ Timer::~Timer()
 }
 
 void Timer::execute()
-{
- 
-    //TODO ACY
-//    std::cout << "[LOG] " << "Execute component " << metaObject()->className() << std::endl;   
-    
+{    
     if(timer == NULL){
         timer = new QTime();
         timer->start();
     }
     
-    while(true)
+    int packetCount = 0;
+    
+    while(packetCount < 5)
     {
         int elapsed = timer->elapsed();
         
@@ -45,10 +43,12 @@ void Timer::execute()
             
             //TODO ACY
             std::cout << "Timer sent " << elapsed << std::endl; 
+            
+            packetCount++;
         }
-    }
+    }  
     
-    //TODO ACY
-//    std::cout << "[LOG] " << "Terminate component " << metaObject()->className() << std::endl;    
+    //EOF
+    send("TIME", QVariant());
 }
 
