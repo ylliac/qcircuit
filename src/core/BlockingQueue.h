@@ -23,6 +23,7 @@ public:
     bool enqueue(Data data);
     bool dequeue(Data& value, unsigned long time = ULONG_MAX);
     int size() const;
+    void clear();
 
 private:
     QMutex mutex;

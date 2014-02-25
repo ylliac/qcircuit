@@ -86,3 +86,11 @@ bool BlockingQueue<Data>::dequeue(Data& value, unsigned long time)
     return true;
 }
 
+template<typename Data>
+void BlockingQueue<Data>::clear()
+{
+    QMutexLocker locker(&mutex);
+
+    queue.clear();
+}
+

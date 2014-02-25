@@ -25,15 +25,17 @@ public:
     
     //IIP
     
-    void initialize(QVariant value, FBPComponent* target, QString inPortName);
-    void initialize(QVariant value, QString target, QString inPortName);
-    void initialize(QVariant value, QString target);
+    bool initialize(QVariant value, FBPComponent* target, QString inPortName);
+    bool initialize(QVariant value, QString target, QString inPortName);
+    bool initialize(QVariant value, QString target);
     
     //CONNECTION
     
     bool connect(FBPComponent* source, QString outPortName, FBPComponent* target, QString inPortName);
     bool connect(QString source, QString outPortName, QString target, QString inPortName);
     bool connect(QString source, QString target);
+    
+    bool connectFromSignal(const QObject* sender, const char* signal, FBPComponent* target, QString inPortName);
     
     void go();
     

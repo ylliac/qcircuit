@@ -8,12 +8,19 @@
 #include "FBPInputPort.h"
 
 FBPInputPort::FBPInputPort(QString name) 
-: FBPPort(name)
+: FBPPort(name), iip(false)
 {
 }
 
 FBPInputPort::~FBPInputPort()
 {
+}
+
+void FBPInputPort::initialize(QVariant value)
+{
+    iip = true;
+    receivedQueue.clear();    
+    receivedQueue.enqueue(value);
 }
 
 QVariant FBPInputPort::pop()
@@ -37,6 +44,9 @@ int FBPInputPort::size() const
 
 void FBPInputPort::onReceive(QVariant value)
 {
+    //Input port with IIP can't be connected to another component
+    Q_ASSERT(!iip);
+    
     receivedQueue.enqueue(value);
     
     emit received(value);

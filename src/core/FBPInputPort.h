@@ -24,6 +24,8 @@ public:
     int size() const;
     QVariant pop();
     
+    void initialize(QVariant value);
+    
 public slots:
     void onReceive(QVariant value);
     
@@ -32,6 +34,7 @@ signals:
     
 private:
     BlockingQueue<QVariant> receivedQueue;
+    bool iip;
 };
 
 #include "BlockingQueue.cpp"
