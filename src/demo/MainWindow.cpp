@@ -50,10 +50,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::launchNetwork()
-{
-//    m_Network->go();        
-    QtConcurrent::run(m_Network, &FBPNetwork::go);
-    
-    //TODO ACY
-    std::cout << "End of Network" << std::endl; 
+{       
+    m_Network->activate();
 }

@@ -10,10 +10,10 @@
 
 #include "blocks/FBPEditorBlock.h"
 #include "blocks/Button.h"
+#include "blocks/TextPrompt.h"
 #include "Util.h"
 #include "core/FBPNetwork.h"
 #include "network/CreateNewComponent.h"
-#include "network/EnterText.h"
 #include "network/FBPEditorNetwork.h"
 
 #include <iostream>
@@ -32,13 +32,29 @@ FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
     //------------------------------------------------------------------
     // BUILD APP 
     //------------------------------------------------------------------
-    Button* newButton = new Button();
-    addBlock("New block", newButton);
+    Button* newComponentButton = new Button();
+    addBlock("New block button", newComponentButton);
+    
+    TextPrompt* newComponentNamePrompt = new TextPrompt();
+    addBlock("New block name prompt", newComponentNamePrompt);
+    
+    //------------------------------------------------------------------
+    // CONNECT THE BLOCKS TO THE NETWORK 
+    //------------------------------------------------------------------
+    //Button block => Input "TRIGGER"
+    m_Network->connectFromSignal(newComponentButton, SIGNAL(outClicked(QVariant)), "TRIGGER");
+    
+    //Output "NEWCOMPONENT_ASKNAME" => Enter text block
+    m_Network->connectToSlot("NEWCOMPONENT_ASKNAME", newComponentNamePrompt, SLOT(inTrigger(QVariant)));
+    
+    //Enter text block => Input "NEWCOMPONENT_NAME" 
+    bool check = m_Network->connectFromSignal(newComponentNamePrompt, SIGNAL(outValue(QVariant)), "NEWCOMPONENT_NAME");
+    Q_ASSERT(check);
     
     //------------------------------------------------------------------
     // START THE NETWORK 
     //------------------------------------------------------------------
-    QtConcurrent::run(m_Network, &FBPNetwork::go);
+    m_Network->activate();
 }
 
 FBPEditor::~FBPEditor()

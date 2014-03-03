@@ -35,10 +35,13 @@ public:
     bool connect(QString source, QString outPortName, QString target, QString inPortName);
     bool connect(QString source, QString target);
     
-    bool connectFromSignal(const QObject* sender, const char* signal, FBPComponent* target, QString inPortName);
+    bool connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName);
+    bool connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName);
+    bool connectSubInToOut(QString inPortName, QString outPortName);
     
-    void go();
-    
+    bool connectFromSignal(const QObject* sender, const char* signal, QString inPortName);
+    bool connectToSlot(QString outPortName, const QObject* target, const char* slot);
+            
 protected:
     virtual void execute();
     virtual void define();
@@ -49,6 +52,7 @@ private:
     
     QMap<QString, FBPComponent*> componentMap;
     Counter* activeComponentCounter;
+    bool isDefined;
 
 };
 

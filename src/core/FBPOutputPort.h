@@ -19,6 +19,7 @@ public:
     FBPOutputPort(QString name);
     virtual ~FBPOutputPort();
     
+public slots:
     void send(QVariant value);
     
 signals:

@@ -13,7 +13,7 @@
 #include <QtCore/QEventLoop>
 
 FBPNetwork::FBPNetwork(QObject* parent)
-: FBPComponent(parent)
+: FBPComponent(parent), isDefined(false)
 {
     activeComponentCounter = new Counter(this);
 }
@@ -30,7 +30,25 @@ FBPNetwork::~FBPNetwork()
 
 void FBPNetwork::execute()
 {
-    // Overridden by specific networks
+    // Define the network
+    //------------------------------------------------------------------
+    if(!isDefined)
+    {
+        define();
+        isDefined = true;
+    }
+    
+    // Initiate self starters components
+    //------------------------------------------------------------------
+    initiate();
+
+    // Event loop (used to enable the signal / slot mechanism)
+    // Stop when no component is active
+    //------------------------------------------------------------------
+    QEventLoop eventLoop;
+    bool check = QObject::connect(activeComponentCounter, SIGNAL(zero()), &eventLoop, SLOT(quit()));
+    Q_ASSERT(check);
+    eventLoop.exec();
 }
 
 void FBPNetwork::define()
@@ -108,14 +126,69 @@ bool FBPNetwork::connect(FBPComponent* source, QString outPortName, FBPComponent
     return QObject::connect(output, SIGNAL(sent(QVariant)), input, SLOT(onReceive(QVariant)), Qt::DirectConnection);
 }
 
-bool FBPNetwork::connectFromSignal(const QObject* sender, const char* signal, FBPComponent* target, QString inPortName)
+bool FBPNetwork::connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName)
 {
-    FBPInputPort* input = target->getInputPort(inPortName);
+    FBPInputPort* subInput = getInputPort(inPortName);
+    if(subInput == NULL){
+        return false;
+    }
+    
+    FBPInputPort* componentInput = target->getInputPort(targetPortName);
+    if(componentInput == NULL){
+        return false;
+    }
+    
+    return QObject::connect(subInput, SIGNAL(received(QVariant)), componentInput, SLOT(onReceive(QVariant)), Qt::DirectConnection);
+}
+    
+bool FBPNetwork::connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName)
+{    
+    FBPOutputPort* componentOutput = source->getOutputPort(sourcePortName);
+    if(componentOutput == NULL){
+        return false;
+    }
+    
+    FBPOutputPort* subOutput = getOutputPort(outPortName);
+    if(subOutput == NULL){
+        return false;
+    }
+    
+    return QObject::connect(componentOutput, SIGNAL(sent(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
+}
+
+bool FBPNetwork::connectSubInToOut(QString inPortName, QString outPortName)
+{
+    FBPInputPort* subInput = getInputPort(inPortName);
+    if(subInput == NULL){
+        return false;
+    }
+    
+    FBPOutputPort* subOutput = getOutputPort(outPortName);
+    if(subOutput == NULL){
+        return false;
+    }
+    
+    return QObject::connect(subInput, SIGNAL(received(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
+}
+
+bool FBPNetwork::connectFromSignal(const QObject* sender, const char* signal, QString inPortName)
+{
+    FBPInputPort* input = getInputPort(inPortName);
     if(input == NULL){
         return false;
     }
     
     return QObject::connect(sender, signal, input, SLOT(onReceive(QVariant)));
+}
+
+bool FBPNetwork::connectToSlot(QString outPortName, const QObject* target, const char* slot)
+{
+    FBPOutputPort* output = getOutputPort(outPortName);
+    if(output == NULL){
+        return false;
+    }
+    
+    return QObject::connect(output, SIGNAL(sent(QVariant)), target, slot);
 }
 
 bool FBPNetwork::connect(QString source, QString outPortName, QString target, QString inPortName)
@@ -158,25 +231,6 @@ bool FBPNetwork::connect(QString source, QString target)
     QString toPort = outputList.at(1);
     
     return connect(fromComponent, fromPort, toComponent, toPort);
-}
-
-void FBPNetwork::go()
-{    
-    // Define the network
-    //------------------------------------------------------------------
-    define();
-    
-    // Initiate self starters components
-    //------------------------------------------------------------------
-    initiate();
-
-    // Event loop (used to enable the signal / slot mechanism)
-    // Stop when no component is active
-    //------------------------------------------------------------------
-    QEventLoop eventLoop;
-    bool check = QObject::connect(activeComponentCounter, SIGNAL(zero()), &eventLoop, SLOT(quit()));
-    Q_ASSERT(check);
-    eventLoop.exec();
 }
 
 void FBPNetwork::initiate()
