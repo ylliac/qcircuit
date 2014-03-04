@@ -52,4 +52,7 @@ MainWindow::~MainWindow()
 void MainWindow::launchNetwork()
 {       
     m_Network->activate();
+    m_Network->wait();
+    
+    std::cout << "Network finished" << std::endl;
 }

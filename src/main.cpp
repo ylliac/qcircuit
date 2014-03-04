@@ -8,12 +8,12 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-//    MainWindow mainWindow;
-//    mainWindow.show();
+    MainWindow mainWindow;
+    mainWindow.show();
     
-    FBPEditor fbpEditor;
-    fbpEditor.setGeometry(100, 100, 800, 500);
-    fbpEditor.show();
+//    FBPEditor fbpEditor;
+//    fbpEditor.setGeometry(100, 100, 800, 500);
+//    fbpEditor.show();
 
     return app.exec();
 }

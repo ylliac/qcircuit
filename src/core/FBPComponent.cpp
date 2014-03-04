@@ -11,6 +11,8 @@
 #include <QtCore/QMetaObject>
 #include <QtCore/QMetaProperty>
 #include <QtCore/QtConcurrentRun>
+#include <QtCore/QFutureWatcher>
+#include <QtCore/QEventLoop>
 #include <iostream>
 
 FBPComponent::FBPComponent(QObject* parent)
@@ -150,7 +152,11 @@ void FBPComponent::setSelfStarting(bool value)
 
 void FBPComponent::wait()
 {
-    future.waitForFinished();
+    QFutureWatcher<void> watcher;    
+    QEventLoop loop;
+    connect(&watcher, SIGNAL(finished()), &loop, SLOT(quit()));
+    watcher.setFuture(future);
+    loop.exec();    
 }
 
 bool FBPComponent::isActive()
