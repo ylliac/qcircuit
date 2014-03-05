@@ -10,7 +10,7 @@
 
 #include <QtCore/QObject>
 
-class FBPEditor;
+#include "editor/FBPEditor.h"
 
 class FBPEditorAction : public QObject {
     Q_OBJECT
@@ -20,6 +20,9 @@ public:
     virtual ~FBPEditorAction();
     
     FBPEditor* getEditor() const;
+    
+public slots:
+    virtual void execute() = 0;
     
 private:
     FBPEditor* m_Editor;

@@ -18,7 +18,7 @@ namespace Ui {
     class FBPEditor;
 }
 
-class QGraphicsScene;
+class EditorScene;
 
 class FBPEditor : public QMainWindow {
     Q_OBJECT
@@ -27,13 +27,13 @@ public:
     FBPEditor(QWidget* parent = 0, Qt::WindowFlags windowFlag = 0);
     virtual ~FBPEditor();
     
-    QGraphicsScene* getScene();
+    EditorScene* getScene();
     
 private:
     void initialize();
     
     Ui::FBPEditor* ui;
-    QGraphicsScene* m_GraphicsScene;
+    EditorScene* m_Scene;
 };
 
 #endif	/* _FBPEDITOR_H */

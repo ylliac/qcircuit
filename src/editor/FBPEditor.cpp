@@ -11,14 +11,17 @@
 
 #include <iostream>
 #include <QtCore/QtConcurrentRun>
-#include <QtGui/QGraphicsScene>
+
+#include "action/CreateNewBlock.h"
+#include "scene/EditorScene.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
-: QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_GraphicsScene(new QGraphicsScene(this))
+: QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this))
 {
     ui->setupUi(this);
     
-    ui->graphicsView->setScene(m_GraphicsScene);
+    ui->graphicsView->setScene(m_Scene);
+    ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
     
     initialize();
 }
@@ -29,12 +32,23 @@ FBPEditor::~FBPEditor()
 }
 
 void FBPEditor::initialize()
-{    
-    //Background color
-    m_GraphicsScene->setBackgroundBrush(QBrush(Qt::white));
+{   
+    //------------------------------------------------------------------
+    // CONFIGURATION 
+    //------------------------------------------------------------------
+    //TODO
+    
+    //------------------------------------------------------------------
+    // ACTIONS 
+    //------------------------------------------------------------------
+    //New block
+    CreateNewBlock* newBlock = new CreateNewBlock(this);
+    
+    CONNECT(ui->actionNewBlock, SIGNAL(triggered()), newBlock, SLOT(execute()));
+    
 }
 
-QGraphicsScene* FBPEditor::getScene()
+EditorScene* FBPEditor::getScene()
 {
-    return m_GraphicsScene;
+    return m_Scene;
 }

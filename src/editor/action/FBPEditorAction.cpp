@@ -8,7 +8,7 @@
 #include "FBPEditorAction.h"
 
 FBPEditorAction::FBPEditorAction(FBPEditor* parent)
-: m_Editor(parent)
+: QObject(parent), m_Editor(parent)
 {
 }
 
