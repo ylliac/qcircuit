@@ -13,6 +13,7 @@
 #include <QtGui/QPen>
 
 class BlockCornerItem;
+class BlockRemoveButton;
 
 class BlockItem : public QGraphicsItem {
 public:
@@ -29,7 +30,7 @@ public:
     virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);
 
 private:
-    void updateCornerPositions();
+    void updateChildItemsPositions();
     void incrementSize(int x, int y);
 
     ///Sample text to go in the title area.
@@ -50,11 +51,14 @@ private:
     ///Real dimensions of the block (global dimensions - corner dimensions)
     qreal m_DrawingWidth;
     qreal m_DrawingHeight;
-    qreal m_DrawingOrigenX;
-    qreal m_DrawingOrigenY;
+    qreal m_DrawingOriginX;
+    qreal m_DrawingOriginY;
 
     /// 0,1,2,3  - starting at x=0,y=0 and moving clockwise around the box
     BlockCornerItem* m_Corners[4];
+    
+    //Remove button
+    BlockRemoveButton* m_RemoveButton;
 };
 
 #endif	/* BLOCKITEM_H */

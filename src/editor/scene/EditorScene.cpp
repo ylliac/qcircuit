@@ -17,7 +17,7 @@ QGraphicsScene(parent)
     setBackgroundBrush(QBrush(Qt::white));
     
     //State
-    installEventFilter(new DefaultState(this));
+    //installEventFilter(new DefaultState(this));
 }
 
 EditorScene::~EditorScene()

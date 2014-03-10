@@ -24,6 +24,13 @@ DefaultState::~DefaultState()
 
 bool DefaultState::eventFilter(QObject* obj, QEvent* event)
 {
+    //TODO ACY Déplacer dans un bouton associé au block
+    
+//    if (event->type() == QEvent::MouseButtonPress)
+//    {
+//        return true;
+//    }
+    
     if (event->type() == QEvent::GraphicsSceneMousePress)
     {
         QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
@@ -35,7 +42,7 @@ bool DefaultState::eventFilter(QObject* obj, QEvent* event)
                 m_Arrow = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
                 m_Arrow->setPen(QPen(Qt::black, 2));
                 scene->addItem(m_Arrow);
-                return true;
+//                return true;
             }
         }
     }
@@ -46,7 +53,7 @@ bool DefaultState::eventFilter(QObject* obj, QEvent* event)
         {
             QLineF newLine(m_Arrow->line().p1(), mouseEvent->scenePos());
             m_Arrow->setLine(newLine);
-            return true;
+//            return true;
         }
     }
     if (event->type() == QEvent::GraphicsSceneMouseRelease)
@@ -89,7 +96,7 @@ bool DefaultState::eventFilter(QObject* obj, QEvent* event)
                 //            arrow->updatePosition();
                 //        }
 
-                return true;
+//                return true;
             }
         }
         m_Arrow = NULL;

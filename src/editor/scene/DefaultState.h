@@ -11,6 +11,8 @@
 #include <QtCore/QObject>
 #include <QtGui/QGraphicsLineItem>
 
+
+//TODO ACY Supprimer ?
 class DefaultState : public QObject {
     Q_OBJECT
     

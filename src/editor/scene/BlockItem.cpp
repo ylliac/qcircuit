@@ -12,6 +12,7 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 
 #include "BlockCornerItem.h"
+#include "BlockRemoveButton.h"
 
 BlockItem::BlockItem() :
 m_Text(),
@@ -23,8 +24,9 @@ m_XcornerGrabBuffer(20),
 m_YcornerGrabBuffer(20),
 m_DrawingWidth(m_Width - m_XcornerGrabBuffer),
 m_DrawingHeight(m_Height - m_YcornerGrabBuffer),
-m_DrawingOrigenX(m_XcornerGrabBuffer),
-m_DrawingOrigenY(m_YcornerGrabBuffer)
+m_DrawingOriginX(m_XcornerGrabBuffer),
+m_DrawingOriginY(m_YcornerGrabBuffer),
+m_RemoveButton(NULL)
 {
     m_OutterborderPen.setWidth(2);
     m_OutterborderPen.setColor(m_OutterborderColor);
@@ -65,8 +67,8 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     int shadowThickness = 3;
 
     QLinearGradient gradient;
-    gradient.setStart(m_DrawingOrigenX, m_DrawingOrigenY);
-    gradient.setFinalStop(m_DrawingWidth, m_DrawingOrigenY);
+    gradient.setStart(m_DrawingOriginX, m_DrawingOriginY);
+    gradient.setFinalStop(m_DrawingWidth, m_DrawingOriginY);
     // starting color of the gradient - can play with the starting color and ,point since its not visible anyway
     QColor grey1(150, 150, 150, 125); 
     // grey2 is ending color of the gradient - this is what will show up as the shadow. the last parameter is the alpha blend, its set
@@ -81,7 +83,7 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     m_OutterborderPen.setStyle(Qt::NoPen);
     painter->setPen(m_OutterborderPen);
 
-    QPointF topLeft(m_DrawingOrigenX, m_DrawingOrigenX);
+    QPointF topLeft(m_DrawingOriginX, m_DrawingOriginX);
     QPointF bottomRight(m_DrawingWidth, m_DrawingHeight);
 
     QRectF rect(topLeft, bottomRight);
@@ -96,7 +98,7 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QBrush contentBrush(QColor(243, 255, 216, 255), Qt::SolidPattern);
     painter->setBrush(contentBrush);
 
-    QPointF topLeft2(m_DrawingOrigenX, m_DrawingOrigenY);
+    QPointF topLeft2(m_DrawingOriginX, m_DrawingOriginY);
     QPointF bottomRight2(m_DrawingWidth - shadowThickness, m_DrawingHeight - shadowThickness);
 
     QRectF rect2(topLeft2, bottomRight2);
@@ -129,6 +131,9 @@ void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
     delete m_Corners[1];
     delete m_Corners[2];
     delete m_Corners[3];
+    
+    m_RemoveButton->setParentItem(NULL);
+    delete m_RemoveButton;
 }
 
 void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
@@ -144,16 +149,20 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
     m_Corners[1]->installSceneEventFilter(this);
     m_Corners[2]->installSceneEventFilter(this);
     m_Corners[3]->installSceneEventFilter(this);
+    
+    m_RemoveButton = new BlockRemoveButton(this);
 
-    updateCornerPositions();
+    updateChildItemsPositions();
 }
 
-void BlockItem::updateCornerPositions()
+void BlockItem::updateChildItemsPositions()
 {
-    m_Corners[0]->setPos(m_DrawingOrigenX, m_DrawingOrigenY);
-    m_Corners[1]->setPos(m_DrawingWidth, m_DrawingOrigenY);
+    m_Corners[0]->setPos(m_DrawingOriginX, m_DrawingOriginY);
+    m_Corners[1]->setPos(m_DrawingWidth, m_DrawingOriginY);
     m_Corners[2]->setPos(m_DrawingWidth, m_DrawingHeight);
-    m_Corners[3]->setPos(m_DrawingOrigenX, m_DrawingHeight);
+    m_Corners[3]->setPos(m_DrawingOriginX, m_DrawingHeight);
+    
+    m_RemoveButton->setPos(m_DrawingWidth / 2.0, m_DrawingOriginY - m_RemoveButton->boundingRect().width() / 2.0);
 }
 
 void BlockItem::incrementSize(int x, int y)
@@ -290,7 +299,7 @@ bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
             this->setPos(newXpos, this->pos().y());
         }
 
-        updateCornerPositions();
+        updateChildItemsPositions();
 
         update();
     }
