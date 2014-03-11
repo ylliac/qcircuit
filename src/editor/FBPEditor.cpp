@@ -14,7 +14,6 @@
 
 #include "action/CreateNewBlock.h"
 #include "scene/EditorScene.h"
-#include "scene/DefaultState.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this))
@@ -23,8 +22,6 @@ FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
     
     ui->graphicsView->setScene(m_Scene);
     ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
-    
-//    ui->graphicsView->installEventFilter(new DefaultState(ui->graphicsView));
     
     initialize();
 }

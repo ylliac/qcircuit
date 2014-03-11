@@ -6,7 +6,6 @@
  */
 
 #include "EditorScene.h"
-#include "DefaultState.h"
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
