@@ -14,6 +14,7 @@
 
 class BlockCornerItem;
 class BlockRemoveButton;
+class BlockConnectButton;
 
 class BlockItem : public QGraphicsItem {
 public:
@@ -59,6 +60,9 @@ private:
     
     //Remove button
     BlockRemoveButton* m_RemoveButton;
+    
+    //Connect button
+    BlockConnectButton* m_ConnectButton;
 };
 
 #endif	/* BLOCKITEM_H */

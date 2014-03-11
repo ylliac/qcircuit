@@ -13,20 +13,22 @@
 
 #include "BlockCornerItem.h"
 #include "BlockRemoveButton.h"
+#include "BlockConnectButton.h"
 
 BlockItem::BlockItem() :
 m_Text(),
 m_OutterborderColor(Qt::black),
 m_OutterborderPen(),
-m_Width(250),
-m_Height(200),
+m_Width(150),
+m_Height(100),
 m_XcornerGrabBuffer(20),
 m_YcornerGrabBuffer(20),
 m_DrawingWidth(m_Width - m_XcornerGrabBuffer),
 m_DrawingHeight(m_Height - m_YcornerGrabBuffer),
 m_DrawingOriginX(m_XcornerGrabBuffer),
 m_DrawingOriginY(m_YcornerGrabBuffer),
-m_RemoveButton(NULL)
+m_RemoveButton(NULL),
+m_ConnectButton(NULL)
 {
     m_OutterborderPen.setWidth(2);
     m_OutterborderPen.setColor(m_OutterborderColor);
@@ -134,6 +136,9 @@ void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
     
     m_RemoveButton->setParentItem(NULL);
     delete m_RemoveButton;
+    
+    m_ConnectButton->setParentItem(NULL);
+    delete m_ConnectButton;
 }
 
 void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
@@ -151,6 +156,7 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
     m_Corners[3]->installSceneEventFilter(this);
     
     m_RemoveButton = new BlockRemoveButton(this);
+    m_ConnectButton = new BlockConnectButton(this);
 
     updateChildItemsPositions();
 }
@@ -162,7 +168,8 @@ void BlockItem::updateChildItemsPositions()
     m_Corners[2]->setPos(m_DrawingWidth, m_DrawingHeight);
     m_Corners[3]->setPos(m_DrawingOriginX, m_DrawingHeight);
     
-    m_RemoveButton->setPos(m_DrawingWidth / 2.0, m_DrawingOriginY - m_RemoveButton->boundingRect().width() / 2.0);
+    m_RemoveButton->setPos(m_DrawingOriginX - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingOriginY - m_RemoveButton->boundingRect().height() / 2.0);
+    m_ConnectButton->setPos(m_DrawingWidth - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingHeight / 2.0);
 }
 
 void BlockItem::incrementSize(int x, int y)

@@ -1,0 +1,144 @@
+/* 
+ * File:   BlockConnectButton.cpp
+ * Author: acailly
+ * 
+ * Created on 10 mars 2014, 17:24
+ */
+
+#include "BlockConnectButton.h"
+#include "BlockItem.h"
+#include "ArrowItem.h"
+
+#include <QtCore/QEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsScene>
+#include <QtGui/QGraphicsSceneMouseEvent>
+
+#include <iostream>
+
+BlockConnectButton::BlockConnectButton(QGraphicsItem *parent) :
+m_Width(20),
+m_Height(20),
+m_Arrow(NULL)
+{
+    setParentItem(parent);
+    setAcceptHoverEvents(true);
+
+    m_BorderPen.setWidth(2);
+    m_BorderPen.setColor(Qt::blue);
+    m_BorderPen.setCapStyle(Qt::SquareCap);
+    m_BorderPen.setStyle(Qt::SolidLine);
+
+    installSceneEventFilter(this);
+}
+
+BlockConnectButton::~BlockConnectButton()
+{
+}
+
+QRectF BlockConnectButton::boundingRect() const
+{
+    return QRectF(0, 0, m_Width, m_Height);
+}
+
+void BlockConnectButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->setPen(m_BorderPen);
+
+    QPointF topLeft(0, 0);
+    QPointF bottomRight(m_Width, m_Height);
+
+    QRectF rect(topLeft, bottomRight);
+
+    painter->drawEllipse(rect);
+
+    qreal widthPer4 = m_Width / 4.0;
+    qreal heightPer4 = m_Height / 4.0;
+    painter->drawLine(widthPer4, 2 * heightPer4, 3 * widthPer4, 2 * heightPer4);
+    painter->drawLine(3 * widthPer4, 2 * heightPer4, 2 * widthPer4, heightPer4);
+    painter->drawLine(3 * widthPer4, 2 * heightPer4, 2 * widthPer4, 3 * heightPer4);
+}
+
+void BlockConnectButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
+{
+    m_BorderPen.setColor(Qt::blue);
+    this->update(0, 0, m_Width, m_Height);
+}
+
+void BlockConnectButton::hoverEnterEvent(QGraphicsSceneHoverEvent *)
+{
+    m_BorderPen.setColor(Qt::green);
+    this->update(0, 0, m_Width, m_Height);
+}
+
+bool BlockConnectButton::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
+{
+    if (watched != this)
+    {
+        // not expected to get here
+        return false;
+    }
+
+    QGraphicsSceneMouseEvent * mevent = dynamic_cast<QGraphicsSceneMouseEvent*> (event);
+    if (mevent == NULL)
+    {
+        // this is not one of the mouse events we are interrested in
+        return false;
+    }
+
+    if (event->type() == QEvent::GraphicsSceneMousePress)
+    {
+        QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
+        if (mouseEvent->button() == Qt::LeftButton)
+        {
+            m_Arrow = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(), mouseEvent->scenePos()));
+            m_Arrow->setPen(QPen(Qt::black, 2));
+            scene()->addItem(m_Arrow);
+
+            return true;
+        }
+    }
+    else if (event->type() == QEvent::GraphicsSceneMouseMove)
+    {
+        QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
+        if (m_Arrow != NULL)
+        {
+            QLineF newLine(m_Arrow->line().p1(), mouseEvent->scenePos());
+            m_Arrow->setLine(newLine);
+
+            return true;
+        }
+    }
+    else if (event->type() == QEvent::GraphicsSceneMouseRelease)
+    {
+        QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
+        if (mouseEvent->button() == Qt::LeftButton && m_Arrow != NULL)
+        {
+            QList<QGraphicsItem *> endItems = scene()->items(m_Arrow->line().p2());
+            endItems.removeAll(m_Arrow);
+
+            scene()->removeItem(m_Arrow);
+            delete m_Arrow;
+
+            if (endItems.size() > 0)
+            {
+                BlockItem * startItem = qgraphicsitem_cast<BlockItem *>(parentItem());
+                BlockItem * endItem = qgraphicsitem_cast<BlockItem *>(endItems.first());
+                
+                ArrowItem* arrow = new ArrowItem(startItem, endItem);
+                arrow->setColor(Qt::blue);
+                arrow->setZValue(-1000.0);
+                scene()->addItem(arrow);
+                arrow->updatePosition();
+            }
+
+            return true;
+        }
+        m_Arrow = NULL;
+    }
+
+    return false;
+}
+
