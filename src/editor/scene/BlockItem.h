@@ -50,10 +50,10 @@ private:
     int m_YcornerGrabBuffer;
 
     ///Real dimensions of the block (global dimensions - corner dimensions)
-    qreal m_DrawingWidth;
-    qreal m_DrawingHeight;
-    qreal m_DrawingOriginX;
-    qreal m_DrawingOriginY;
+    qreal m_DrawingRight;
+    qreal m_DrawingBottom;
+    qreal m_DrawingLeft;
+    qreal m_DrawingTop;
 
     /// 0,1,2,3  - starting at x=0,y=0 and moving clockwise around the box
     BlockCornerItem* m_Corners[4];

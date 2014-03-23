@@ -23,10 +23,10 @@ m_Width(150),
 m_Height(100),
 m_XcornerGrabBuffer(20),
 m_YcornerGrabBuffer(20),
-m_DrawingWidth(m_Width - m_XcornerGrabBuffer),
-m_DrawingHeight(m_Height - m_YcornerGrabBuffer),
-m_DrawingOriginX(m_XcornerGrabBuffer),
-m_DrawingOriginY(m_YcornerGrabBuffer),
+m_DrawingRight(m_Width - m_XcornerGrabBuffer),
+m_DrawingBottom(m_Height - m_YcornerGrabBuffer),
+m_DrawingLeft(m_XcornerGrabBuffer),
+m_DrawingTop(m_YcornerGrabBuffer),
 m_RemoveButton(NULL),
 m_ConnectButton(NULL)
 {
@@ -48,7 +48,7 @@ BlockItem::~BlockItem()
 
 QRectF BlockItem::boundingRect() const
 {
-    return QRectF(0, 0, m_Width, m_Height);
+    return QRectF(m_DrawingLeft, m_DrawingTop, m_DrawingRight - m_DrawingLeft, m_DrawingBottom - m_DrawingTop);
 }
 
 void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -69,8 +69,8 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     int shadowThickness = 3;
 
     QLinearGradient gradient;
-    gradient.setStart(m_DrawingOriginX, m_DrawingOriginY);
-    gradient.setFinalStop(m_DrawingWidth, m_DrawingOriginY);
+    gradient.setStart(m_DrawingLeft, m_DrawingTop);
+    gradient.setFinalStop(m_DrawingRight, m_DrawingTop);
     // starting color of the gradient - can play with the starting color and ,point since its not visible anyway
     QColor grey1(150, 150, 150, 125); 
     // grey2 is ending color of the gradient - this is what will show up as the shadow. the last parameter is the alpha blend, its set
@@ -85,8 +85,8 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     m_OutterborderPen.setStyle(Qt::NoPen);
     painter->setPen(m_OutterborderPen);
 
-    QPointF topLeft(m_DrawingOriginX, m_DrawingOriginX);
-    QPointF bottomRight(m_DrawingWidth, m_DrawingHeight);
+    QPointF topLeft(m_DrawingLeft, m_DrawingLeft);
+    QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
 
     QRectF rect(topLeft, bottomRight);
 
@@ -100,8 +100,8 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QBrush contentBrush(QColor(243, 255, 216, 255), Qt::SolidPattern);
     painter->setBrush(contentBrush);
 
-    QPointF topLeft2(m_DrawingOriginX, m_DrawingOriginY);
-    QPointF bottomRight2(m_DrawingWidth - shadowThickness, m_DrawingHeight - shadowThickness);
+    QPointF topLeft2(m_DrawingLeft, m_DrawingTop);
+    QPointF bottomRight2(m_DrawingRight - shadowThickness, m_DrawingBottom - shadowThickness);
 
     QRectF rect2(topLeft2, bottomRight2);
 
@@ -163,13 +163,13 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 
 void BlockItem::updateChildItemsPositions()
 {
-    m_Corners[0]->setPos(m_DrawingOriginX, m_DrawingOriginY);
-    m_Corners[1]->setPos(m_DrawingWidth, m_DrawingOriginY);
-    m_Corners[2]->setPos(m_DrawingWidth, m_DrawingHeight);
-    m_Corners[3]->setPos(m_DrawingOriginX, m_DrawingHeight);
+    m_Corners[0]->setPos(m_DrawingLeft, m_DrawingTop);
+    m_Corners[1]->setPos(m_DrawingRight, m_DrawingTop);
+    m_Corners[2]->setPos(m_DrawingRight, m_DrawingBottom);
+    m_Corners[3]->setPos(m_DrawingLeft, m_DrawingBottom);
     
-    m_RemoveButton->setPos(m_DrawingOriginX - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingOriginY - m_RemoveButton->boundingRect().height() / 2.0);
-    m_ConnectButton->setPos(m_DrawingWidth - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingHeight / 2.0);
+    m_RemoveButton->setPos(m_DrawingLeft - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingTop - m_RemoveButton->boundingRect().height() / 2.0);
+    m_ConnectButton->setPos(m_DrawingRight - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingBottom / 2.0);
 }
 
 void BlockItem::incrementSize(int x, int y)
@@ -177,8 +177,8 @@ void BlockItem::incrementSize(int x, int y)
     m_Width += x;
     m_Height += y;
 
-    m_DrawingWidth =  m_Width - m_XcornerGrabBuffer;
-    m_DrawingHeight=  m_Height - m_YcornerGrabBuffer;
+    m_DrawingRight =  m_Width - m_XcornerGrabBuffer;
+    m_DrawingBottom=  m_Height - m_YcornerGrabBuffer;
 }
 
 bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)

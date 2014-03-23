@@ -64,8 +64,11 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     qreal arrowSize = 20;
     painter->setPen(myPen);
     painter->setBrush(m_Color);
+    
+    QPointF startCenter = m_StartItem->pos() + m_StartItem->boundingRect().center();
+    QPointF endCenter = m_EndItem->pos() + m_EndItem->boundingRect().center();
 
-    QLineF centerLine(m_StartItem->pos(), m_EndItem->pos());
+    QLineF centerLine(startCenter, endCenter);
     
     QPainterPath endPainterPath = m_EndItem->shape();
     QPointF p1 = endPainterPath.elementAt(0) + m_EndItem->pos();
@@ -85,7 +88,10 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         p1 = p2;
     }
 
-    setLine(QLineF(intersectPoint, m_StartItem->pos()));
+    setLine(QLineF(startCenter, intersectPoint));
+    
+    //TODO ACY
+//    setLine(centerLine);
 
     double angle = acos(line().dx() / line().length());
     if (line().dy() >= 0)
@@ -93,11 +99,11 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         angle = (Pi * 2) - angle;
     }
 
-    QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize, cos(angle + Pi / 3) * arrowSize);
-    QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize, cos(angle + Pi - Pi / 3) * arrowSize);
+    QPointF arrowP1 = line().p2() - QPointF(sin(angle + Pi / 3) * arrowSize, cos(angle + Pi / 3) * arrowSize);
+    QPointF arrowP2 = line().p2() - QPointF(sin(angle + Pi - Pi / 3) * arrowSize, cos(angle + Pi - Pi / 3) * arrowSize);
 
     m_ArrowHead.clear();
-    m_ArrowHead << line().p1() << arrowP1 << arrowP2;
+    m_ArrowHead << line().p2() << arrowP1 << arrowP2;
     painter->drawLine(line());
     painter->drawPolygon(m_ArrowHead);
     if (isSelected())
