@@ -13,7 +13,7 @@ EditorScene::EditorScene(QObject* parent) :
 QGraphicsScene(parent)
 {
     //Background color
-    setBackgroundBrush(QBrush(Qt::white));
+    setBackgroundBrush(QBrush(Qt::gray));
     
     //State
     //installEventFilter(new DefaultState(this));

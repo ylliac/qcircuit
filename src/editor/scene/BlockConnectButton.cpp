@@ -116,7 +116,7 @@ bool BlockConnectButton::sceneEventFilter(QGraphicsItem * watched, QEvent * even
         QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
         if (mouseEvent->button() == Qt::LeftButton && m_Arrow != NULL)
         {
-            QList<QGraphicsItem *> endItems = scene()->items(m_Arrow->line().p2());
+            QList<QGraphicsItem *> endItems = scene()->items(m_Arrow->line().p2(), Qt::IntersectsItemShape, Qt::AscendingOrder);
             endItems.removeAll(m_Arrow);
 
             scene()->removeItem(m_Arrow);

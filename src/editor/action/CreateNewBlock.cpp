@@ -34,14 +34,14 @@ void CreateNewBlock::execute()
     BlockItem* newBlock2 = new BlockItem();
     scene->addItem(newBlock2);       
     
-    QBrush greenBrush(Qt::green);
-    QBrush blueBrush(Qt::blue);
-    QPen outlinePen(Qt::black);
-    outlinePen.setWidth(2);
-    
-    QGraphicsRectItem* block = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
-    block->setFlag(QGraphicsItem::ItemIsMovable);
-    block->setFlag(QGraphicsItem::ItemIsSelectable);
+//    QBrush greenBrush(Qt::green);
+//    QBrush blueBrush(Qt::blue);
+//    QPen outlinePen(Qt::black);
+//    outlinePen.setWidth(2);
+//    
+//    QGraphicsRectItem* block = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
+//    block->setFlag(QGraphicsItem::ItemIsMovable);
+//    block->setFlag(QGraphicsItem::ItemIsSelectable);
     
 //    QGraphicsRectItem* block2 = scene->addRect(150, 0, 80, 100, outlinePen, greenBrush);
 //    block2->setFlag(QGraphicsItem::ItemIsMovable);

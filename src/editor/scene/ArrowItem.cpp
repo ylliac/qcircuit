@@ -61,7 +61,8 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     QPen myPen = pen();
     myPen.setColor(m_Color);
-    qreal arrowSize = 20;
+    myPen.setWidth(5);
+    qreal arrowSize = 10;
     painter->setPen(myPen);
     painter->setBrush(m_Color);
     
@@ -90,9 +91,6 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     setLine(QLineF(startCenter, intersectPoint));
     
-    //TODO ACY
-//    setLine(centerLine);
-
     double angle = acos(line().dx() / line().length());
     if (line().dy() >= 0)
     {

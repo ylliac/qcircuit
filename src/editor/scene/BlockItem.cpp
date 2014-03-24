@@ -28,100 +28,111 @@ m_DrawingBottom(m_Height - m_YcornerGrabBuffer),
 m_DrawingLeft(m_XcornerGrabBuffer),
 m_DrawingTop(m_YcornerGrabBuffer),
 m_RemoveButton(NULL),
-m_ConnectButton(NULL)
-{
+m_ConnectButton(NULL) {
     m_OutterborderPen.setWidth(2);
     m_OutterborderPen.setColor(m_OutterborderColor);
 
     m_Text.setPos(35, 35);
     m_Text.setPlainText("text goes here");
     m_Text.setParentItem(this);
-
+//    m_Text.setFont(QFont("Calibri", 10, QFont::Bold));
+    
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemIsSelectable);
 }
 
-BlockItem::~BlockItem()
-{
+BlockItem::~BlockItem() {
 }
 
-QRectF BlockItem::boundingRect() const
-{
+QRectF BlockItem::boundingRect() const {
     return QRectF(m_DrawingLeft, m_DrawingTop, m_DrawingRight - m_DrawingLeft, m_DrawingBottom - m_DrawingTop);
 }
 
-void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-    //------------------------------------------------------------------
-    // DROP SHADOW 
-    //------------------------------------------------------------------
-    
-    /*
-     The drop shadow effect will be created by drawing a filled, rounded corner rectangle with a gradient fill.
-     Then on top of this will be drawn  filled, rounded corner rectangle, filled with a solid color, and offset such that the gradient filled
-     box is only visible below for a few pixels on two edges.
-
-     The total box size is _width by _height. So the top box will start at (0,0) and go to (_width-shadowThickness, _height-shadowThickness),
-     while the under box will be offset, and start at (shadowThickness+0, shadowThickness+0) and go to  (_width, _height).
-     */
-    
-    int shadowThickness = 3;
+void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+    //    //------------------------------------------------------------------
+    //    // DROP SHADOW 
+    //    //------------------------------------------------------------------
+    //    
+    //    /*
+    //     The drop shadow effect will be created by drawing a filled, rounded corner rectangle with a gradient fill.
+    //     Then on top of this will be drawn  filled, rounded corner rectangle, filled with a solid color, and offset such that the gradient filled
+    //     box is only visible below for a few pixels on two edges.
+    //
+    //     The total box size is _width by _height. So the top box will start at (0,0) and go to (_width-shadowThickness, _height-shadowThickness),
+    //     while the under box will be offset, and start at (shadowThickness+0, shadowThickness+0) and go to  (_width, _height).
+    //     */
+    //    
+    //    int shadowThickness = 3;
+    //
+    //    QLinearGradient gradient;
+    //    gradient.setStart(m_DrawingLeft, m_DrawingTop);
+    //    gradient.setFinalStop(m_DrawingRight, m_DrawingTop);
+    //    // starting color of the gradient - can play with the starting color and ,point since its not visible anyway
+    //    QColor grey1(150, 150, 150, 125); 
+    //    // grey2 is ending color of the gradient - this is what will show up as the shadow. the last parameter is the alpha blend, its set
+    //    // to 125 allowing a mix of th color and and the background, making more realistic shadow effect.
+    //    QColor grey2(225, 225, 225, 125);
+    //    gradient.setColorAt((qreal) 0, grey1);
+    //    gradient.setColorAt((qreal) 1, grey2);
+    //    QBrush brush(gradient);
+    //    painter->setBrush(brush);
+    //
+    //    // for the desired effect, no border will be drawn, and because a brush was set, the drawRoundRect will fill the box with the gradient brush.
+    //    m_OutterborderPen.setStyle(Qt::NoPen);
+    //    painter->setPen(m_OutterborderPen);
+    //
+    //    QPointF topLeft(m_DrawingLeft, m_DrawingLeft);
+    //    QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
+    //
+    //    QRectF rect(topLeft, bottomRight);
+    //
+    //    painter->drawRoundRect(rect, 25, 25); // corner radius of 25 pixels
+    //
+    //    //------------------------------------------------------------------
+    //    // CONTENT 
+    //    //------------------------------------------------------------------
+    //    
+    //    // draw the top box, the visible one
+    //    QBrush contentBrush(QColor(243, 255, 216, 255), Qt::SolidPattern);
+    //    painter->setBrush(contentBrush);
+    //
+    //    QPointF topLeft2(m_DrawingLeft, m_DrawingTop);
+    //    QPointF bottomRight2(m_DrawingRight - shadowThickness, m_DrawingBottom - shadowThickness);
+    //
+    //    QRectF rect2(topLeft2, bottomRight2);
+    //
+    //    painter->drawRoundRect(rect2, 25, 25);
 
     QLinearGradient gradient;
-    gradient.setStart(m_DrawingLeft, m_DrawingTop);
-    gradient.setFinalStop(m_DrawingRight, m_DrawingTop);
-    // starting color of the gradient - can play with the starting color and ,point since its not visible anyway
-    QColor grey1(150, 150, 150, 125); 
-    // grey2 is ending color of the gradient - this is what will show up as the shadow. the last parameter is the alpha blend, its set
-    // to 125 allowing a mix of th color and and the background, making more realistic shadow effect.
-    QColor grey2(225, 225, 225, 125);
-    gradient.setColorAt((qreal) 0, grey1);
-    gradient.setColorAt((qreal) 1, grey2);
+    gradient.setStart(m_DrawingLeft, m_DrawingBottom);
+    gradient.setFinalStop(m_DrawingLeft, m_DrawingTop);
+    QColor start(73, 132, 180, 255);
+    QColor end(97, 155, 203, 255);
+    gradient.setColorAt((qreal) 0, start);
+    gradient.setColorAt((qreal) 1, end);
     QBrush brush(gradient);
     painter->setBrush(brush);
 
-    // for the desired effect, no border will be drawn, and because a brush was set, the drawRoundRect will fill the box with the gradient brush.
-    m_OutterborderPen.setStyle(Qt::NoPen);
-    painter->setPen(m_OutterborderPen);
-
-    QPointF topLeft(m_DrawingLeft, m_DrawingLeft);
+    QPointF topLeft(m_DrawingLeft, m_DrawingTop);
     QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
 
     QRectF rect(topLeft, bottomRight);
+    painter->drawRect(rect);
 
-    painter->drawRoundRect(rect, 25, 25); // corner radius of 25 pixels
-
-    //------------------------------------------------------------------
-    // CONTENT 
-    //------------------------------------------------------------------
-    
-    // draw the top box, the visible one
-    QBrush contentBrush(QColor(243, 255, 216, 255), Qt::SolidPattern);
-    painter->setBrush(contentBrush);
-
-    QPointF topLeft2(m_DrawingLeft, m_DrawingTop);
-    QPointF bottomRight2(m_DrawingRight - shadowThickness, m_DrawingBottom - shadowThickness);
-
-    QRectF rect2(topLeft2, bottomRight2);
-
-    painter->drawRoundRect(rect2, 25, 25);
-    
     //------------------------------------------------------------------
     // SELECTION BORDER 
     //------------------------------------------------------------------
-    if(isSelected())
-    {
+    if (isSelected()) {
         painter->setBrush(Qt::NoBrush);
         QPen selectionPen(QColor(255, 0, 0, 255));
         selectionPen.setWidth(3);
         painter->setPen(selectionPen);
-        painter->drawRoundRect(rect2, 25, 25);
+        painter->drawRect(rect);
     }
 }
 
-void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
-{
+void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
     m_OutterborderColor = Qt::black;
 
     m_Corners[0]->setParentItem(NULL);
@@ -133,16 +144,15 @@ void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
     delete m_Corners[1];
     delete m_Corners[2];
     delete m_Corners[3];
-    
+
     m_RemoveButton->setParentItem(NULL);
     delete m_RemoveButton;
-    
+
     m_ConnectButton->setParentItem(NULL);
     delete m_ConnectButton;
 }
 
-void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
-{
+void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
     m_OutterborderColor = Qt::red;
 
     m_Corners[0] = new BlockCornerItem(this, 0);
@@ -154,51 +164,45 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
     m_Corners[1]->installSceneEventFilter(this);
     m_Corners[2]->installSceneEventFilter(this);
     m_Corners[3]->installSceneEventFilter(this);
-    
+
     m_RemoveButton = new BlockRemoveButton(this);
     m_ConnectButton = new BlockConnectButton(this);
 
     updateChildItemsPositions();
 }
 
-void BlockItem::updateChildItemsPositions()
-{
+void BlockItem::updateChildItemsPositions() {
     m_Corners[0]->setPos(m_DrawingLeft, m_DrawingTop);
     m_Corners[1]->setPos(m_DrawingRight, m_DrawingTop);
     m_Corners[2]->setPos(m_DrawingRight, m_DrawingBottom);
     m_Corners[3]->setPos(m_DrawingLeft, m_DrawingBottom);
-    
+
     m_RemoveButton->setPos(m_DrawingLeft - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingTop - m_RemoveButton->boundingRect().height() / 2.0);
     m_ConnectButton->setPos(m_DrawingRight - m_RemoveButton->boundingRect().width() / 2.0, m_DrawingBottom / 2.0);
 }
 
-void BlockItem::incrementSize(int x, int y)
-{
+void BlockItem::incrementSize(int x, int y) {
     m_Width += x;
     m_Height += y;
 
-    m_DrawingRight =  m_Width - m_XcornerGrabBuffer;
-    m_DrawingBottom=  m_Height - m_YcornerGrabBuffer;
+    m_DrawingRight = m_Width - m_XcornerGrabBuffer;
+    m_DrawingBottom = m_Height - m_YcornerGrabBuffer;
 }
 
-bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
-{
+bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event) {
     BlockCornerItem * corner = dynamic_cast<BlockCornerItem *> (watched);
-    if (corner == NULL)
-    {
+    if (corner == NULL) {
         // not expected to get here
         return false;
     }
 
     QGraphicsSceneMouseEvent * mevent = dynamic_cast<QGraphicsSceneMouseEvent*> (event);
-    if (mevent == NULL)
-    {
+    if (mevent == NULL) {
         // this is not one of the mouse events we are interrested in
         return false;
     }
 
-    switch (event->type())
-    {
+    switch (event->type()) {
             // if the mouse went down, record the x,y coords of the press, record it inside the corner object
         case QEvent::GraphicsSceneMousePress:
         {
@@ -226,8 +230,7 @@ bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
             break;
     }
 
-    if (corner->getMouseState() == BlockCornerItem::kMouseMoving)
-    {
+    if (corner->getMouseState() == BlockCornerItem::kMouseMoving) {
 
         qreal x = mevent->pos().x(), y = mevent->pos().y();
 
@@ -237,8 +240,7 @@ bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
 
         int XaxisSign = 0;
         int YaxisSign = 0;
-        switch (corner->getCorner())
-        {
+        switch (corner->getCorner()) {
             case 0:
             {
                 XaxisSign = +1;
@@ -289,19 +291,14 @@ bool BlockItem::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
         deltaWidth *= (-1);
         deltaHeight *= (-1);
 
-        if (corner->getCorner() == 0)
-        {
+        if (corner->getCorner() == 0) {
             int newXpos = this->pos().x() + deltaWidth;
             int newYpos = this->pos().y() + deltaHeight;
             this->setPos(newXpos, newYpos);
-        }
-        else if (corner->getCorner() == 1)
-        {
+        } else if (corner->getCorner() == 1) {
             int newYpos = this->pos().y() + deltaHeight;
             this->setPos(this->pos().x(), newYpos);
-        }
-        else if (corner->getCorner() == 3)
-        {
+        } else if (corner->getCorner() == 3) {
             int newXpos = this->pos().x() + deltaWidth;
             this->setPos(newXpos, this->pos().y());
         }
