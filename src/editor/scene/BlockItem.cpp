@@ -32,10 +32,10 @@ m_ConnectButton(NULL) {
     m_OutterborderPen.setWidth(2);
     m_OutterborderPen.setColor(m_OutterborderColor);
 
-    m_Text.setPos(35, 35);
-    m_Text.setPlainText("text goes here");
+    m_Text.setPos(50, 35);
+    m_Text.setPlainText("Block");
     m_Text.setParentItem(this);
-//    m_Text.setFont(QFont("Calibri", 10, QFont::Bold));
+    m_Text.setFont(QFont("Helvetica", 10, QFont::Bold));
     
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsMovable);
@@ -50,6 +50,8 @@ QRectF BlockItem::boundingRect() const {
 }
 
 void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+    
+    //TODO ACY SUPPRIMER
     //    //------------------------------------------------------------------
     //    // DROP SHADOW 
     //    //------------------------------------------------------------------
@@ -107,12 +109,16 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QLinearGradient gradient;
     gradient.setStart(m_DrawingLeft, m_DrawingBottom);
     gradient.setFinalStop(m_DrawingLeft, m_DrawingTop);
-    QColor start(73, 132, 180, 255);
-    QColor end(97, 155, 203, 255);
+//    QColor start(127, 210, 251, 255); // blue
+//    QColor start(245,245,245); //light gray
+    QColor start(238,238,240); //gray
+    QColor end = start;
     gradient.setColorAt((qreal) 0, start);
     gradient.setColorAt((qreal) 1, end);
     QBrush brush(gradient);
     painter->setBrush(brush);
+//    painter->setPen(Qt::gray); // gray
+    painter->setPen(QColor(80,80,80)); // darker gray
 
     QPointF topLeft(m_DrawingLeft, m_DrawingTop);
     QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
@@ -121,12 +127,12 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->drawRect(rect);
 
     //------------------------------------------------------------------
-    // SELECTION BORDER 
+    // SELECTION 
     //------------------------------------------------------------------
     if (isSelected()) {
         painter->setBrush(Qt::NoBrush);
-        QPen selectionPen(QColor(255, 0, 0, 255));
-        selectionPen.setWidth(3);
+        QPen selectionPen(Qt::black);
+        selectionPen.setWidth(2);
         painter->setPen(selectionPen);
         painter->drawRect(rect);
     }

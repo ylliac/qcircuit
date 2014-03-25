@@ -22,6 +22,9 @@ FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
     
     ui->graphicsView->setScene(m_Scene);
     ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing, true);
+    ui->graphicsView->setRenderHint(QPainter::HighQualityAntialiasing, true);
+    ui->graphicsView->setRenderHint(QPainter::SmoothPixmapTransform, true);
     
     initialize();
 }

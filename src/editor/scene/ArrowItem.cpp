@@ -61,11 +61,13 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     QPen myPen = pen();
     myPen.setColor(m_Color);
-    myPen.setWidth(5);
-    qreal arrowSize = 10;
+    myPen.setWidth(3);
     painter->setPen(myPen);
     painter->setBrush(m_Color);
     
+    //------------------------------------------------------------------
+    // ARROW BODY 
+    //------------------------------------------------------------------
     QPointF startCenter = m_StartItem->pos() + m_StartItem->boundingRect().center();
     QPointF endCenter = m_EndItem->pos() + m_EndItem->boundingRect().center();
 
@@ -90,27 +92,54 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     }
 
     setLine(QLineF(startCenter, intersectPoint));
+    painter->drawLine(line());
     
+    //TODO ACY SUPPRIMER
+    //------------------------------------------------------------------
+    // ARROW HEAD 
+    //------------------------------------------------------------------    
+//    qreal arrowSize = 10;
+//    double angle = acos(line().dx() / line().length());
+//    if (line().dy() >= 0)
+//    {
+//        angle = (Pi * 2) - angle;
+//    }
+//
+//    QPointF arrowP1 = line().p2() - QPointF(sin(angle + Pi / 3) * arrowSize, cos(angle + Pi / 3) * arrowSize);
+//    QPointF arrowP2 = line().p2() - QPointF(sin(angle + Pi - Pi / 3) * arrowSize, cos(angle + Pi - Pi / 3) * arrowSize);
+//
+//    m_ArrowHead.clear();
+//    m_ArrowHead << line().p2() << arrowP1 << arrowP2;
+//    painter->drawPolygon(m_ArrowHead);   
+        
+    //------------------------------------------------------------------
+    // ARROW BORDER 
+    //------------------------------------------------------------------
     double angle = acos(line().dx() / line().length());
     if (line().dy() >= 0)
     {
         angle = (Pi * 2) - angle;
     }
-
-    QPointF arrowP1 = line().p2() - QPointF(sin(angle + Pi / 3) * arrowSize, cos(angle + Pi / 3) * arrowSize);
-    QPointF arrowP2 = line().p2() - QPointF(sin(angle + Pi - Pi / 3) * arrowSize, cos(angle + Pi - Pi / 3) * arrowSize);
-
-    m_ArrowHead.clear();
-    m_ArrowHead << line().p2() << arrowP1 << arrowP2;
-    painter->drawLine(line());
-    painter->drawPolygon(m_ArrowHead);
+    double dx = sin(angle + Pi / 4) * 3.0;
+    double dy = cos(angle + Pi / 4) * 3.0;    
+    
+    painter->setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+    QLineF myLine = line();
+    myLine.translate(dx, dy);
+    painter->drawLine(myLine);
+    myLine.translate(-2*dx, -2*dy);
+    painter->drawLine(myLine); 
+    
+    //------------------------------------------------------------------
+    // SELECTION 
+    //------------------------------------------------------------------
     if (isSelected())
     {
-        painter->setPen(QPen(m_Color, 1, Qt::DashLine));
+        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
         QLineF myLine = line();
-        myLine.translate(0, 4.0);
+        myLine.translate(dx, dy);
         painter->drawLine(myLine);
-        myLine.translate(0, -8.0);
+        myLine.translate(-2*dx, -2*dy);
         painter->drawLine(myLine);
     }
 }
