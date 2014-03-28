@@ -19,18 +19,19 @@
 #include <iostream>
 
 BlockConnectButton::BlockConnectButton(QGraphicsItem *parent) :
-m_Width(20),
-m_Height(20),
+m_Width(22),
+m_Height(22),
 m_Arrow(NULL)
 {
     setParentItem(parent);
     setAcceptHoverEvents(true);
 
-    m_BorderPen.setWidth(2);
-    m_BorderPen.setColor(Qt::blue);
-    m_BorderPen.setCapStyle(Qt::SquareCap);
-    m_BorderPen.setStyle(Qt::SolidLine);
-
+    m_Pen.setColor(Qt::white);
+    m_Pen.setWidth(2);
+    
+    m_Brush.setColor(Qt::black);
+    m_Brush.setStyle(Qt::SolidPattern);
+    
     installSceneEventFilter(this);
 }
 
@@ -44,16 +45,15 @@ QRectF BlockConnectButton::boundingRect() const
 }
 
 void BlockConnectButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-    painter->setPen(m_BorderPen);
-
+{    
+    painter->setPen(m_Pen);
+    painter->setBrush(m_Brush);
+    
     QPointF topLeft(0, 0);
     QPointF bottomRight(m_Width, m_Height);
-
     QRectF rect(topLeft, bottomRight);
-
     painter->drawEllipse(rect);
-
+    
     qreal widthPer4 = m_Width / 4.0;
     qreal heightPer4 = m_Height / 4.0;
     painter->drawLine(widthPer4, 2 * heightPer4, 3 * widthPer4, 2 * heightPer4);
@@ -63,13 +63,13 @@ void BlockConnectButton::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 void BlockConnectButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
-    m_BorderPen.setColor(Qt::blue);
+    m_Pen.setColor(Qt::white);
     this->update(0, 0, m_Width, m_Height);
 }
 
 void BlockConnectButton::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 {
-    m_BorderPen.setColor(Qt::green);
+    m_Pen.setColor(QColor(255,140,0));
     this->update(0, 0, m_Width, m_Height);
 }
 

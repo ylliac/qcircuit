@@ -29,8 +29,10 @@ private:
     qreal m_Width;
     qreal m_Height;
     
-    ///Border pen
-    QPen m_BorderPen;
+    ///Pen
+    QPen m_Pen;
+    ///Brush
+    QBrush m_Brush;
 
 };
 

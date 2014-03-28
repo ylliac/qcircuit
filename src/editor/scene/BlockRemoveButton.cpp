@@ -15,11 +15,12 @@ m_Height(20)
 {
     setParentItem(parent);
     setAcceptHoverEvents(true);
+
+    m_Pen.setColor(Qt::white);
+    m_Pen.setWidth(2);
     
-    m_BorderPen.setWidth(2);
-    m_BorderPen.setColor(Qt::blue);
-    m_BorderPen.setCapStyle(Qt::SquareCap);
-    m_BorderPen.setStyle(Qt::SolidLine);
+    m_Brush.setColor(Qt::black);
+    m_Brush.setStyle(Qt::SolidPattern);
 }
 
 BlockRemoveButton::~BlockRemoveButton()
@@ -33,13 +34,12 @@ QRectF BlockRemoveButton::boundingRect() const
 
 void BlockRemoveButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->setPen(m_BorderPen);
-
+    painter->setPen(m_Pen);
+    painter->setBrush(m_Brush);
+    
     QPointF topLeft(0, 0);
     QPointF bottomRight(m_Width, m_Height);
-
     QRectF rect(topLeft, bottomRight);
-
     painter->drawEllipse(rect);
 
     qreal widthPer4 = m_Width / 4.0;
@@ -50,13 +50,13 @@ void BlockRemoveButton::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 void BlockRemoveButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
-    m_BorderPen.setColor(Qt::blue);
+    m_Pen.setColor(Qt::white);
     this->update(0, 0, m_Width, m_Height);
 }
 
 void BlockRemoveButton::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 {
-    m_BorderPen.setColor(Qt::green);
+    m_Pen.setColor(QColor(255,140,0));
     this->update(0, 0, m_Width, m_Height);
 }
 

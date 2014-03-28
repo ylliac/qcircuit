@@ -170,6 +170,12 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
     m_Corners[1]->installSceneEventFilter(this);
     m_Corners[2]->installSceneEventFilter(this);
     m_Corners[3]->installSceneEventFilter(this);
+    
+    //TODO ACY
+    m_Corners[0]->setVisible(false);
+    m_Corners[1]->setVisible(false);
+    m_Corners[2]->setVisible(false);
+    m_Corners[3]->setVisible(false);
 
     m_RemoveButton = new BlockRemoveButton(this);
     m_ConnectButton = new BlockConnectButton(this);
