@@ -124,21 +124,24 @@ bool BlockConnectButton::sceneEventFilter(QGraphicsItem * watched, QEvent * even
 
             if (endItems.size() > 0)
             {
-                BlockItem * startItem = qgraphicsitem_cast<BlockItem *>(parentItem());
-                BlockItem * endItem = qgraphicsitem_cast<BlockItem *>(endItems.first());
+                BlockItem * startItem = dynamic_cast<BlockItem *>(parentItem());
+                BlockItem * endItem = dynamic_cast<BlockItem *>(endItems.first());
                 
-                ArrowItem* arrow = new ArrowItem(startItem, endItem);
-                arrow->setColor(QColor(123,229,180)); //green
-//                arrow->setColor(QColor(118,229,233)); //blue
-//                arrow->setColor(QColor(248,131,128)); //red
-//                arrow->setColor(QColor(132,130,250)); //violet
-//                arrow->setColor(QColor(237,237,120)); //yellow
-//                arrow->setColor(QColor(124,181,242)); //another blue
-//                arrow->setColor(QColor(141,150,165)); //gray
-                
-                arrow->setZValue(-1000.0);
-                scene()->addItem(arrow);
-                arrow->updatePosition();
+                if(startItem != NULL && endItem != NULL)
+                {
+                    ArrowItem* arrow = new ArrowItem(startItem, endItem);
+                    arrow->setColor(QColor(123,229,180)); //green
+    //                arrow->setColor(QColor(118,229,233)); //blue
+    //                arrow->setColor(QColor(248,131,128)); //red
+    //                arrow->setColor(QColor(132,130,250)); //violet
+    //                arrow->setColor(QColor(237,237,120)); //yellow
+    //                arrow->setColor(QColor(124,181,242)); //another blue
+    //                arrow->setColor(QColor(141,150,165)); //gray
+
+                    arrow->setZValue(-1000.0);
+                    scene()->addItem(arrow);
+                    arrow->updateTextPosition();
+                }
             }
 
             return true;

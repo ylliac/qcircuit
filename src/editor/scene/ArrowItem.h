@@ -27,7 +27,7 @@ public:
     void setColor(const QColor &color);    
 
 public slots:
-    void updatePosition();
+    void updateTextPosition();
     
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -38,6 +38,9 @@ private:
     BlockItem* m_EndItem;
     QColor m_Color;
     QPolygonF m_ArrowHead;
+    
+    QGraphicsTextItem* m_InputPortName;
+    QGraphicsTextItem* m_OutputPortName;
 
 };
 

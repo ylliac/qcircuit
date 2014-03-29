@@ -7,7 +7,12 @@
 
 #include "BlockRemoveButton.h"
 
+#include <QtCore/QEvent>
 #include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsScene>
+#include <QtGui/QGraphicsSceneMouseEvent>
 
 BlockRemoveButton::BlockRemoveButton(QGraphicsItem *parent) :
 m_Width(20),
@@ -21,6 +26,8 @@ m_Height(20)
     
     m_Brush.setColor(Qt::black);
     m_Brush.setStyle(Qt::SolidPattern);
+    
+    installSceneEventFilter(this);
 }
 
 BlockRemoveButton::~BlockRemoveButton()
@@ -58,5 +65,38 @@ void BlockRemoveButton::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 {
     m_Pen.setColor(QColor(255,140,0));
     this->update(0, 0, m_Width, m_Height);
+}
+
+bool BlockRemoveButton::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
+{
+    if (watched != this)
+    {
+        // not expected to get here
+        return false;
+    }
+
+    QGraphicsSceneMouseEvent * mevent = dynamic_cast<QGraphicsSceneMouseEvent*> (event);
+    if (mevent == NULL)
+    {
+        // this is not one of the mouse events we are interrested in
+        return false;
+    }
+
+    if (event->type() == QEvent::GraphicsSceneMousePress)
+    {
+        //If mouse press event is not handled, mouse released event is never emitted
+        return true;
+    }
+    else if (event->type() == QEvent::GraphicsSceneMouseRelease)
+    {
+        QGraphicsSceneMouseEvent * mouseEvent = ((QGraphicsSceneMouseEvent *) event);
+        if (mouseEvent->button() == Qt::LeftButton)
+        {
+            scene()->removeItem(parentItem());
+            return true;
+        }
+    }
+
+    return false;
 }
 

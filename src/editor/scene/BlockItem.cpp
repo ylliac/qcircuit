@@ -9,6 +9,7 @@
 
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
+#include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsSceneMouseEvent>
 
 #include "BlockCornerItem.h"
@@ -17,7 +18,7 @@
 
 BlockItem::BlockItem() :
 m_Text(),
-m_OutterborderColor(Qt::black),
+m_OutterborderColor(Qt::gray),
 m_OutterborderPen(),
 m_Width(150),
 m_Height(100),
@@ -40,17 +41,34 @@ m_ConnectButton(NULL) {
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 }
 
 BlockItem::~BlockItem() {
 }
 
 QRectF BlockItem::boundingRect() const {
-    return QRectF(m_DrawingLeft, m_DrawingTop, m_DrawingRight - m_DrawingLeft, m_DrawingBottom - m_DrawingTop);
+    return QRectF(0, 0, m_Width, m_Height);
 }
 
-void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    
+QPainterPath BlockItem::shape() const
+{
+    QPainterPath path;
+    QRectF shape(m_DrawingLeft, m_DrawingTop, m_DrawingRight - m_DrawingLeft, m_DrawingBottom - m_DrawingTop);
+    path.addRect(shape);
+    return path;
+}
+
+QVariant BlockItem::itemChange(GraphicsItemChange change, const QVariant &value)
+ {
+     if (change == ItemPositionChange && scene() != NULL) {         
+         emit posChanged(this);
+     }
+     return QGraphicsItem::itemChange(change, value);
+ }
+
+void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) 
+{   
     //TODO ACY SUPPRIMER
     //    //------------------------------------------------------------------
     //    // DROP SHADOW 
@@ -117,8 +135,10 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     gradient.setColorAt((qreal) 1, end);
     QBrush brush(gradient);
     painter->setBrush(brush);
-//    painter->setPen(Qt::gray); // gray
-    painter->setPen(QColor(80,80,80)); // darker gray
+    QPen pen;
+    pen.setColor(m_OutterborderColor);
+    pen.setWidth(2);
+    painter->setPen(pen);
 
     QPointF topLeft(m_DrawingLeft, m_DrawingTop);
     QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
@@ -130,16 +150,22 @@ void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     // SELECTION 
     //------------------------------------------------------------------
     if (isSelected()) {
+        QPointF selectionTopLeft(m_DrawingLeft-2, m_DrawingTop-2);
+        QPointF selectionBottomRight(m_DrawingRight+2, m_DrawingBottom+2);
+        QRectF selectionRect(selectionTopLeft, selectionBottomRight);
         painter->setBrush(Qt::NoBrush);
-        QPen selectionPen(Qt::black);
+        QPen selectionPen;
+        selectionPen.setColor(QColor(124,181,242)); //blue
         selectionPen.setWidth(2);
+        selectionPen.setStyle(Qt::SolidLine);
         painter->setPen(selectionPen);
-        painter->drawRect(rect);
+        painter->drawRect(selectionRect);
     }
 }
 
 void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
-    m_OutterborderColor = Qt::black;
+//    m_OutterborderColor = QColor(80,80,80);
+    m_OutterborderColor = Qt::gray;
 
     m_Corners[0]->setParentItem(NULL);
     m_Corners[1]->setParentItem(NULL);
@@ -156,10 +182,12 @@ void BlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 
     m_ConnectButton->setParentItem(NULL);
     delete m_ConnectButton;
+    
+    this->update(boundingRect());
 }
 
 void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
-    m_OutterborderColor = Qt::red;
+    m_OutterborderColor = Qt::black;
 
     m_Corners[0] = new BlockCornerItem(this, 0);
     m_Corners[1] = new BlockCornerItem(this, 1);
@@ -181,6 +209,8 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
     m_ConnectButton = new BlockConnectButton(this);
 
     updateChildItemsPositions();
+    
+    this->update(boundingRect());
 }
 
 void BlockItem::updateChildItemsPositions() {

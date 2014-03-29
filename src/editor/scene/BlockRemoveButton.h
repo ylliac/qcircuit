@@ -22,6 +22,8 @@ public:
     ///Mouse hover events
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+
+    virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);
     
 private:
     

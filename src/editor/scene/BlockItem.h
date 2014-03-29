@@ -16,12 +16,15 @@ class BlockCornerItem;
 class BlockRemoveButton;
 class BlockConnectButton;
 
-class BlockItem : public QGraphicsItem {
+class BlockItem : public QObject, public QGraphicsItem {
+    Q_OBJECT
+    
 public:
     BlockItem();
     virtual ~BlockItem();
 
     virtual QRectF boundingRect() const;
+    virtual QPainterPath shape() const;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     ///Handle hover event
@@ -29,7 +32,11 @@ public:
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 
     virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+signals:
+    void posChanged(BlockItem* item);
+    
 private:
     void updateChildItemsPositions();
     void incrementSize(int x, int y);

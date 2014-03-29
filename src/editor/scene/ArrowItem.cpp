@@ -9,7 +9,10 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
+#include <QtGui/QTextBlockFormat>
+#include <QtGui/QTextCursor>
 #include <cmath>
+#include <iostream>
 
 const qreal Pi = 3.14;
 
@@ -22,6 +25,18 @@ QGraphicsLineItem(parent, scene)
 
     setPen(QPen(m_Color, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     setFlag(QGraphicsItem::ItemIsSelectable, true);
+    
+    bool check = connect(startItem, SIGNAL(posChanged(BlockItem*)),this, SLOT(updateTextPosition()));
+    Q_ASSERT(check);
+    check = connect(endItem, SIGNAL(posChanged(BlockItem*)),this, SLOT(updateTextPosition()));
+    Q_ASSERT(check);
+    
+    //TODO ACY
+    m_InputPortName = new QGraphicsTextItem(this);
+    m_InputPortName->setPlainText("IN");
+    
+    m_OutputPortName = new QGraphicsTextItem(this);
+    m_OutputPortName->setPlainText("OUT");
 }
 
 ArrowItem::~ArrowItem()
@@ -30,7 +45,7 @@ ArrowItem::~ArrowItem()
 
 QRectF ArrowItem::boundingRect() const
 {
-    qreal extra = (pen().width() + 20) / 2.0;
+    qreal extra = (pen().width() + 40) / 2.0;
 
     return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
             line().p2().y() - line().p1().y()))
@@ -45,15 +60,29 @@ QPainterPath ArrowItem::shape() const
     return path;
 }
 
-void ArrowItem::updatePosition()
+void ArrowItem::updateTextPosition()
 {
-    QLineF line(mapFromItem(m_StartItem, 0, 0), mapFromItem(m_EndItem, 0, 0));
-    setLine(line);
+    //TODO ACY
+        
+    QLineF unitVector = line().unitVector();
+    
+    m_InputPortName->setPos(line().p1());
+    m_OutputPortName->setPos(
+        line().p2().x() 
+        - m_OutputPortName->boundingRect().width() / 2. 
+        - m_OutputPortName->boundingRect().width() * unitVector.dx(),
+            line().p2().y() 
+            - m_OutputPortName->boundingRect().height() / 2. 
+            - m_OutputPortName->boundingRect().height() * unitVector.dy());
 }
 
 void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         QWidget *)
 {
+    
+    //TODO ACY
+    std::cout << "POS = " << pos().x() << " - " << pos().y() << std::endl;
+    
     if (m_StartItem->collidesWithItem(m_EndItem))
     {
         return;
@@ -93,24 +122,6 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     setLine(QLineF(startCenter, intersectPoint));
     painter->drawLine(line());
-    
-    //TODO ACY SUPPRIMER
-    //------------------------------------------------------------------
-    // ARROW HEAD 
-    //------------------------------------------------------------------    
-//    qreal arrowSize = 10;
-//    double angle = acos(line().dx() / line().length());
-//    if (line().dy() >= 0)
-//    {
-//        angle = (Pi * 2) - angle;
-//    }
-//
-//    QPointF arrowP1 = line().p2() - QPointF(sin(angle + Pi / 3) * arrowSize, cos(angle + Pi / 3) * arrowSize);
-//    QPointF arrowP2 = line().p2() - QPointF(sin(angle + Pi - Pi / 3) * arrowSize, cos(angle + Pi - Pi / 3) * arrowSize);
-//
-//    m_ArrowHead.clear();
-//    m_ArrowHead << line().p2() << arrowP1 << arrowP2;
-//    painter->drawPolygon(m_ArrowHead);   
         
     //------------------------------------------------------------------
     // ARROW BORDER 
@@ -130,12 +141,19 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     myLine.translate(-2*dx, -2*dy);
     painter->drawLine(myLine); 
     
+    painter->setPen(Qt::red);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawRect(boundingRect());
+    
     //------------------------------------------------------------------
     // SELECTION 
     //------------------------------------------------------------------
     if (isSelected())
     {
-        painter->setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        dx = sin(angle + Pi / 4) * 4.0;
+        dy = cos(angle + Pi / 4) * 4.0;
+        
+        painter->setPen(QPen(QColor(124,181,242), 2, Qt::SolidLine)); //blue
         QLineF myLine = line();
         myLine.translate(dx, dy);
         painter->drawLine(myLine);
