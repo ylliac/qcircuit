@@ -7,6 +7,7 @@
 
 #include "ArrowItem.h"
 
+#include <QtCore/qnumeric.h>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QtGui/QTextBlockFormat>
@@ -61,19 +62,21 @@ QPainterPath ArrowItem::shape() const
 }
 
 void ArrowItem::updateTextPosition()
-{
-    //TODO ACY
-        
-    QLineF unitVector = line().unitVector();
-    
-    m_InputPortName->setPos(line().p1());
-    m_OutputPortName->setPos(
-        line().p2().x() 
-        - m_OutputPortName->boundingRect().width() / 2. 
-        - m_OutputPortName->boundingRect().width() * unitVector.dx(),
-            line().p2().y() 
-            - m_OutputPortName->boundingRect().height() / 2. 
-            - m_OutputPortName->boundingRect().height() * unitVector.dy());
+{        
+    QLineF unitVector = line().unitVector();    
+    if(!qIsNaN(unitVector.dx()))
+    {    
+        //TODO ACY
+        m_InputPortName->setPos(line().p1());
+
+        m_OutputPortName->setPos(
+            line().p2().x() 
+            - m_OutputPortName->boundingRect().width() / 2. 
+            - m_OutputPortName->boundingRect().width() * unitVector.dx(),
+                line().p2().y() 
+                - m_OutputPortName->boundingRect().height() / 2. 
+                - m_OutputPortName->boundingRect().height() * unitVector.dy());
+    }
 }
 
 void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
