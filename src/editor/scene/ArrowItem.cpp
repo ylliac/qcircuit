@@ -65,23 +65,23 @@ void ArrowItem::updateTextPosition()
 {        
     QLineF unitVector = line().unitVector();    
     if(!qIsNaN(unitVector.dx()))
-    {    
-        m_InputPortName->setPos(
+    {            
+        m_OutputPortName->setPos(
             line().p1().x() 
-            - m_InputPortName->boundingRect().width() / 2. 
-            + m_InputPortName->boundingRect().width() * unitVector.dx()
+            - m_OutputPortName->boundingRect().width() / 2. 
+            + m_OutputPortName->boundingRect().width() * unitVector.dx()
                 , line().p1().y() 
-                - m_InputPortName->boundingRect().height() / 2. 
-                + m_InputPortName->boundingRect().height() * unitVector.dy()
+                - m_OutputPortName->boundingRect().height() / 2. 
+                + m_OutputPortName->boundingRect().height() * unitVector.dy()
         );
 
-        m_OutputPortName->setPos(
+        m_InputPortName->setPos(
             line().p2().x() 
-            - m_OutputPortName->boundingRect().width() / 2. 
-            - m_OutputPortName->boundingRect().width() * unitVector.dx(),
+            - m_InputPortName->boundingRect().width() / 2. 
+            - m_InputPortName->boundingRect().width() * unitVector.dx(),
                 line().p2().y() 
-                - m_OutputPortName->boundingRect().height() / 2. 
-                - m_OutputPortName->boundingRect().height() * unitVector.dy());
+                - m_InputPortName->boundingRect().height() / 2. 
+                - m_InputPortName->boundingRect().height() * unitVector.dy());
     }
 }
 
@@ -164,9 +164,10 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     myLine.translate(-2*dx, -2*dy);
     painter->drawLine(myLine); 
     
-    painter->setPen(Qt::red);
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(boundingRect());
+    //TODO ACY Draw arrow bounding rect
+//    painter->setPen(Qt::red);
+//    painter->setBrush(Qt::NoBrush);
+//    painter->drawRect(boundingRect());
     
     //------------------------------------------------------------------
     // SELECTION 
@@ -183,6 +184,8 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         myLine.translate(-2*dx, -2*dy);
         painter->drawLine(myLine);
     }
+    
+    updateTextPosition();
 }
 
 void ArrowItem::setColor(const QColor &color)
