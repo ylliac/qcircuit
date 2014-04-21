@@ -30,9 +30,11 @@ void CreateNewBlock::execute()
     
     BlockItem* newBlock = new BlockItem();
     scene->addItem(newBlock);    
+    newBlock->setPos(200,10);
     
     BlockItem* newBlock2 = new BlockItem();
     scene->addItem(newBlock2);       
+    newBlock2->setPos(400,10);
     
 //    QBrush greenBrush(Qt::green);
 //    QBrush blueBrush(Qt::blue);

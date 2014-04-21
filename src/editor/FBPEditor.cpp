@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <QtCore/QtConcurrentRun>
+#include <QtGui/QLabel>
 
 #include "action/CreateNewBlock.h"
 #include "scene/EditorScene.h"
@@ -22,6 +23,8 @@ FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
     ui->setupUi(this);
     
     ui->graphicsView->setScene(m_Scene);
+//    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    ui->graphicsView->setAlignment(Qt::AlignCenter);
     ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing, true);
     ui->graphicsView->setRenderHint(QPainter::HighQualityAntialiasing, true);
@@ -53,10 +56,9 @@ void FBPEditor::initialize()
     // NOTIFICATIONS
     //------------------------------------------------------------------
     //TODO ACY TEST
-    ui->graphicsView->setVisible(false);
     NotificationPanel* notificationPanel = new NotificationPanel(ui->graphicsView);
 //    centralWidget()->layout()->addWidget(notificationPanel);
-    notificationPanel->setGeometry(100, 100, 500, 500);
+//    notificationPanel->setGeometry(100, 100, 500, 500);
 }
 
 EditorScene* FBPEditor::getScene()
