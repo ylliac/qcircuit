@@ -66,8 +66,14 @@ void ArrowItem::updateTextPosition()
     QLineF unitVector = line().unitVector();    
     if(!qIsNaN(unitVector.dx()))
     {    
-        //TODO ACY
-        m_InputPortName->setPos(line().p1());
+        m_InputPortName->setPos(
+            line().p1().x() 
+            - m_InputPortName->boundingRect().width() / 2. 
+            + m_InputPortName->boundingRect().width() * unitVector.dx()
+                , line().p1().y() 
+                - m_InputPortName->boundingRect().height() / 2. 
+                + m_InputPortName->boundingRect().height() * unitVector.dy()
+        );
 
         m_OutputPortName->setPos(
             line().p2().x() 
@@ -81,11 +87,7 @@ void ArrowItem::updateTextPosition()
 
 void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         QWidget *)
-{
-    
-    //TODO ACY
-    std::cout << "POS = " << pos().x() << " - " << pos().y() << std::endl;
-    
+{    
     if (m_StartItem->collidesWithItem(m_EndItem))
     {
         return;
@@ -105,17 +107,35 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     QLineF centerLine(startCenter, endCenter);
     
-    QPainterPath endPainterPath = m_EndItem->shape();
-    QPointF p1 = endPainterPath.elementAt(0) + m_EndItem->pos();
+    //Intersection with start element
+    QPainterPath startPainterPath = m_StartItem->shape();
+    QPointF p1 = startPainterPath.elementAt(0) + m_StartItem->pos();
     QPointF p2;
-    QPointF intersectPoint;
+    QPointF startIntersectPoint;
     QLineF polyLine;
+    for (int i = 1; i < startPainterPath.elementCount(); ++i)
+    {
+        p2 = startPainterPath.elementAt(i) + m_StartItem->pos();
+        polyLine = QLineF(p1, p2);
+        QLineF::IntersectType intersectType =
+                polyLine.intersect(centerLine, &startIntersectPoint);
+        if (intersectType == QLineF::BoundedIntersection)
+        {
+            break;
+        }
+        p1 = p2;
+    }
+    
+    //Intersection with end element
+    QPainterPath endPainterPath = m_EndItem->shape();
+    p1 = endPainterPath.elementAt(0) + m_EndItem->pos();
+    QPointF endIntersectPoint;
     for (int i = 1; i < endPainterPath.elementCount(); ++i)
     {
         p2 = endPainterPath.elementAt(i) + m_EndItem->pos();
         polyLine = QLineF(p1, p2);
         QLineF::IntersectType intersectType =
-                polyLine.intersect(centerLine, &intersectPoint);
+                polyLine.intersect(centerLine, &endIntersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
         {
             break;
@@ -123,7 +143,7 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         p1 = p2;
     }
 
-    setLine(QLineF(startCenter, intersectPoint));
+    setLine(QLineF(startIntersectPoint, endIntersectPoint));
     painter->drawLine(line());
         
     //------------------------------------------------------------------
