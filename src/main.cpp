@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 //    mainWindow.show();
     
     FBPEditor fbpEditor;
-    fbpEditor.setGeometry(100, 100, 800, 500);
+    fbpEditor.setGeometry(100, 100, 1500, 800);
     fbpEditor.show();
 
     return app.exec();
