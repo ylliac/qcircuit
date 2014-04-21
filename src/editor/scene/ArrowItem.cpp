@@ -61,6 +61,16 @@ QPainterPath ArrowItem::shape() const
     return path;
 }
 
+BlockItem* ArrowItem::getStartBlock()
+{
+    return m_StartItem;
+}
+    
+BlockItem* ArrowItem::getEndBlock()
+{
+    return m_EndItem;
+}
+
 void ArrowItem::updateTextPosition()
 {        
     QLineF unitVector = line().unitVector();    

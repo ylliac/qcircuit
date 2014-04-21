@@ -24,6 +24,9 @@ public:
     QRectF boundingRect() const;
     QPainterPath shape() const;
     
+    BlockItem* getStartBlock();
+    BlockItem* getEndBlock();
+    
     void setColor(const QColor &color);    
 
 public slots:
