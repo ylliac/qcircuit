@@ -11,6 +11,7 @@
 #include "ui_NotificationPanel.h"
 
 #include <QtGui/QWidget>
+#include <QtGui/QVBoxLayout>
 
 class NotificationPanel : public QWidget {
     Q_OBJECT
@@ -19,8 +20,11 @@ public:
     NotificationPanel(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~NotificationPanel();
     
+    void addNotification(QWidget* notification);
+    
 private:
-    Ui::NotificationPanel widget;
+    Ui::NotificationPanel widget;    
+    QVBoxLayout* m_Layout;
 };
 
 #endif	/* _NOTIFICATIONPANEL_H */

@@ -7,7 +7,6 @@
 
 #include "NotificationPanel.h"
 
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
 
 NotificationPanel::NotificationPanel(QWidget* parent, Qt::WindowFlags f) :
@@ -17,20 +16,20 @@ QWidget(parent, f)
     
     int fixedWidth = 300;
     
-    setStyleSheet("QWidget{ border: 1px solid border; background-color:white; }");
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     setMinimumWidth(fixedWidth);
-    setGeometry(0,0,fixedWidth,500);
-    
-    //TODO ACY TEST
-    QVBoxLayout *layout = new QVBoxLayout();
-    setLayout(layout);
-    
-    for (int i = 0; i < 10; i++) {
-        QLabel* testLabel = new QLabel("2 selected elements", this);    
-        layout->addWidget(testLabel);
-    }
+    setGeometry(0,0,fixedWidth,10000);
+        
+    m_Layout = new QVBoxLayout();
+    m_Layout->setAlignment(Qt::AlignTop);
+    setLayout(m_Layout);
 }
 
 NotificationPanel::~NotificationPanel() {
+}
+
+void NotificationPanel::addNotification(QWidget* notification)
+{
+    m_Layout->addWidget(notification);
+    m_Layout->setStretchFactor(notification, 0);
 }

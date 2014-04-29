@@ -16,6 +16,7 @@
 #include "action/CreateNewBlock.h"
 #include "scene/EditorScene.h"
 #include "notifications/NotificationPanel.h"
+#include "notifications/block/BlockNotification.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this))
@@ -55,10 +56,10 @@ void FBPEditor::initialize()
     //------------------------------------------------------------------
     // NOTIFICATIONS
     //------------------------------------------------------------------
-    //TODO ACY TEST
+    //TODO ACY TEST, déplacer ailleurs ?
     NotificationPanel* notificationPanel = new NotificationPanel(ui->graphicsView);
-//    centralWidget()->layout()->addWidget(notificationPanel);
-//    notificationPanel->setGeometry(100, 100, 500, 500);
+    BlockNotification* notification = new BlockNotification(ui->graphicsView);
+    notificationPanel->addNotification(notification);
 }
 
 EditorScene* FBPEditor::getScene()
