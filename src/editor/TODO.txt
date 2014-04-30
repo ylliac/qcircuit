@@ -1,12 +1,17 @@
 
-- Ajouter un mécanisme de remontée d'erreur pour les actions et le scripting :
-  par exemple si on essaie de mettre un nom à un block qui existe déjà --> erreur explicite
-
-- Finaliser la place du NotificationPanel dans l'achitecture de l'appli (comme ca vite fait : dans FBPEditor)
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
-- Faire une notification affichée tout le temps qui contient une barre de recherche et un bouton "ajouter un block"
 
 - Faire un exporteur vers .fbp
 
+
+
+- Ajouter un mécanisme de remontée d'erreur pour les actions et le scripting :
+  par exemple si on essaie de mettre un nom à un block qui existe déjà --> erreur explicite
+
+- Brancher la barre de recherche
+
+- Utiliser les polices de caractères téléchargées
+
+- BUG : quand on met un block dans la zone de gauche en dessous des notifications, on peut pas le resélectionner
 

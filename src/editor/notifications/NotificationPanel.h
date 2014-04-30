@@ -8,22 +8,27 @@
 #ifndef _NOTIFICATIONPANEL_H
 #define	_NOTIFICATIONPANEL_H
 
-#include "ui_NotificationPanel.h"
-
 #include <QtGui/QWidget>
 #include <QtGui/QVBoxLayout>
+
+class FBPEditor;
+
+namespace Ui {
+    class NotificationPanel;
+}
 
 class NotificationPanel : public QWidget {
     Q_OBJECT
     
 public:
-    NotificationPanel(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    NotificationPanel(FBPEditor* editor);
     virtual ~NotificationPanel();
     
     void addNotification(QWidget* notification);
     
 private:
-    Ui::NotificationPanel widget;    
+    Ui::NotificationPanel* ui;    
+    FBPEditor* m_Editor; 
     QVBoxLayout* m_Layout;
 };
 

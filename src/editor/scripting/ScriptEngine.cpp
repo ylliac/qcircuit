@@ -36,7 +36,8 @@ bool ScriptEngine::runScriptCommand(QString input)
     m_History.append(input);
     
     //Run the associated command
-    foreach(ScriptCommand* command, m_Commands){
+    foreach(ScriptCommand* command, m_Commands)
+    {
         if(command->apply(input))
         {
             result = true;

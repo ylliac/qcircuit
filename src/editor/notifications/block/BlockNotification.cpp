@@ -8,7 +8,8 @@
 #include "BlockNotification.h"
 #include "ui_BlockNotification.h"
 
-#include <QtGui/QGraphicsDropShadowEffect>
+#include <QtGui/QGraphicsScene>
+#include <QtGui/QGraphicsOpacityEffect>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
 #include <QtCore/QAbstractAnimation>
@@ -22,46 +23,11 @@
 #include "editor/action/SetBlockName.h"
 #include "AppendToTextEdit.h"
 
-BlockNotification::BlockNotification(FBPEditor* editor)
-: QWidget(editor), ui(new Ui::BlockNotification),
+BlockNotification::BlockNotification(FBPEditor* editor) :
+QWidget(editor), ui(new Ui::BlockNotification),
 m_Editor(editor)
 {
     ui->setupUi(this);
-    
-    setStyleSheet(
-            "QWidget#BlockNotification{"
-            "   padding: 0px;"
-            "   margin: 0px;"
-            "   border: none;"
-            "}"
-            "QFrame#main{"
-            "   padding: 0px;"
-            "   margin: 0px;"
-            "   border: none;"
-            "}"
-            "QFrame#content{"
-            "   background-color: white;"
-            "   border: 1px solid gray;"
-            "   padding: 3px;"
-            "   margin: 0px;"
-            "}"
-            "QPushButton{"
-            "   border: none;"
-            "   padding: 5px;"
-            "}"
-            "QPushButton:hover{"
-            "   border: 1px solid #C6C6C6;"
-            "   background-color: #F4F4F4;"
-            "}"
-            "QLineEdit{"
-            "   border: 2px solid gray;"
-            "   padding: 2px;"
-            "}" 
-            "QLineEdit:read-only {"
-            "   background: white;"
-            "   border: none;"
-            "}"     
-    );
     
     setReadOnly(true);  
     setVisible(false);  

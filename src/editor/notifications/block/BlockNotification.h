@@ -9,7 +9,6 @@
 #define	_BLOCKNOTIFICATION_H
 
 #include <QtGui/QWidget>
-#include <QtGui/QGraphicsScene>
 
 class FBPEditor;
 
