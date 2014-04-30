@@ -16,7 +16,7 @@
 #include "BlockRemoveButton.h"
 #include "BlockConnectButton.h"
 
-BlockItem::BlockItem() :
+BlockItem::BlockItem(FBPEditor* editor) :
 m_Text(),
 m_OutterborderColor(Qt::gray),
 m_OutterborderPen(),
@@ -29,7 +29,9 @@ m_DrawingBottom(m_Height - m_YcornerGrabBuffer),
 m_DrawingLeft(m_XcornerGrabBuffer),
 m_DrawingTop(m_YcornerGrabBuffer),
 m_RemoveButton(NULL),
-m_ConnectButton(NULL) {
+m_ConnectButton(NULL),
+m_Editor(editor)
+{
     m_OutterborderPen.setWidth(2);
     m_OutterborderPen.setColor(m_OutterborderColor);
 
@@ -46,6 +48,11 @@ m_ConnectButton(NULL) {
 }
 
 BlockItem::~BlockItem() {
+}
+
+FBPEditor* BlockItem::getEditor()
+{
+    return m_Editor;
 }
 
 QRectF BlockItem::boundingRect() const {

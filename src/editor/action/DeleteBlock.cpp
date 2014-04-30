@@ -9,11 +9,13 @@
 
 #include <QtGui/QGraphicsScene>
 
+#include "editor/FBPEditor.h"
+#include "editor/scene/EditorScene.h"
 #include "editor/scene/ArrowItem.h"
 #include "editor/scene/SceneDetective.h"
 
-DeleteBlock::DeleteBlock(BlockItem* block) :
-m_Block(block)
+DeleteBlock::DeleteBlock(FBPEditor* editor) :
+FBPEditorAction(editor)
 {
 }
 
@@ -21,20 +23,23 @@ DeleteBlock::~DeleteBlock()
 {
 }
 
-void DeleteBlock::execute()
+void DeleteBlock::execute(QString blockName, QString, QString, QString, QString)
 {    
-    if(m_Block != NULL)
+    QGraphicsScene* scene = getEditor()->getScene();
+    
+    BlockItem* block = SceneDetective::getBlock(blockName, scene);
+    if(block != NULL)
     {
-        QGraphicsScene* scene = m_Block->scene();
+        QGraphicsScene* scene = block->scene();
         
         //Delete connected arrows
-        QList<ArrowItem*> connectedArrows = SceneDetective::getConnectedArrows(scene, m_Block);
+        QList<ArrowItem*> connectedArrows = SceneDetective::getConnectedArrows(scene, block);
         foreach(ArrowItem* connectedArrow, connectedArrows)
         {
             scene->removeItem(connectedArrow);
         }
         //Delete parent block
-        scene->removeItem(m_Block);
+        scene->removeItem(block);
     }
 }
 

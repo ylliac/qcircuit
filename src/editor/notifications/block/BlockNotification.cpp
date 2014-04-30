@@ -8,23 +8,42 @@
 #include "BlockNotification.h"
 #include "ui_BlockNotification.h"
 
+#include <QtGui/QGraphicsDropShadowEffect>
+#include <QtCore/QPropertyAnimation>
+#include <QtCore/QEasingCurve>
+#include <QtCore/QAbstractAnimation>
+
+#include "editor/FBPEditor.h"
+#include "editor/scene/EditorScene.h"
 #include "editor/scene/SceneDetective.h"
 #include "editor/scene/BlockItem.h"
 #include "util/Util.h"
 #include "editor/action/DeleteSelectedBlocks.h"
 #include "editor/action/SetBlockName.h"
+#include "AppendToTextEdit.h"
 
-BlockNotification::BlockNotification(QGraphicsScene* scene, QWidget* parent, Qt::WindowFlags windowFlag)
-: QWidget(parent, windowFlag), ui(new Ui::BlockNotification),
-m_Scene(scene)
+BlockNotification::BlockNotification(FBPEditor* editor)
+: QWidget(editor), ui(new Ui::BlockNotification),
+m_Editor(editor)
 {
     ui->setupUi(this);
     
     setStyleSheet(
+            "QWidget#BlockNotification{"
+            "   padding: 0px;"
+            "   margin: 0px;"
+            "   border: none;"
+            "}"
+            "QFrame#main{"
+            "   padding: 0px;"
+            "   margin: 0px;"
+            "   border: none;"
+            "}"
             "QFrame#content{"
             "   background-color: white;"
             "   border: 1px solid gray;"
             "   padding: 3px;"
+            "   margin: 0px;"
             "}"
             "QPushButton{"
             "   border: none;"
@@ -47,7 +66,7 @@ m_Scene(scene)
     setReadOnly(true);  
     setVisible(false);  
     
-    CONNECT(m_Scene, SIGNAL(selectionChanged()), this, SLOT(on_selection_changed()));    
+    CONNECT(m_Editor->getScene(), SIGNAL(selectionChanged()), this, SLOT(on_selection_changed()));    
 }
 
 BlockNotification::~BlockNotification()
@@ -88,8 +107,52 @@ void BlockNotification::on_selection_changed()
     setReadOnly(true);
     
     //Hide or Display 
-    bool visible = SceneDetective::getSelectedBlocks(m_Scene).size() == 1;
-    setVisible(visible);
+    bool currentState = isVisible();
+    bool futureState = SceneDetective::getSelectedBlocks(m_Editor->getScene()).size() == 1;
+    
+    double startOpacity;
+    double endOpacity;
+    if(currentState)
+    {
+        startOpacity = 1.0;
+    }
+    else
+    {
+        startOpacity = 0.0;
+    }
+    if(futureState)
+    {
+        endOpacity = 1.0;
+    }
+    else
+    {
+        endOpacity = 0.0;
+    }
+    
+    if(currentState != futureState)
+    {
+        if(futureState){
+            setVisible(true);
+        }
+        
+        //TODO ACY Extraire la construction de cette animation dans une méthode utilitaire
+        QGraphicsOpacityEffect* opacityEffect = new QGraphicsOpacityEffect(this);
+        opacityEffect->setOpacity(startOpacity);
+        ui->content->setGraphicsEffect(opacityEffect);
+        
+        QPropertyAnimation* animation = new QPropertyAnimation(this);
+        animation->setTargetObject(opacityEffect);
+        animation->setPropertyName("opacity");
+        animation->setDuration(200);
+        animation->setStartValue(opacityEffect->opacity());
+        animation->setEndValue(endOpacity);
+        animation->setEasingCurve(QEasingCurve::OutQuad);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+        
+        if(!futureState){
+            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));    
+        }
+    }
 }
 
 void BlockNotification::setReadOnly(bool readOnly)
@@ -108,7 +171,7 @@ QString BlockNotification::selectedBlockName()
 {
     QString result;
     
-    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Scene);
+    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Editor->getScene());
     if(selectedBlocks.size() == 1)
     {
         result = selectedBlocks.first()->name();
@@ -119,16 +182,20 @@ QString BlockNotification::selectedBlockName()
 
 void BlockNotification::setSelectedBlockName(QString name)
 {
-    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Scene);
+    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Editor->getScene());
     if(selectedBlocks.size() == 1)
     {
-        SetBlockName action(selectedBlocks.first(), name);
-        action.execute();
+        m_Editor->runScriptCommand(
+            QString("Rename block %1 in block %2")
+            .arg(selectedBlocks.first()->name())
+            .arg(name)
+        );
     }
 }
 
 void BlockNotification::deleteSelectedBlock()
 {
-    DeleteSelectedBlocks deleteAction(m_Scene);
-    deleteAction.execute();
+    m_Editor->runScriptCommand(
+        QString("Delete selected blocks")
+    );
 }

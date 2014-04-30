@@ -12,6 +12,8 @@
 
 #include <QtCore/QMap>
 
+#include "scripting/ScriptEngine.h"
+
 class FBPEditorBlock;
 
 namespace Ui {
@@ -28,12 +30,16 @@ public:
     virtual ~FBPEditor();
     
     EditorScene* getScene();
+    ScriptEngine* getScriptEngine();
+    
+    bool runScriptCommand(QString input);
     
 private:
     void initialize();
     
     Ui::FBPEditor* ui;
     EditorScene* m_Scene;
+    ScriptEngine* m_ScriptEngine;
 };
 
 #endif	/* _FBPEDITOR_H */

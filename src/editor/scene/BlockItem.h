@@ -15,12 +15,13 @@
 class BlockCornerItem;
 class BlockRemoveButton;
 class BlockConnectButton;
+class FBPEditor;
 
 class BlockItem : public QObject, public QGraphicsItem {
     Q_OBJECT
     
 public:
-    BlockItem();
+    BlockItem(FBPEditor* editor);
     virtual ~BlockItem();
 
     virtual QRectF boundingRect() const;
@@ -36,6 +37,8 @@ public:
 
     virtual QString name();
     virtual void setName(QString name);
+    
+    FBPEditor* getEditor();
     
 signals:
     void posChanged(BlockItem* item);
@@ -73,6 +76,9 @@ private:
     
     //Connect button
     BlockConnectButton* m_ConnectButton;
+    
+    //Editor interface
+    FBPEditor* m_Editor;
 };
 
 #endif	/* BLOCKITEM_H */

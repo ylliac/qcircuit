@@ -7,11 +7,15 @@
 
 #include "DeleteSelectedBlocks.h"
 
+#include <QtGui/QGraphicsScene>
+
 #include "DeleteBlock.h"
+#include "editor/FBPEditor.h"
+#include "editor/scene/EditorScene.h"
 #include "editor/scene/SceneDetective.h"
 
-DeleteSelectedBlocks::DeleteSelectedBlocks(QGraphicsScene* scene) :
-m_Scene(scene)
+DeleteSelectedBlocks::DeleteSelectedBlocks(FBPEditor* editor) :
+FBPEditorAction(editor)
 {
 }
 
@@ -19,13 +23,15 @@ DeleteSelectedBlocks::~DeleteSelectedBlocks()
 {
 }
 
-void DeleteSelectedBlocks::execute()
+void DeleteSelectedBlocks::execute(QString, QString, QString, QString, QString)
 {    
-    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Scene);
+    QGraphicsScene* scene = getEditor()->getScene();
+      
+    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(scene);
     foreach(BlockItem* block, selectedBlocks)
     {
-        DeleteBlock deleteAction(block);
-        deleteAction.execute();
+        DeleteBlock deleteAction(getEditor());
+        deleteAction.execute(block->name());
     }
 }
 

@@ -10,21 +10,15 @@
 
 #include "FBPEditorAction.h"
 
-class BlockItem;
-
 class DeleteBlock : public FBPEditorAction {
     Q_OBJECT
     
 public:
-    DeleteBlock(BlockItem* block);
+    DeleteBlock(FBPEditor* editor);
     virtual ~DeleteBlock();
     
 public slots:
-    virtual void execute();
-    
-private:
-    BlockItem* m_Block;
-
+    virtual void execute(QString blockName = 0, QString arg2 = 0, QString arg3 = 0, QString arg4 = 0, QString arg5 = 0);
 };
 
 #endif	/* DELETEBLOCK_H */

@@ -16,15 +16,11 @@ class SetBlockName : public FBPEditorAction {
     Q_OBJECT
     
 public:
-    SetBlockName(BlockItem* block, QString name);
+    SetBlockName(FBPEditor* editor);
     virtual ~SetBlockName();
     
 public slots:
-    virtual void execute();
-    
-private:
-    BlockItem* m_Block;
-    QString m_Name;
+    virtual void execute(QString arg1 = 0, QString arg2 = 0, QString arg3 = 0, QString arg4 = 0, QString arg5 = 0);
 
 };
 

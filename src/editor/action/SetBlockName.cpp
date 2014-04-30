@@ -7,11 +7,15 @@
 
 #include "SetBlockName.h"
 
-#include "editor/scene/BlockItem.h"
+#include <QtGui/QGraphicsScene>
 
-SetBlockName::SetBlockName(BlockItem* block, QString name):
-m_Block(block),
-m_Name(name)
+#include "editor/FBPEditor.h"
+#include "editor/scene/EditorScene.h"
+#include "editor/scene/BlockItem.h"
+#include "editor/scene/SceneDetective.h"
+
+SetBlockName::SetBlockName(FBPEditor* editor) :
+FBPEditorAction(editor)
 {
 }
 
@@ -19,11 +23,16 @@ SetBlockName::~SetBlockName()
 {
 }
 
-void SetBlockName::execute()
+void SetBlockName::execute(QString blockName, QString newName, QString, QString, QString)
 {    
-    if(m_Block != NULL)
+    QGraphicsScene* scene = getEditor()->getScene();
+    
+    BlockItem* block = SceneDetective::getBlock(blockName, scene);     
+    if(block != NULL)
     {
-        m_Block->setName(m_Name);
+        //TODO ACY Ensure this name is not already taken
+        
+        block->setName(newName);
     }
 }
 

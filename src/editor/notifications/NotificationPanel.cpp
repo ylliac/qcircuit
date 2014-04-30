@@ -16,10 +16,12 @@ QWidget(parent, f)
     
     int fixedWidth = 300;
     
+    //Size
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     setMinimumWidth(fixedWidth);
     setGeometry(0,0,fixedWidth,10000);
         
+    //Layout
     m_Layout = new QVBoxLayout();
     m_Layout->setAlignment(Qt::AlignTop);
     setLayout(m_Layout);

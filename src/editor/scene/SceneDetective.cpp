@@ -24,6 +24,24 @@ QList<BlockItem*> SceneDetective::getBlocks(QGraphicsScene* scene)
     return result;
 }
 
+BlockItem* SceneDetective::getBlock(QString name, QGraphicsScene* scene)
+{
+    BlockItem* result = NULL;
+    
+    QList<BlockItem*> blocks = getBlocks(scene);
+    
+    foreach(BlockItem* block, blocks)
+    {
+        if(name.compare(block->name(), Qt::CaseInsensitive) == 0)
+        {
+            result = block;
+            break;
+        }
+    }
+    
+    return result;
+}
+
 QList<BlockItem*> SceneDetective::getSelectedBlocks(QGraphicsScene* scene)
 {
     QList<BlockItem*> result;

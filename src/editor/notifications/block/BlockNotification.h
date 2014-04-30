@@ -11,14 +11,17 @@
 #include <QtGui/QWidget>
 #include <QtGui/QGraphicsScene>
 
+class FBPEditor;
+
 namespace Ui {
     class BlockNotification;
 }
 
 class BlockNotification : public QWidget {
     Q_OBJECT
+    
 public:
-    BlockNotification(QGraphicsScene* scene, QWidget* parent = 0, Qt::WindowFlags windowFlag = 0);
+    BlockNotification(FBPEditor* editor);
     virtual ~BlockNotification();
     
 private slots:
@@ -38,9 +41,8 @@ private:
     void deleteSelectedBlock();
     
 private:
-    Ui::BlockNotification* ui;
-    
-    QGraphicsScene* m_Scene;
+    Ui::BlockNotification* ui;    
+    FBPEditor* m_Editor;
 };
 
 #endif	/* _BLOCKNOTIFICATION_H */

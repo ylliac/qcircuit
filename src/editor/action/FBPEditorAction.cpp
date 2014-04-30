@@ -7,10 +7,17 @@
 
 #include "FBPEditorAction.h"
 
-FBPEditorAction::FBPEditorAction()
+FBPEditorAction::FBPEditorAction(FBPEditor* editor) :
+QObject(editor),
+m_Editor(editor)
 {
 }
 
 FBPEditorAction::~FBPEditorAction()
 {
+}
+
+FBPEditor* FBPEditorAction::getEditor()
+{
+    return m_Editor;
 }

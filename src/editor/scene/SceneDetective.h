@@ -19,6 +19,7 @@ public:
     virtual ~SceneDetective(){}
 
     static QList<BlockItem*> getBlocks(QGraphicsScene* scene);
+    static BlockItem* getBlock(QString name, QGraphicsScene* scene);
     static QList<BlockItem*> getSelectedBlocks(QGraphicsScene* scene);
     
     static QList<ArrowItem*> getArrows(QGraphicsScene* scene);    

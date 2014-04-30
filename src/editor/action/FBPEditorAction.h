@@ -10,6 +10,8 @@
 
 #include <QtCore/QObject>
 
+#include "editor/FBPEditor.h"
+
 class FBPEditorAction : public QObject {
     Q_OBJECT
     
@@ -26,11 +28,17 @@ class FBPEditorAction : public QObject {
     //   - Enregistrer un script (ou macro) en live dans le logiciel
     
 public:
-    FBPEditorAction();
+    FBPEditorAction(FBPEditor* editor);
     virtual ~FBPEditorAction();
     
+    FBPEditor* getEditor();
+    
 public slots:
-    virtual void execute() = 0;
+    //TODO ACY Au lieu de retourner void retourner un objet permettant de stocker des messages d'erreur
+    virtual void execute(QString arg1 = 0, QString arg2 = 0, QString arg3 = 0, QString arg4 = 0, QString arg5 = 0) = 0;
+    
+private:
+    FBPEditor* m_Editor;
 };
 
 #endif	/* FBPEDITORACTION_H */

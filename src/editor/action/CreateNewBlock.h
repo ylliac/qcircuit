@@ -16,14 +16,11 @@ class CreateNewBlock : public FBPEditorAction {
     Q_OBJECT
     
 public:
-    CreateNewBlock(QGraphicsScene* scene);
+    CreateNewBlock(FBPEditor* editor);
     virtual ~CreateNewBlock();
     
 public slots:
-    virtual void execute();
-    
-private:
-    QGraphicsScene* m_Scene;
+    virtual void execute(QString arg1 = 0, QString arg2 = 0, QString arg3 = 0, QString arg4 = 0, QString arg5 = 0);
 
 };
 

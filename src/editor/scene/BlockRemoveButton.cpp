@@ -98,9 +98,10 @@ bool BlockRemoveButton::sceneEventFilter(QGraphicsItem * watched, QEvent * event
             BlockItem* parentBlock = dynamic_cast<BlockItem*>(parentItem());
             if(parentBlock != NULL)
             {
-                //Delete parrent block
-                DeleteBlock deleteAction(parentBlock);
-                deleteAction.execute();
+                parentBlock->getEditor()->runScriptCommand(
+                    QString("Delete the block %1")
+                    .arg(parentBlock->name())
+                );
                 
                 return true;
             }
