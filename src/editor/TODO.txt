@@ -5,6 +5,7 @@
 - Finaliser la place du NotificationPanel dans l'achitecture de l'appli (comme ca vite fait : dans FBPEditor)
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
+- Faire une notification affichée tout le temps qui contient une barre de recherche et un bouton "ajouter un block"
 
 - Faire un exporteur vers .fbp
 
