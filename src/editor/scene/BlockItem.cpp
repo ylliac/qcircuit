@@ -34,7 +34,6 @@ m_ConnectButton(NULL) {
     m_OutterborderPen.setColor(m_OutterborderColor);
 
     m_Text.setPos(50, 35);
-    m_Text.setPlainText("Block");
     m_Text.setParentItem(this);
     m_Text.setFont(QFont("Helvetica", 10, QFont::Bold));
     
@@ -42,6 +41,8 @@ m_ConnectButton(NULL) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    
+    setName("Block");
 }
 
 BlockItem::~BlockItem() {
@@ -57,6 +58,16 @@ QPainterPath BlockItem::shape() const
     QRectF shape(m_DrawingLeft, m_DrawingTop, m_DrawingRight - m_DrawingLeft, m_DrawingBottom - m_DrawingTop);
     path.addRect(shape);
     return path;
+}
+
+QString BlockItem::name()
+{
+    return m_Text.toPlainText();
+}
+
+void BlockItem::setName(QString name)
+{
+    m_Text.setPlainText(name);
 }
 
 QVariant BlockItem::itemChange(GraphicsItemChange change, const QVariant &value)

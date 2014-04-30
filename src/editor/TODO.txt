@@ -1,0 +1,16 @@
+
+- Implémenter le système d'action pour faciliter le BDD, le scripting et le log
+- Ajouter un ScriptEngine qui prend en entrée un texte et le transforme en action
+- Remplacer tous les appels d'action par un appel au ScriptEngine
+
+- Faire en sorte que la notification du block se masque quand rien n'est sélectionné
+
+- Finaliser les notifications :
+    - Effet d'ombre
+    - Layout animé quand une notification s'affiche et se masque
+
+- Faire une notifocation pour modifier les noms des ports d'entrée / sortie des ArrowItem
+
+- Faire un exporteur vers .fbp
+
+

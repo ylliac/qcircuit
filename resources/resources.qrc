@@ -2,6 +2,7 @@
   <qresource prefix="/resources">
     <file>open_iconic/png/x-4x.png</file>
 	<file>open_iconic/png/pencil-4x.png</file>    
-	<file>open_iconic/png/check-4x.png</file>    
+	<file>open_iconic/png/circle-check-4x.png</file>    
+	<file>open_iconic/png/circle-x-4x.png</file>    
   </qresource>
 </RCC>

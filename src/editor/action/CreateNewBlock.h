@@ -10,15 +10,20 @@
 
 #include "FBPEditorAction.h"
 
+#include <QtGui/QGraphicsScene>
+
 class CreateNewBlock : public FBPEditorAction {
     Q_OBJECT
     
 public:
-    CreateNewBlock(FBPEditor* parent);
+    CreateNewBlock(QGraphicsScene* scene);
     virtual ~CreateNewBlock();
     
 public slots:
     virtual void execute();
+    
+private:
+    QGraphicsScene* m_Scene;
 
 };
 

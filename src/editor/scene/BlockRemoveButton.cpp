@@ -8,6 +8,7 @@
 #include "BlockRemoveButton.h"
 #include "BlockItem.h"
 #include "SceneDetective.h"
+#include "editor/action/DeleteBlock.h"
 
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
@@ -97,14 +98,10 @@ bool BlockRemoveButton::sceneEventFilter(QGraphicsItem * watched, QEvent * event
             BlockItem* parentBlock = dynamic_cast<BlockItem*>(parentItem());
             if(parentBlock != NULL)
             {
-                //Delete connected arrows
-                QList<ArrowItem*> connectedArrows = SceneDetective::getConnectedArrows(scene(), parentBlock);
-                foreach(ArrowItem* connectedArrow, connectedArrows)
-                {
-                    scene()->removeItem(connectedArrow);
-                }
-                //Delete parent block
-                scene()->removeItem(parentBlock);
+                //Delete parrent block
+                DeleteBlock deleteAction(parentBlock);
+                deleteAction.execute();
+                
                 return true;
             }
         }

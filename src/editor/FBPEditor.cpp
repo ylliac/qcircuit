@@ -50,7 +50,8 @@ void FBPEditor::initialize()
     // ACTIONS 
     //------------------------------------------------------------------
     //New block
-    CreateNewBlock* newBlock = new CreateNewBlock(this);
+    CreateNewBlock* newBlock = new CreateNewBlock(m_Scene);
+    newBlock->setParent(this);
     CONNECT(ui->actionNewBlock, SIGNAL(triggered()), newBlock, SLOT(execute()));    
     
     //------------------------------------------------------------------
@@ -58,7 +59,7 @@ void FBPEditor::initialize()
     //------------------------------------------------------------------
     //TODO ACY TEST, déplacer ailleurs ?
     NotificationPanel* notificationPanel = new NotificationPanel(ui->graphicsView);
-    BlockNotification* notification = new BlockNotification(ui->graphicsView);
+    BlockNotification* notification = new BlockNotification(m_Scene, ui->graphicsView);
     notificationPanel->addNotification(notification);
 }
 

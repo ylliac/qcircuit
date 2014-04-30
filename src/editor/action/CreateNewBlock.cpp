@@ -13,10 +13,8 @@
 #include <QtGui/QGraphicsEllipseItem>
 #include <QtGui/QGraphicsRectItem>
 
-#include "editor/scene/EditorScene.h"
-
-CreateNewBlock::CreateNewBlock(FBPEditor* parent)
-: FBPEditorAction(parent)
+CreateNewBlock::CreateNewBlock(QGraphicsScene* scene) :
+m_Scene(scene)
 {
 }
 
@@ -25,15 +23,13 @@ CreateNewBlock::~CreateNewBlock()
 }
 
 void CreateNewBlock::execute()
-{
-    QGraphicsScene* scene = getEditor()->getScene();
-    
+{    
     BlockItem* newBlock = new BlockItem();
-    scene->addItem(newBlock);    
+    m_Scene->addItem(newBlock);    
     newBlock->setPos(200,10);
     
     BlockItem* newBlock2 = new BlockItem();
-    scene->addItem(newBlock2);       
+    m_Scene->addItem(newBlock2);       
     newBlock2->setPos(400,10);
     
 //    QBrush greenBrush(Qt::green);
@@ -41,18 +37,18 @@ void CreateNewBlock::execute()
 //    QPen outlinePen(Qt::black);
 //    outlinePen.setWidth(2);
 //    
-//    QGraphicsRectItem* block = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
+//    QGraphicsRectItem* block = m_Scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
 //    block->setFlag(QGraphicsItem::ItemIsMovable);
 //    block->setFlag(QGraphicsItem::ItemIsSelectable);
     
-//    QGraphicsRectItem* block2 = scene->addRect(150, 0, 80, 100, outlinePen, greenBrush);
+//    QGraphicsRectItem* block2 = m_Scene->addRect(150, 0, 80, 100, outlinePen, greenBrush);
 //    block2->setFlag(QGraphicsItem::ItemIsMovable);
 //    block2->setFlag(QGraphicsItem::ItemIsSelectable);
 
 //    // addEllipse(x,y,w,h,pen,brush)
-//    QGraphicsEllipseItem* ellipse = scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
+//    QGraphicsEllipseItem* ellipse = m_Scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
 //
-//    QGraphicsTextItem* text = scene->addText("bogotobogo.com", QFont("Arial", 20) );
+//    QGraphicsTextItem* text = m_Scene->addText("bogotobogo.com", QFont("Arial", 20) );
 //    // movable text
 //    text->setFlag(QGraphicsItem::ItemIsMovable);
 }

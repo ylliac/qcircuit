@@ -24,6 +24,23 @@ QList<BlockItem*> SceneDetective::getBlocks(QGraphicsScene* scene)
     return result;
 }
 
+QList<BlockItem*> SceneDetective::getSelectedBlocks(QGraphicsScene* scene)
+{
+    QList<BlockItem*> result;
+            
+    QList<QGraphicsItem*> items = scene->selectedItems();
+    foreach(QGraphicsItem* item, items)
+    {
+        BlockItem* block = dynamic_cast<BlockItem*>(item);
+        if(block != NULL)
+        {
+            result.append(block);
+        }
+    }
+    
+    return result;
+}
+
 QList<ArrowItem*> SceneDetective::getArrows(QGraphicsScene* scene)
 {
     QList<ArrowItem*> result;

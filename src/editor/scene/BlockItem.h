@@ -34,6 +34,9 @@ public:
     virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    virtual QString name();
+    virtual void setName(QString name);
+    
 signals:
     void posChanged(BlockItem* item);
     
