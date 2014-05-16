@@ -24,6 +24,7 @@
 #include "action/DeleteBlock.h"
 #include "action/DeleteSelectedBlocks.h"
 #include "action/SetBlockName.h"
+#include "cornermenu/CornerMenu.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
@@ -84,6 +85,7 @@ void FBPEditor::initialize() {
     //------------------------------------------------------------------
     // SCRIPT COMMANDS 
     //------------------------------------------------------------------
+    //TODO ACY Déporter ca dans un fichier
     m_ScriptEngine->addScriptCommand("Create a new block", newBlock);
     m_ScriptEngine->addScriptCommand("Delete the block $1", deleteBlock);
     m_ScriptEngine->addScriptCommand("Delete selected blocks", deleteSelectedBlocks);
@@ -96,6 +98,11 @@ void FBPEditor::initialize() {
     m_NotificationPanel->addNotification(searchNotification);
     BlockNotification* blockNotification = new BlockNotification(this);
     m_NotificationPanel->addNotification(blockNotification);
+    
+    //------------------------------------------------------------------
+    // CORNER MENU 
+    //------------------------------------------------------------------
+    new CornerMenu(this);
 }
 
 QGraphicsView* FBPEditor::getGraphicsView() {

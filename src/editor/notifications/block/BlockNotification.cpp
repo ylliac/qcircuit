@@ -101,7 +101,6 @@ void BlockNotification::on_selection_changed()
             setVisible(true);
         }
         
-        //TODO ACY Extraire la construction de cette animation dans une méthode utilitaire
         QGraphicsOpacityEffect* opacityEffect = new QGraphicsOpacityEffect(this);
         opacityEffect->setOpacity(startOpacity);
         ui->content->setGraphicsEffect(opacityEffect);

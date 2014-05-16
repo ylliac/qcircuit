@@ -6,5 +6,11 @@
 	<file>open_iconic/png/circle-x-4x.png</file>    
 	<file>open_iconic/png/magnifying-glass-4x.png</file>    
 	<file>open_iconic/png/plus-4x.png</file>    
+	<file>open_iconic/png/bug-4x.png</file>    
+	<file>open_iconic/png/camera-slr-4x.png</file>    
+	<file>open_iconic/png/cog-4x.png</file>    
+	<file>open_iconic/png/dashboard-4x.png</file>    
+	<file>open_iconic/png/share-boxed-4x.png</file> 
+	<file>open_iconic/png/grid-four-up-4x.png</file> 
   </qresource>
 </RCC>

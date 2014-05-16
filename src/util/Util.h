@@ -16,6 +16,8 @@ if(!QObject::connect(sender, signal, receiver, slot)){\
     Q_ASSERT(false);\
 }
 
+class QWidget;
+
 class Util {
 public:
     virtual ~Util(){};
@@ -31,6 +33,9 @@ public:
     {
         return qVariantFromValue((void *) ptr);
     }
+    
+    static void fadeIn(QWidget* widget);
+    static void fadeOut(QWidget* widget);
 
 };
 
