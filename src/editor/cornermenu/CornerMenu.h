@@ -27,12 +27,18 @@ public:
     virtual bool eventFilter(QObject * watched, QEvent * event);
 
 private slots:
-    void showMenu(bool);
+    void on_menuButton_toggled(bool);
+    void on_buttonDebug_clicked();
+    void on_buttonProfile_clicked();
+    void on_buttonExport_clicked();
+    void on_buttonSettings_clicked();
+    void on_buttonSnapshot_clicked();
     
 private:
     void updatePosition();
     
     Ui::CornerMenu* ui;
+    FBPEditor* m_Editor;
 };
 
 #endif	/* _CORNERMENU_H */

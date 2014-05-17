@@ -1,9 +1,25 @@
 
+/////////////////////////////////// PRINCIPE DE FONCTIONNEMENT ////////////////////////////////////
+(Inspiré de Flux : http://facebook.github.io/react/docs/flux-overview.html)
+
+Qt views ---> (commands) ----> ScriptEngine ---> (registered actions) ---> Application Model -----+
+Ʌ                                                                                                 |
+|                                                                                                 V
++---- (Qt views event handlers) <---- Event bus <---- (Application model emits "change" events) --+
+
+Principes : 
+    - Flux UNIdirectionnel
+    - 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
 
 - Faire un exporteur vers .fbp
-
+BUG : Ca marche pas !
 
 - Mettre en place un fichier pour faire le lien entre commande et action :
     1) Enregistrer toutes les actions dans le logiciel en leur donnant un nom :
@@ -29,3 +45,7 @@
 
 - BUG : quand on met un block dans la zone de gauche en dessous des notifications, on peut pas le resélectionner
 
+
+//////// Bonne idées
+
+- Faire tourner le bouton menu du coin en bas à droite quand on clique dessus (animation)

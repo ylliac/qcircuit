@@ -25,6 +25,7 @@
 #include "action/DeleteSelectedBlocks.h"
 #include "action/SetBlockName.h"
 #include "cornermenu/CornerMenu.h"
+#include "action/ExportDiagram.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
@@ -81,6 +82,8 @@ void FBPEditor::initialize() {
     DeleteSelectedBlocks* deleteSelectedBlocks = new DeleteSelectedBlocks(this);
     //Set block name
     SetBlockName* setBlockName = new SetBlockName(this);
+    //Export diagram
+    ExportDiagram* exportDiagram = new ExportDiagram(this);
 
     //------------------------------------------------------------------
     // SCRIPT COMMANDS 
@@ -90,6 +93,8 @@ void FBPEditor::initialize() {
     m_ScriptEngine->addScriptCommand("Delete the block $1", deleteBlock);
     m_ScriptEngine->addScriptCommand("Delete selected blocks", deleteSelectedBlocks);
     m_ScriptEngine->addScriptCommand("Rename block $1 in block $2", setBlockName);
+    m_ScriptEngine->addScriptCommand("Export diagram", exportDiagram);
+    m_ScriptEngine->addScriptCommand("Export diagram in file $1", exportDiagram);
 
     //------------------------------------------------------------------
     // NOTIFICATIONS

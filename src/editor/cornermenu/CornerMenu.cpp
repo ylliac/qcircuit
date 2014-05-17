@@ -14,7 +14,8 @@
 #include "editor/FBPEditor.h"
 
 CornerMenu::CornerMenu(FBPEditor* editor)
-: QWidget(editor->getGraphicsView()), ui(new Ui::CornerMenu)
+: QWidget(editor->getGraphicsView()), ui(new Ui::CornerMenu),
+m_Editor(editor)
 {
     ui->setupUi(this);
 
@@ -52,8 +53,6 @@ CornerMenu::CornerMenu(FBPEditor* editor)
     ui->buttonSettings->setVisible(false);
     ui->buttonSnapshot->setVisible(false);
 
-    CONNECT(ui->menuButton, SIGNAL(toggled(bool)), this, SLOT(showMenu(bool)));
-
     updatePosition();
     parent()->installEventFilter(this);
 }
@@ -63,7 +62,7 @@ CornerMenu::~CornerMenu()
     delete ui;
 }
 
-void CornerMenu::showMenu(bool show)
+void CornerMenu::on_menuButton_toggled(bool show)
 {    
     if(show)
     {
@@ -99,4 +98,31 @@ void CornerMenu::updatePosition()
     int y = parentSize.height() - height();
 
     setGeometry(x, y, width(), height());
+}
+
+void CornerMenu::on_buttonDebug_clicked()
+{
+    //TODO
+}
+
+void CornerMenu::on_buttonProfile_clicked()
+{
+    //TODO
+}
+
+void CornerMenu::on_buttonExport_clicked()
+{    
+    m_Editor->runScriptCommand(
+        QString("Export diagram")
+    );
+}
+
+void CornerMenu::on_buttonSettings_clicked()
+{
+    //TODO
+}
+
+void CornerMenu::on_buttonSnapshot_clicked()
+{
+    //TODO
 }
