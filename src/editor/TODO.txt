@@ -13,13 +13,7 @@ Principes :
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
-
-- Faire un exporteur vers .fbp
-BUG : Ca marche pas !
 
 - Mettre en place un fichier pour faire le lien entre commande et action :
     1) Enregistrer toutes les actions dans le logiciel en leur donnant un nom :
@@ -39,13 +33,18 @@ BUG : Ca marche pas !
 - Ajouter un mécanisme de remontée d'erreur pour les actions et le scripting :
   par exemple si on essaie de mettre un nom à un block qui existe déjà --> erreur explicite
 
+- Ajouter un mécanisme de notifocation non bloquant comme les toasts sous Android
+http://developer.android.com/guide/topics/ui/notifiers/toasts.html
+
 - Brancher la barre de recherche
 
 - Utiliser les polices de caractères téléchargées
 
 - BUG : quand on met un block dans la zone de gauche en dessous des notifications, on peut pas le resélectionner
+- BUG : quand on déplace deux bloc connectés en dehors de la scène, l'arrow disparaît
 
 
-//////// Bonne idées
+
+//////// Bonne idées ////////////////////////////////////////////////////////////////////////////////////
 
 - Faire tourner le bouton menu du coin en bas à droite quand on clique dessus (animation)
