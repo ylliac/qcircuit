@@ -47,34 +47,19 @@ void ExportDiagram::execute(QString inputFileName, QString, QString, QString, QS
     }
 
     {
-        QTextStream out(&fileName);
-        
-            
-            //TODO ACY
-            std::cout << out.status() << std::endl;
-            std::cout << fileName.toStdString() << std::endl;
-            std::cout << file.isOpen() << std::endl;
-
+        QTextStream out(&file);
         QGraphicsScene* scene = getEditor()->getScene();
 
         //Export block list
         QList<BlockItem*> blocks = SceneDetective::getBlocks(scene);
-
         foreach(BlockItem* block, blocks) {
-            out << block->name() << " (null)" << endl;
-            
-            //TODO ACY
-            std::cout << block->name().toStdString() << std::endl;
+            out << block->name() << " (null)," << endl;
         }
 
+        //Export arrow list
         QList<ArrowItem*> arrows = SceneDetective::getArrows(scene);
-
         foreach(ArrowItem* arrow, arrows) {
-            out << arrow->getStartBlock()->name() << " OUT -> IN " << arrow->getEndBlock()->name() << endl;
-            
-            //TODO ACY
-            std::cout << arrow->getStartBlock()->name().toStdString() << std::endl;
-            std::cout << arrow->getEndBlock()->name().toStdString() << std::endl;
+            out << arrow->getStartBlock()->name() << " OUT -> IN " << arrow->getEndBlock()->name() << "," << endl;
         }
     }
 

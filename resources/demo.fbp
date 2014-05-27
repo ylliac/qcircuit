@@ -1,14 +1,6 @@
-Source
-_Timer_(null),
-Send
-_UDPEmitter_(null),
-Receive
-_UDPReceiver_(null),
-Display
-_Console_(null),
-Source
-_Timer_ TIME -> IN Send
-_UDPEmitter_,
-Receive
-_UDPReceiver_ OUT -> MESSAGE Display
-_Console_
+Source (Timer),
+Send (UDPEmitter),
+Receive (UDPReceiver),
+Display (Console),
+Source TIME -> IN Send,
+Receive OUT -> MESSAGE Display

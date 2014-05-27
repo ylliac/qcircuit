@@ -50,7 +50,7 @@ m_Editor(editor)
     ui->buttonDebug->setVisible(false);
     ui->buttonExport->setVisible(false);
     ui->buttonProfile->setVisible(false);
-    ui->buttonSettings->setVisible(false);
+    ui->buttonImport->setVisible(false);
     ui->buttonSnapshot->setVisible(false);
 
     updatePosition();
@@ -69,7 +69,7 @@ void CornerMenu::on_menuButton_toggled(bool show)
         Util::fadeIn(ui->buttonDebug);
         Util::fadeIn(ui->buttonExport);
         Util::fadeIn(ui->buttonProfile);
-        Util::fadeIn(ui->buttonSettings);
+        Util::fadeIn(ui->buttonImport);
         Util::fadeIn(ui->buttonSnapshot);
     }
     else
@@ -77,7 +77,7 @@ void CornerMenu::on_menuButton_toggled(bool show)
         Util::fadeOut(ui->buttonDebug);
         Util::fadeOut(ui->buttonExport);
         Util::fadeOut(ui->buttonProfile);
-        Util::fadeOut(ui->buttonSettings);
+        Util::fadeOut(ui->buttonImport);
         Util::fadeOut(ui->buttonSnapshot);
     }
 }
@@ -117,9 +117,11 @@ void CornerMenu::on_buttonExport_clicked()
     );
 }
 
-void CornerMenu::on_buttonSettings_clicked()
+void CornerMenu::on_buttonImport_clicked()
 {
-    //TODO
+    m_Editor->runScriptCommand(
+        QString("Import diagram")
+    );
 }
 
 void CornerMenu::on_buttonSnapshot_clicked()

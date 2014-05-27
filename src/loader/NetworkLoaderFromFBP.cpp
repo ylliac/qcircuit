@@ -30,17 +30,11 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath) const
 {
     FBPNetwork* result = new FBPNetwork();
 
-    //TODO ACY 
-    ////Example : ComponentName ( ComponentClass )
-    //QRegExp componentDeclarationExp("^\\s*([^\\s]+)\\s*\\(\\s*([^\\s]+)\\s*\\)\\s*$");
-    //Example : ComponentName _ComponentClass_ ( null )
-    QRegExp componentDeclarationExp("^\\s*([^\\s]+)\\s*_\\s*([^\\s]+)\\s*_.*$");
+    //Example : ComponentName ( ComponentClass )
+    QRegExp componentDeclarationExp("^\\s*([^\\s]+)\\s*\\(\\s*([^\\s]+)\\s*\\)\\s*$");
 
-    //TODO ACY
-    ////Example : SourceComponentName SourceComponentOutput -> TargetComponentInput TargetComponentName
-    //QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
-    //Example : SourceComponentName _SourceComponentClass_ SourceComponentOutput -> TargetComponentInput TargetComponentName _TargetComponentClass_
-    QRegExp relationDeclarationExp("^\\s*([^\\s]+).*([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+).*$");
+    //Example : SourceComponentName SourceComponentOutput -> TargetComponentInput TargetComponentName
+    QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
     QString content;
     QFile file(filePath);    

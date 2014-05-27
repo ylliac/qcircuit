@@ -31,7 +31,7 @@ private slots:
     void on_buttonDebug_clicked();
     void on_buttonProfile_clicked();
     void on_buttonExport_clicked();
-    void on_buttonSettings_clicked();
+    void on_buttonImport_clicked();
     void on_buttonSnapshot_clicked();
     
 private:

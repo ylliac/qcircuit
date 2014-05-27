@@ -94,7 +94,7 @@ void WindowButton::initMinimize() {
     painter.begin(m_Normal);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(Qt::black));
+    painter.setBrush(QBrush(Qt::white));
 
     painter.drawPolygon(symbol);
 
@@ -104,8 +104,8 @@ void WindowButton::initMinimize() {
     /********** Hovered **********/
     painter.begin(m_Hovered);
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(Qt::white));
+    painter.setPen(Qt::white);
+    painter.setBrush(QBrush(Qt::gray));
 
     painter.drawPolygon(symbol);
 
@@ -115,8 +115,8 @@ void WindowButton::initMinimize() {
     /********** Clicked **********/
     painter.begin(m_Clicked);
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(Qt::white));
+    painter.setPen(Qt::white);
+    painter.setBrush(QBrush(Qt::gray));
 
     painter.drawPolygon(symbol);
 
@@ -145,12 +145,12 @@ void WindowButton::initMaximize() {
     /********** Normal **********/
     painter.begin(m_Normal);
 
-    painter.setPen(QPen(Qt::black));
-    painter.setBrush(QBrush(Qt::black));
+    painter.setPen(QPen(Qt::white));
+    painter.setBrush(QBrush(Qt::white));
 
     painter.drawPolygon(symbol1);
 
-    painter.setPen(QPen(Qt::black));
+    painter.setPen(QPen(Qt::white));
     painter.setBrush(Qt::NoBrush);
 
     painter.drawPolygon(symbol2);
@@ -162,7 +162,7 @@ void WindowButton::initMaximize() {
     painter.begin(m_Hovered);
 
     painter.setPen(QPen(Qt::white));
-    painter.setBrush(QBrush(Qt::white));
+    painter.setBrush(QBrush(Qt::gray));
 
     painter.drawPolygon(symbol1);
 
@@ -178,7 +178,7 @@ void WindowButton::initMaximize() {
     painter.begin(m_Clicked);
 
     painter.setPen(QPen(Qt::white));
-    painter.setBrush(QBrush(Qt::white));
+    painter.setBrush(QBrush(Qt::gray));
 
     painter.drawPolygon(symbol1);
 
@@ -203,7 +203,7 @@ void WindowButton::initClose() {
     /********** Normal **********/
     painter.begin(m_Normal);
 
-    painter.setPen(QPen(QBrush(Qt::black), 2.0));
+    painter.setPen(QPen(QBrush(Qt::white), 2.0));
 
     painter.drawLine(symbol1);
     painter.drawLine(symbol2);
@@ -214,7 +214,7 @@ void WindowButton::initClose() {
     /********** Hovered **********/
     painter.begin(m_Hovered);
 
-    painter.setPen(QPen(QBrush(Qt::white), 2.0));
+    painter.setPen(QPen(QBrush(Qt::gray), 2.0));
 
     painter.drawLine(symbol1);
     painter.drawLine(symbol2);
@@ -225,7 +225,7 @@ void WindowButton::initClose() {
     /********** Clicked **********/
     painter.begin(m_Clicked);
 
-    painter.setPen(QPen(QBrush(Qt::white), 2.0));
+    painter.setPen(QPen(QBrush(Qt::gray), 2.0));
 
     painter.drawLine(symbol1);
     painter.drawLine(symbol2);

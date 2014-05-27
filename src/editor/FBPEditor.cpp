@@ -16,15 +16,16 @@
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
 
-#include "action/CreateNewBlock.h"
 #include "scene/EditorScene.h"
+#include "cornermenu/CornerMenu.h"
 #include "notifications/NotificationPanel.h"
 #include "notifications/block/BlockNotification.h"
 #include "notifications/search/SearchNotification.h"
+#include "action/CreateNewBlock.h"
 #include "action/DeleteBlock.h"
 #include "action/DeleteSelectedBlocks.h"
 #include "action/SetBlockName.h"
-#include "cornermenu/CornerMenu.h"
+#include "action/ImportDiagram.h"
 #include "action/ExportDiagram.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
@@ -82,6 +83,8 @@ void FBPEditor::initialize() {
     DeleteSelectedBlocks* deleteSelectedBlocks = new DeleteSelectedBlocks(this);
     //Set block name
     SetBlockName* setBlockName = new SetBlockName(this);
+    //Import diagram
+    ImportDiagram* importDiagram = new ImportDiagram(this);
     //Export diagram
     ExportDiagram* exportDiagram = new ExportDiagram(this);
 
@@ -93,6 +96,8 @@ void FBPEditor::initialize() {
     m_ScriptEngine->addScriptCommand("Delete the block $1", deleteBlock);
     m_ScriptEngine->addScriptCommand("Delete selected blocks", deleteSelectedBlocks);
     m_ScriptEngine->addScriptCommand("Rename block $1 in block $2", setBlockName);
+    m_ScriptEngine->addScriptCommand("Import diagram", importDiagram);
+    m_ScriptEngine->addScriptCommand("Import diagram from file $1", importDiagram);
     m_ScriptEngine->addScriptCommand("Export diagram", exportDiagram);
     m_ScriptEngine->addScriptCommand("Export diagram in file $1", exportDiagram);
 

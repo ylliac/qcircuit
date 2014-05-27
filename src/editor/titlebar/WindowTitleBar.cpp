@@ -43,31 +43,11 @@ void WindowTitleBar::resizeEvent(QResizeEvent *event) {
     delete m_Cache; // Remove old cache
     
     m_Cache = new QPixmap(size()); // Create a cache with same size as the widget
-    
-    QColor lightBlue(177, 177, 203, 255);
-    QColor gradientStart(0, 0, 0, 0);
-    QColor gradientEnd(0, 0, 0, 220);
-
-    m_Cache->fill(lightBlue); // Create a the transparent background
+    m_Cache->fill(Qt::black); 
 
     QPainter painter(m_Cache); // Start painting the cache
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
-
-    /********** Title bar's title area **********/
-    QPolygon buttons;
-
-    buttons << QPoint(150, 0)
-            << QPoint(0, 0)
-            << QPoint(0, 32)
-            << QPoint(160, 32)
-            << QPoint(160, 12);
-
-    painter.setPen(QPen(Qt::white));
-    painter.setBrush(QBrush(Qt::black));
-
-    painter.drawPolygon(buttons);
-    /**********************************************/
 
     m_Title.move(28, 2);
     m_Title.resize(width() - 116, 20);
