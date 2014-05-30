@@ -9,7 +9,7 @@ Qt views ---> (commands) ----> ScriptEngine ---> (registered actions) ---> Appli
 
 Principes : 
     - Flux UNIdirectionnel
-    - 
+    - Les commandes passent par un chemin différent des évènements
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,5 +46,8 @@ http://developer.android.com/guide/topics/ui/notifiers/toasts.html
 
 
 //////// Bonne idées ////////////////////////////////////////////////////////////////////////////////////
+
+- Faire un réseau de neurones en FBP ! : 
+https://docs.google.com/a/google.com/viewer?url=www.google.com/about/datacenters/efficiency/internal/assets/machine-learning-applicationsfor-datacenter-optimization-finalv2.pdf
 
 - Faire tourner le bouton menu du coin en bas à droite quand on clique dessus (animation)
