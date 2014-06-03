@@ -8,7 +8,6 @@
 #include "CreateNewBlock.h"
 
 #include <QtGui/QGraphicsScene>
-#include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsTextItem>
 #include <QtGui/QGraphicsEllipseItem>
 #include <QtGui/QGraphicsRectItem>
@@ -27,21 +26,34 @@ CreateNewBlock::~CreateNewBlock()
 {
 }
 
-void CreateNewBlock::execute(QString, QString, QString, QString, QString)
+void CreateNewBlock::execute(QString name, QString className, QString, QString, QString)
 {    
-    QGraphicsScene* scene = getEditor()->getScene();
+    //TODO ACY Gérer le nom de classe
     
+    QGraphicsScene* scene = getEditor()->getScene();
+        
+    //Find a name that doesn't exists
+    QString newName = name;
+    if(newName.isEmpty())
+    {
+        newName = "Block";
+    }    
+    
+    if(SceneDetective::getBlock(newName, scene) != NULL)
+    {
+        newName = QString("%1%2").arg(newName);
+        int index = 2;
+        while(SceneDetective::getBlock(newName.arg(index), scene) != NULL)
+        {
+            index++;
+        }
+        newName = newName.arg(index);
+    }
+    
+    //Create the block
     BlockItem* newBlock = new BlockItem(getEditor());
     scene->addItem(newBlock);    
     newBlock->setPos(200,10);
-    
-    //Set a name that doesn't exists
-    QString name = "Block%1";
-    int index = 1;
-    while(SceneDetective::getBlock(name.arg(index), scene) != NULL)
-    {
-        index++;
-    }
-    newBlock->setName(name.arg(index));
+    newBlock->setName(newName);
 }
 

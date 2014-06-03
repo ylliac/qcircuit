@@ -22,6 +22,7 @@
 #include "notifications/block/BlockNotification.h"
 #include "notifications/search/SearchNotification.h"
 #include "action/CreateNewBlock.h"
+#include "action/CreateNewArrow.h"
 #include "action/DeleteBlock.h"
 #include "action/DeleteSelectedBlocks.h"
 #include "action/SetBlockName.h"
@@ -83,6 +84,8 @@ void FBPEditor::initialize() {
     DeleteSelectedBlocks* deleteSelectedBlocks = new DeleteSelectedBlocks(this);
     //Set block name
     SetBlockName* setBlockName = new SetBlockName(this);
+    //New arrow
+    CreateNewArrow* newArrow = new CreateNewArrow(this);
     //Import diagram
     ImportDiagram* importDiagram = new ImportDiagram(this);
     //Export diagram
@@ -93,6 +96,8 @@ void FBPEditor::initialize() {
     //------------------------------------------------------------------
     //TODO ACY Déporter ca dans un fichier
     m_ScriptEngine->addScriptCommand("Create a new block", newBlock);
+    m_ScriptEngine->addScriptCommand("Create a new block with name $1 and class $2", newBlock);
+    m_ScriptEngine->addScriptCommand("Create a new arrow from block $1 port $2 to block $3 port $4", newArrow);
     m_ScriptEngine->addScriptCommand("Delete the block $1", deleteBlock);
     m_ScriptEngine->addScriptCommand("Delete selected blocks", deleteSelectedBlocks);
     m_ScriptEngine->addScriptCommand("Rename block $1 in block $2", setBlockName);

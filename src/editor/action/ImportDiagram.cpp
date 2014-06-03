@@ -74,10 +74,14 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
             QString blockName = blockDeclarationExp.cap(1);
             QString blockClass = blockDeclarationExp.cap(2);
             
-            //TODO ACY Lancer l'action CreateNewBlock avec en paramètre le nom et la classe
+            //TODO ACY Vérifier qu'un block du même nom n'est pas déjà pris 
+            //Si c'est le cas, arrêter tout et renvoyer une erreur car la gestion des flêches par la suite va être tordue sinon
             
-            //TODO ACY SUPPR
-            std::cout << "Block: " << blockName.toStdString() << std::endl;
+            getEditor()->runScriptCommand(
+                    QString("Create a new block with name %1 and class %2")
+                    .arg(blockName)
+                    .arg(blockClass)
+                    );
         }
             //Import arrow
         else if (arrowDeclarationExp.exactMatch(instruction))
@@ -87,10 +91,21 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
             QString targetBlockInput = arrowDeclarationExp.cap(3);
             QString targetBlockName = arrowDeclarationExp.cap(4);
             
-            //TODO ACY Lancer l'action CreateNewArrow avec en paramètre le nom du block source et destination
+            getEditor()->runScriptCommand(
+                    QString("Create a new arrow from block %1 port %2 to block %3 port %4")
+                    .arg(sourceBlockName)
+                    .arg(sourceBlockOutput)
+                    .arg(targetBlockName)
+                    .arg(targetBlockInput)
+                    );
             
-            //TODO ACY SUPPR
-            std::cout << "Arrow: " << sourceBlockName.toStdString() << " --> " << sourceBlockName.toStdString() << std::endl;
+            //TODO ACY Que se passe t'il si on a importé un block depuis un fichier qui comporte le même nom qu'un autre block qui était
+            //la avant l'importation ? Actuellement il est renommé [Nom du block]2. Sauf que quand on importe les liaison de ce block par la suite,
+            //on a perdu la trace du renommage
+            //--> Il faut s'assurer que le block n'existe pas déjà avant de lancer l'action d'import
+            // et renvoyer une erreur.
+            //Soit ca n'arrive jamais parce qu'on vide la scène avant, soit ca stoppe l'importation avec un message d'erreur
+            
         }
     }
 
