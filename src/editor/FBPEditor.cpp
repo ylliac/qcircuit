@@ -78,33 +78,30 @@ void FBPEditor::initialize() {
     //------------------------------------------------------------------
     //New block
     CreateNewBlock* newBlock = new CreateNewBlock(this);
+    m_ScriptEngine->registerAction("CreateBlock", newBlock);
     //Delete block
     DeleteBlock* deleteBlock = new DeleteBlock(this);
+    m_ScriptEngine->registerAction("DeleteBlock", deleteBlock);
     //Delete selected blocks
     DeleteSelectedBlocks* deleteSelectedBlocks = new DeleteSelectedBlocks(this);
+    m_ScriptEngine->registerAction("DeleteSelectedBlocks", deleteSelectedBlocks);
     //Set block name
     SetBlockName* setBlockName = new SetBlockName(this);
+    m_ScriptEngine->registerAction("SetBlockName", setBlockName);
     //New arrow
     CreateNewArrow* newArrow = new CreateNewArrow(this);
+    m_ScriptEngine->registerAction("CreateArrow", newArrow);
     //Import diagram
     ImportDiagram* importDiagram = new ImportDiagram(this);
+    m_ScriptEngine->registerAction("ImportDiagram", importDiagram);
     //Export diagram
     ExportDiagram* exportDiagram = new ExportDiagram(this);
+    m_ScriptEngine->registerAction("ExportDiagram", exportDiagram);
 
     //------------------------------------------------------------------
     // SCRIPT COMMANDS 
     //------------------------------------------------------------------
-    //TODO ACY Déporter ca dans un fichier
-    m_ScriptEngine->addScriptCommand("Create a new block", newBlock);
-    m_ScriptEngine->addScriptCommand("Create a new block with name $1 and class $2", newBlock);
-    m_ScriptEngine->addScriptCommand("Create a new arrow from block $1 port $2 to block $3 port $4", newArrow);
-    m_ScriptEngine->addScriptCommand("Delete the block $1", deleteBlock);
-    m_ScriptEngine->addScriptCommand("Delete selected blocks", deleteSelectedBlocks);
-    m_ScriptEngine->addScriptCommand("Rename block $1 in block $2", setBlockName);
-    m_ScriptEngine->addScriptCommand("Import diagram", importDiagram);
-    m_ScriptEngine->addScriptCommand("Import diagram from file $1", importDiagram);
-    m_ScriptEngine->addScriptCommand("Export diagram", exportDiagram);
-    m_ScriptEngine->addScriptCommand("Export diagram in file $1", exportDiagram);
+    m_ScriptEngine->loadAssociationFile("../source/resources/commands.txt");
 
     //------------------------------------------------------------------
     // NOTIFICATIONS

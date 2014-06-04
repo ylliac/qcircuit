@@ -1,0 +1,23 @@
+ACTION CreateBlock
+COMMAND Create a new block
+COMMAND Create a new block with name $1 and class $2
+
+ACTION CreateArrow
+COMMAND Create a new arrow from block $1 port $2 to block $3 port $4
+
+ACTION DeleteBlock
+COMMAND Delete the block $1
+
+ACTION DeleteSelectedBlocks
+COMMAND Delete selected blocks
+
+ACTION SetBlockName
+COMMAND Rename block $1 in block $2
+
+ACTION ImportDiagram
+COMMAND Import diagram
+COMMAND Import diagram from file $1
+
+ACTION ExportDiagram
+COMMAND Export diagram
+COMMAND Export diagram in file $1

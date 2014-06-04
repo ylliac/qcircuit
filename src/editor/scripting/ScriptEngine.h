@@ -10,6 +10,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QtCore/QMap>
 
 class FBPEditor;
 class FBPEditorAction;
@@ -22,12 +23,18 @@ public:
     ScriptEngine(FBPEditor* editor);
     virtual ~ScriptEngine();
     
-    void addScriptCommand(QString input, FBPEditorAction* action);
+    void registerAction(QString actionName, FBPEditorAction* action);
+    void registerScriptCommand(QString input, QString actionName);
     
     bool runScriptCommand(QString input);
     
+    void loadAssociationFile(QString filePath);
+    
 private:
+    FBPEditorAction* findAction(QString actionName);
+    
     FBPEditor* m_Editor;
+    QMap<QString, FBPEditorAction*> m_Actions;
     QList<ScriptCommand*> m_Commands;
     
     QList<QString> m_History;

@@ -15,21 +15,6 @@ Principes :
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
 
-- Mettre en place un fichier pour faire le lien entre commande et action :
-    1) Enregistrer toutes les actions dans le logiciel en leur donnant un nom :
-        FBPEditor.registerAction("NewBlock", newBlockAction);
-        FBPEditor.registerAction("DeleteBlock", deleteBlockAction);
-
-    2) Ecrire dans un fichier la correspondance COMMANDE --> ACTION
-        COMMAND Create a new block
-        COMMAND new
-        ACTION NewBlock
-
-        COMMAND Delete the block $1
-        COMMAND Remove the block $1
-        COMMAND rm $1
-        ACTION DeleteBlock
-
 - Ajouter un mécanisme de remontée d'information : 
   1) BLOQUANT : remontée d'erreur pour les actions et le scripting :
   par exemple si on essaie de mettre un nom à un block qui existe déjà --> erreur explicite (message box)
