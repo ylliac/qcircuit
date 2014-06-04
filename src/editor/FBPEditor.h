@@ -37,7 +37,8 @@ public:
     ScriptEngine* getScriptEngine();
     NotificationPanel* getNotificationPanel();
 
-    bool runScriptCommand(QString input);
+    bool runScriptCommand(QString input);    
+    void info(QString text);
 
     void setWindowTitle(const QString &title);
 

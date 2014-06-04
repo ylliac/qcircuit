@@ -30,14 +30,14 @@ void CreateNewArrow::execute(QString sourceBlockName, QString sourceBlockOutput,
     BlockItem* sourceBlock = SceneDetective::getBlock(sourceBlockName, scene);
     if(sourceBlock == NULL)
     {
-        //TODO ACY Error
+        getEditor()->info(QString("Can't find the block named %1").arg(sourceBlockName));
         return;
     }
     
     BlockItem* targetBlock = SceneDetective::getBlock(targetBlockName, scene);
     if(targetBlock == NULL)
     {
-        //TODO ACY Error
+        getEditor()->info(QString("Can't find the block named %1").arg(targetBlockName));
         return;
     }
     

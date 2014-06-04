@@ -103,11 +103,13 @@ void CornerMenu::updatePosition()
 void CornerMenu::on_buttonDebug_clicked()
 {
     //TODO
+    m_Editor->info("Not implemented");
 }
 
 void CornerMenu::on_buttonProfile_clicked()
 {
     //TODO
+    m_Editor->info("Not implemented");
 }
 
 void CornerMenu::on_buttonExport_clicked()
@@ -127,4 +129,5 @@ void CornerMenu::on_buttonImport_clicked()
 void CornerMenu::on_buttonSnapshot_clicked()
 {
     //TODO
+    m_Editor->info("Not implemented");
 }

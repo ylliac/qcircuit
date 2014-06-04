@@ -28,6 +28,7 @@
 #include "action/SetBlockName.h"
 #include "action/ImportDiagram.h"
 #include "action/ExportDiagram.h"
+#include "toast/Toast.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
@@ -137,6 +138,11 @@ bool FBPEditor::runScriptCommand(QString input) {
     bool result = m_ScriptEngine->runScriptCommand(input);
     Q_ASSERT(result);
     return result;
+}
+
+void FBPEditor::info(QString text)
+{
+    Toast::make(this, text);
 }
 
 void FBPEditor::paintEvent(QPaintEvent *event) {

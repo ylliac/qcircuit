@@ -85,7 +85,6 @@ bool ScriptEngine::runScriptCommand(QString input)
 
 void ScriptEngine::loadAssociationFile(QString filePath)
 {
-    QString content;
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {

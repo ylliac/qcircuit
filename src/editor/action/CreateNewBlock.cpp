@@ -27,7 +27,7 @@ CreateNewBlock::~CreateNewBlock()
 }
 
 void CreateNewBlock::execute(QString name, QString className, QString, QString, QString)
-{    
+{       
     //TODO ACY Gérer le nom de classe
     
     QGraphicsScene* scene = getEditor()->getScene();

@@ -76,7 +76,7 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
             
             //TODO ACY Vérifier qu'un block du même nom n'est pas déjà pris 
             //Si c'est le cas, arrêter tout et renvoyer une erreur car la gestion des flêches par la suite va être tordue sinon
-            
+                        
             getEditor()->runScriptCommand(
                     QString("Create a new block with name %1 and class %2")
                     .arg(blockName)
@@ -98,14 +98,6 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
                     .arg(targetBlockName)
                     .arg(targetBlockInput)
                     );
-            
-            //TODO ACY Que se passe t'il si on a importé un block depuis un fichier qui comporte le même nom qu'un autre block qui était
-            //la avant l'importation ? Actuellement il est renommé [Nom du block]2. Sauf que quand on importe les liaison de ce block par la suite,
-            //on a perdu la trace du renommage
-            //--> Il faut s'assurer que le block n'existe pas déjà avant de lancer l'action d'import
-            // et renvoyer une erreur.
-            //Soit ca n'arrive jamais parce qu'on vide la scène avant, soit ca stoppe l'importation avec un message d'erreur
-            
         }
     }
 

@@ -87,61 +87,6 @@ QVariant BlockItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void BlockItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) 
 {   
-    //TODO ACY SUPPRIMER
-    //    //------------------------------------------------------------------
-    //    // DROP SHADOW 
-    //    //------------------------------------------------------------------
-    //    
-    //    /*
-    //     The drop shadow effect will be created by drawing a filled, rounded corner rectangle with a gradient fill.
-    //     Then on top of this will be drawn  filled, rounded corner rectangle, filled with a solid color, and offset such that the gradient filled
-    //     box is only visible below for a few pixels on two edges.
-    //
-    //     The total box size is _width by _height. So the top box will start at (0,0) and go to (_width-shadowThickness, _height-shadowThickness),
-    //     while the under box will be offset, and start at (shadowThickness+0, shadowThickness+0) and go to  (_width, _height).
-    //     */
-    //    
-    //    int shadowThickness = 3;
-    //
-    //    QLinearGradient gradient;
-    //    gradient.setStart(m_DrawingLeft, m_DrawingTop);
-    //    gradient.setFinalStop(m_DrawingRight, m_DrawingTop);
-    //    // starting color of the gradient - can play with the starting color and ,point since its not visible anyway
-    //    QColor grey1(150, 150, 150, 125); 
-    //    // grey2 is ending color of the gradient - this is what will show up as the shadow. the last parameter is the alpha blend, its set
-    //    // to 125 allowing a mix of th color and and the background, making more realistic shadow effect.
-    //    QColor grey2(225, 225, 225, 125);
-    //    gradient.setColorAt((qreal) 0, grey1);
-    //    gradient.setColorAt((qreal) 1, grey2);
-    //    QBrush brush(gradient);
-    //    painter->setBrush(brush);
-    //
-    //    // for the desired effect, no border will be drawn, and because a brush was set, the drawRoundRect will fill the box with the gradient brush.
-    //    m_OutterborderPen.setStyle(Qt::NoPen);
-    //    painter->setPen(m_OutterborderPen);
-    //
-    //    QPointF topLeft(m_DrawingLeft, m_DrawingLeft);
-    //    QPointF bottomRight(m_DrawingRight, m_DrawingBottom);
-    //
-    //    QRectF rect(topLeft, bottomRight);
-    //
-    //    painter->drawRoundRect(rect, 25, 25); // corner radius of 25 pixels
-    //
-    //    //------------------------------------------------------------------
-    //    // CONTENT 
-    //    //------------------------------------------------------------------
-    //    
-    //    // draw the top box, the visible one
-    //    QBrush contentBrush(QColor(243, 255, 216, 255), Qt::SolidPattern);
-    //    painter->setBrush(contentBrush);
-    //
-    //    QPointF topLeft2(m_DrawingLeft, m_DrawingTop);
-    //    QPointF bottomRight2(m_DrawingRight - shadowThickness, m_DrawingBottom - shadowThickness);
-    //
-    //    QRectF rect2(topLeft2, bottomRight2);
-    //
-    //    painter->drawRoundRect(rect2, 25, 25);
-
     QLinearGradient gradient;
     gradient.setStart(m_DrawingLeft, m_DrawingBottom);
     gradient.setFinalStop(m_DrawingLeft, m_DrawingTop);

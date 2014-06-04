@@ -15,13 +15,6 @@ Principes :
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
 
-- Ajouter un mécanisme de remontée d'information : 
-  1) BLOQUANT : remontée d'erreur pour les actions et le scripting :
-  par exemple si on essaie de mettre un nom à un block qui existe déjà --> erreur explicite (message box)
-
-  2) NON BLOQUANT : Ajouter un mécanisme de notifocation non bloquant comme les toasts sous Android
-http://developer.android.com/guide/topics/ui/notifiers/toasts.html
-
 - Brancher la barre de recherche
 
 - Utiliser les polices de caractères téléchargées
