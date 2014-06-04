@@ -11,6 +11,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#include <QtCore/QPair>
 
 class FBPEditor;
 class FBPEditorAction;
@@ -37,7 +38,9 @@ private:
     QMap<QString, FBPEditorAction*> m_Actions;
     QList<ScriptCommand*> m_Commands;
     
-    QList<QString> m_History;
+    QList<QPair<int, QString> > m_History;
+    
+    int m_CurrentActionLevel;
 };
 
 #endif	/* SCRIPTENGINE_H */

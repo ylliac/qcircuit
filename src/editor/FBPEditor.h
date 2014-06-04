@@ -38,7 +38,7 @@ public:
     NotificationPanel* getNotificationPanel();
 
     bool runScriptCommand(QString input);    
-    void info(QString text);
+    void info(QString text, int timeout = 2000);
 
     void setWindowTitle(const QString &title);
 

@@ -27,6 +27,11 @@ public:
     BlockItem* getStartBlock();
     BlockItem* getEndBlock();
     
+    QString getOutputPortName();
+    void setOutputPortName(QString name);
+    QString getInputPortName();
+    void setInputPortName(QString name);
+    
     void setColor(const QColor &color);    
 
 public slots:

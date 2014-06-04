@@ -30,9 +30,14 @@ void SetBlockName::execute(QString blockName, QString newName, QString, QString,
     BlockItem* block = SceneDetective::getBlock(blockName, scene);     
     if(block != NULL)
     {
-        //TODO ACY Ensure this name is not already taken
-        
-        block->setName(newName);
+        if(SceneDetective::getBlock(newName, scene) != NULL)
+        {
+            getEditor()->info(QString("A block with name '%1' already exists").arg(newName));
+        }
+        else
+        {
+            block->setName(newName);            
+        }
     }
 }
 

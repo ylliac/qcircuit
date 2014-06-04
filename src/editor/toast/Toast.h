@@ -20,7 +20,7 @@ class Toast : public QWidget {
     Q_OBJECT
     
 public:
-    static void make(FBPEditor* editor, QString text);
+    static void make(FBPEditor* editor, QString text, int timeout = 2000);
     
 protected:    
     Toast(QWidget* parent = 0, Qt::WindowFlags windowFlag = 0);

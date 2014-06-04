@@ -40,10 +40,10 @@ void CreateNewArrow::execute(QString sourceBlockName, QString sourceBlockOutput,
         getEditor()->info(QString("Can't find the block named %1").arg(targetBlockName));
         return;
     }
-    
-    //TODO ACY Gérer les noms de port d'entrée / sortie
-    
+        
     ArrowItem* arrow = new ArrowItem(sourceBlock, targetBlock);
+    arrow->setOutputPortName(sourceBlockOutput);
+    arrow->setInputPortName(targetBlockInput);
     arrow->setColor(QColor(123, 229, 180)); //green
     //arrow->setColor(QColor(118,229,233)); //blue
     //arrow->setColor(QColor(248,131,128)); //red

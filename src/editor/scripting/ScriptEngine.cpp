@@ -19,7 +19,8 @@
 #include <iostream>
 
 ScriptEngine::ScriptEngine(FBPEditor* editor) :
-m_Editor(editor)
+m_Editor(editor),
+m_CurrentActionLevel(0)
 {
 }
 
@@ -54,11 +55,26 @@ void ScriptEngine::registerScriptCommand(QString input, QString actionName)
 }
 
 bool ScriptEngine::runScriptCommand(QString input)
-{
+{       
     bool result = false;
-
+    
     //Save the input in the history
-    m_History.append(input);
+    m_History.append(QPair<int, QString>(m_CurrentActionLevel, input));
+    
+    //Log the command
+    QString logPrefix;
+    for(int i=0; i < m_CurrentActionLevel; i++)
+    {
+        logPrefix.append('-');
+    }
+    if(m_CurrentActionLevel > 0)
+    {
+        logPrefix.append(' ');            
+    }
+    std::cout << logPrefix.toStdString() << "COMMAND " << input.toStdString() << std::endl;
+    
+    //Increase the current action level
+    m_CurrentActionLevel++;
     
     //Run the associated command
     foreach(ScriptCommand* command, m_Commands)
@@ -70,12 +86,11 @@ bool ScriptEngine::runScriptCommand(QString input)
         }
     }
     
-    //Log    
-    if(result)
-    {
-        std::cout << "COMMAND " << input.toStdString() << std::endl;
-    }
-    else
+    //Decrease the current action level
+    m_CurrentActionLevel--;
+    
+    //Log if error  
+    if(!result)
     {
         std::cerr << "COMMAND NOT FOUND: " << input.toStdString() << std::endl;
     }

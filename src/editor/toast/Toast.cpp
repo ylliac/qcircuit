@@ -46,14 +46,14 @@ Toast::~Toast()
     delete ui;
 }
 
-void Toast::make(FBPEditor* editor, QString text)
+void Toast::make(FBPEditor* editor, QString text, int timeout)
 {
     Toast* toast = new Toast(editor->getGraphicsView());
     toast->setText(text);
     toast->setVisible(true);
     toast->updatePosition();
     
-    QTimer::singleShot(2000, toast, SLOT(close()));
+    QTimer::singleShot(timeout, toast, SLOT(close()));
 }
 
 QString Toast::text()

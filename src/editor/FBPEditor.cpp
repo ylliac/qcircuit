@@ -140,9 +140,9 @@ bool FBPEditor::runScriptCommand(QString input) {
     return result;
 }
 
-void FBPEditor::info(QString text)
+void FBPEditor::info(QString text, int timeout)
 {
-    Toast::make(this, text);
+    Toast::make(this, text, timeout);
 }
 
 void FBPEditor::paintEvent(QPaintEvent *event) {

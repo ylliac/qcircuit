@@ -14,8 +14,10 @@
 #include <iostream>
 
 #include "editor/FBPEditor.h"
+#include "editor/scene/EditorScene.h"
 #include "editor/scene/BlockItem.h"
 #include "editor/scene/ArrowItem.h"
+#include "editor/scene/SceneDetective.h"
 
 ImportDiagram::ImportDiagram(FBPEditor* editor) :
 FBPEditorAction(editor)
@@ -29,6 +31,8 @@ ImportDiagram::~ImportDiagram()
 
 void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QString)
 {
+    QGraphicsScene* scene = getEditor()->getScene();
+    
     //TODO ACY Vider le diagramme existant avant ?
 
     QString fileName = inputFileName;
@@ -74,9 +78,17 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
             QString blockName = blockDeclarationExp.cap(1);
             QString blockClass = blockDeclarationExp.cap(2);
             
-            //TODO ACY Vérifier qu'un block du même nom n'est pas déjà pris 
-            //Si c'est le cas, arrêter tout et renvoyer une erreur car la gestion des flêches par la suite va être tordue sinon
-                        
+            //Check if the imported block name is not already taken
+            if(SceneDetective::getBlock(blockName, scene) != NULL)
+            {
+                getEditor()->info(
+                        QString("The diagram has not been imported entirely due to following errror :\nA block with name '%1' already exists")
+                        .arg(blockName),
+                        5000
+                        );
+                return;
+            }
+            
             getEditor()->runScriptCommand(
                     QString("Create a new block with name %1 and class %2")
                     .arg(blockName)

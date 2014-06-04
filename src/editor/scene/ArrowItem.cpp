@@ -32,7 +32,6 @@ QGraphicsLineItem(parent, scene)
     check = connect(endItem, SIGNAL(posChanged(BlockItem*)),this, SLOT(updateTextPosition()));
     Q_ASSERT(check);
     
-    //TODO ACY
     m_InputPortName = new QGraphicsTextItem(this);
     m_InputPortName->setPlainText("IN");
     
@@ -42,6 +41,26 @@ QGraphicsLineItem(parent, scene)
 
 ArrowItem::~ArrowItem()
 {
+}
+
+QString ArrowItem::getOutputPortName()
+{
+    return m_OutputPortName->toPlainText();
+}
+    
+void ArrowItem::setOutputPortName(QString name)
+{
+    m_OutputPortName->setPlainText(name);
+}
+
+QString ArrowItem::getInputPortName()
+{
+    return m_InputPortName->toPlainText();
+}
+
+void ArrowItem::setInputPortName(QString name)
+{
+    m_InputPortName->setPlainText(name);
 }
 
 QRectF ArrowItem::boundingRect() const
@@ -174,10 +193,10 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     myLine.translate(-2*dx, -2*dy);
     painter->drawLine(myLine); 
     
-    //TODO ACY Draw arrow bounding rect
-//    painter->setPen(Qt::red);
-//    painter->setBrush(Qt::NoBrush);
-//    painter->drawRect(boundingRect());
+    //DEBUG: Draw arrow bounding rect
+    //    painter->setPen(Qt::red);
+    //    painter->setBrush(Qt::NoBrush);
+    //    painter->drawRect(boundingRect());
     
     //------------------------------------------------------------------
     // SELECTION 

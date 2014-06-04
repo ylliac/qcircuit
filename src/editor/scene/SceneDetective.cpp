@@ -91,3 +91,25 @@ QList<ArrowItem*> SceneDetective::getConnectedArrows(QGraphicsScene* scene, Bloc
     return result;
 }
 
+QString SceneDetective::newUniqueNonEmptyBlockName(QGraphicsScene* scene, QString name)
+{
+    QString newName = name;
+    if(newName.isEmpty())
+    {
+        newName = "Block";
+    } 
+    
+    if(getBlock(newName, scene) != NULL)
+    {
+        newName = QString("%1%2").arg(newName);
+        int index = 2;
+        while(getBlock(newName.arg(index), scene) != NULL)
+        {
+            index++;
+        }
+        newName = newName.arg(index);
+    }
+    
+    return newName;
+}
+

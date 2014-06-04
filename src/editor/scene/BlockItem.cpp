@@ -77,6 +77,16 @@ void BlockItem::setName(QString name)
     m_Text.setPlainText(name);
 }
 
+QString BlockItem::className()
+{
+    return m_Text.toolTip();
+}
+
+void BlockItem::setClassName(QString className)
+{
+    m_Text.setToolTip(className);
+}
+
 QVariant BlockItem::itemChange(GraphicsItemChange change, const QVariant &value)
  {
      if (change == ItemPositionChange && scene() != NULL) {         
@@ -162,7 +172,7 @@ void BlockItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
     m_Corners[2]->installSceneEventFilter(this);
     m_Corners[3]->installSceneEventFilter(this);
     
-    //TODO ACY
+    //TODO ACY don't remove that, Could be usefull for something else
     m_Corners[0]->setVisible(false);
     m_Corners[1]->setVisible(false);
     m_Corners[2]->setVisible(false);

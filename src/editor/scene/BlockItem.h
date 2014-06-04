@@ -38,6 +38,9 @@ public:
     virtual QString name();
     virtual void setName(QString name);
     
+    virtual QString className();
+    virtual void setClassName(QString className);
+    
     FBPEditor* getEditor();
     
 signals:

@@ -13,7 +13,24 @@ Principes :
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////// PRINCIPE DE FONCTIONNEMENT ////////////////////////////////////
+//Principe :
+    //Les actions sont le point d'entrée de l'utilisateur. 
+    //Il peuvent être aussi le point d'entrée d'un mode console, d'un test ou d'un moteur de script.
+    //Un mécanisme qui permet de faire le mapping entre l'action et un texte a été mis en place (ScriptEngine).
+    //Le mapping texte -> action permet de :
+    //   - faire du BDD
+    //   - générer automatiquement des actions à partir d'un script
+    //Le mapping action -> texte permet de :
+    //   - Logger automatiquement les actions
+    //   - Reproduire facilement l'éxécution d'un logiciel à partir de son log
+    //   - Enregistrer un script (ou macro) en live dans le logiciel
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
+- Faire une notification pour modifier la classe d'un block
 
 - Brancher la barre de recherche
 
