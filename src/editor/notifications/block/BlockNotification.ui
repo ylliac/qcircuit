@@ -22,15 +22,8 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLineEdit" name="editName">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="2" column="4">
        <widget class="QPushButton" name="buttonEdit">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
@@ -50,7 +43,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="2" column="5">
        <widget class="QPushButton" name="buttonValidate">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
@@ -70,7 +63,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="2" column="6">
        <widget class="QPushButton" name="buttonCancel">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
@@ -90,7 +83,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="2" column="7">
        <widget class="QPushButton" name="buttonDelete">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
@@ -107,6 +100,40 @@
         </property>
         <property name="flat">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="8">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QLabel" name="title">
+        <property name="text">
+         <string>Selected block</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="3">
+       <widget class="QLineEdit" name="editName">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelName">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Name</string>
         </property>
        </widget>
       </item>

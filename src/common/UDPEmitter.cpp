@@ -15,6 +15,8 @@
 
 UDPEmitter::UDPEmitter()
 {
+    setObjectName(metaObject()->className());
+    
     addInputPort("IN"); 
     
     udpSocket = NULL;

@@ -12,6 +12,8 @@
 
 Console::Console()
 {
+    setObjectName(metaObject()->className());
+
     addInputPort("MESSAGE");
 }
 

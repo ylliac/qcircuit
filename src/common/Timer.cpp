@@ -13,6 +13,8 @@
 Timer::Timer()
 : timer(NULL)
 {
+    setObjectName(metaObject()->className());
+    
     addOutputPort("TIME");
     setSelfStarting(true);
 }

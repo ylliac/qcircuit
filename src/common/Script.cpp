@@ -9,6 +9,7 @@
 //
 //Script::Script()
 //{
+//   setObjectName(metaObject()->className());
 //}
 //
 //Script::~Script()

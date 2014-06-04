@@ -29,7 +29,7 @@ private slots:
     void on_buttonCancel_clicked();
     void on_buttonDelete_clicked();
     void on_editName_returnPressed();
-    void on_selection_changed();
+    void onSelectionChanged();
     
 private:
     void setReadOnly(bool readOnly);

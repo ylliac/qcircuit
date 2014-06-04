@@ -30,11 +30,18 @@
 #include "action/ExportDiagram.h"
 #include "action/Debug.h"
 #include "toast/Toast.h"
+#include "../descriptor/ComponentClassRepository.h"
+#include "../descriptor/QtComponentClassDescriptor.h"
+#include "../common/Timer.h"
+#include "../common/Console.h"
+#include "../common/UDPEmitter.h"
+#include "../common/UDPReceiver.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
     ui->setupUi(this);
 
+    m_ComponentClasses = new ComponentClassRepository();
     m_NotificationPanel = new NotificationPanel(this);
 
     ui->graphicsView->setScene(m_Scene);
@@ -120,6 +127,19 @@ void FBPEditor::initialize() {
     // CORNER MENU 
     //------------------------------------------------------------------
     new CornerMenu(this);
+    
+    //------------------------------------------------------------------
+    // COMPONENT CLASSES 
+    //------------------------------------------------------------------
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Timer::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Console::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
+}
+
+ComponentClassRepository* FBPEditor::getComponentClassRepository()
+{
+    return m_ComponentClasses;
 }
 
 QGraphicsView* FBPEditor::getGraphicsView() {

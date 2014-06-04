@@ -239,7 +239,7 @@ void FBPNetwork::initiate()
     foreach(FBPComponent* component, components)
     {
         if(component->isSelfStarting())
-        {
+        {            
             component->activate();
         }
     }

@@ -32,7 +32,7 @@ m_Editor(editor)
     setReadOnly(true);  
     setVisible(false);  
     
-    CONNECT(m_Editor->getScene(), SIGNAL(selectionChanged()), this, SLOT(on_selection_changed()));    
+    CONNECT(m_Editor->getScene(), SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));    
 }
 
 BlockNotification::~BlockNotification()
@@ -67,7 +67,7 @@ void BlockNotification::on_editName_returnPressed()
     setReadOnly(true);
 }
 
-void BlockNotification::on_selection_changed()
+void BlockNotification::onSelectionChanged()
 {
     //Cancel edition
     setReadOnly(true);

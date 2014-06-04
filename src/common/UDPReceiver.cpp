@@ -14,6 +14,8 @@
 
 UDPReceiver::UDPReceiver()
 {
+    setObjectName(metaObject()->className());
+    
     addOutputPort("OUT");
     setSelfStarting(true);
     

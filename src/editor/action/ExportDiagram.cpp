@@ -53,17 +53,24 @@ void ExportDiagram::execute(QString inputFileName, QString, QString, QString, QS
         //Export block list
         QList<BlockItem*> blocks = SceneDetective::getBlocks(scene);
         foreach(BlockItem* block, blocks) {
-            out << block->name() << " (null)," << endl;
+            QString className = block->className();
+            if(className.isEmpty())
+            {
+                className = "null";
+            }
+            out << block->name() << " (" << className << ")," << endl;
         }
 
         //Export arrow list
         QList<ArrowItem*> arrows = SceneDetective::getArrows(scene);
         foreach(ArrowItem* arrow, arrows) {
-            out << arrow->getStartBlock()->name() << " OUT -> IN " << arrow->getEndBlock()->name() << "," << endl;
+            out << arrow->getStartBlock()->name() << " " << arrow->getOutputPortName() << " -> " 
+                    << arrow->getInputPortName() << " " << arrow->getEndBlock()->name() << "," << endl;
         }
     }
 
     file.close();
-    QMessageBox::information(getEditor(), tr("Export successful"), "Diagram was successfully exported.");
+    
+    getEditor()->info("Diagram was successfully exported.");
 }
 

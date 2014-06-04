@@ -113,6 +113,6 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
         }
     }
 
-    QMessageBox::information(getEditor(), tr("Import successful"), "Diagram was successfully imported.");
+    getEditor()->info("Diagram was successfully imported.");
 }
 

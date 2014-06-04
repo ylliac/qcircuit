@@ -24,6 +24,7 @@ namespace Ui {
 }
 
 class EditorScene;
+class ComponentClassRepository;
 
 class FBPEditor : public QMainWindow {
     Q_OBJECT
@@ -36,6 +37,7 @@ public:
     EditorScene* getScene();
     ScriptEngine* getScriptEngine();
     NotificationPanel* getNotificationPanel();
+    ComponentClassRepository* getComponentClassRepository();
 
     bool runScriptCommand(QString input);    
     void info(QString text, int timeout = 2000);
@@ -57,6 +59,7 @@ private:
     EditorScene* m_Scene;
     ScriptEngine* m_ScriptEngine;
     NotificationPanel* m_NotificationPanel;
+    ComponentClassRepository* m_ComponentClasses;
 };
 
 #endif	/* _FBPEDITOR_H */
