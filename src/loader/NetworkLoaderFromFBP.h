@@ -13,18 +13,14 @@
 #include <QtCore/QMetaObject>
 
 class FBPNetwork;
+class ComponentClassRepository;
 
 class NetworkLoaderFromFBP {
 public:
     NetworkLoaderFromFBP();
     virtual ~NetworkLoaderFromFBP();
     
-    FBPNetwork* loadFromFile(QString filePath) const;
-    
-    void addComponentClass(QString className, QMetaObject metaObject);
-    
-private:
-    QMap<QString, QMetaObject> m_ComponentClasses;
+    FBPNetwork* loadFromFile(QString filePath, ComponentClassRepository* repository) const;
 };
 
 #endif	/* NETWORKLOADERFROMFBP_H */

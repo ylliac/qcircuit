@@ -102,8 +102,9 @@ void CornerMenu::updatePosition()
 
 void CornerMenu::on_buttonDebug_clicked()
 {
-    //TODO
-    m_Editor->info("Not implemented");
+    m_Editor->runScriptCommand(
+        QString("Debug")
+    );
 }
 
 void CornerMenu::on_buttonProfile_clicked()

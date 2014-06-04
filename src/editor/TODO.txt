@@ -33,6 +33,10 @@ Principes :
 - Faire une notification pour modifier la classe d'un block
 
 - Brancher la barre de recherche
+    -> rechercher dans les blocs existant
+    -> rechercher dans le repository des descriptions de blocks 
+    -> rechercher dans les commandes et quand on clique sur une commande, proposer une fenêtre avec la commande ecrite et des cases à remplir à la place des arguments
+    
 
 - Utiliser les polices de caractères téléchargées
 

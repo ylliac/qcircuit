@@ -21,3 +21,6 @@ COMMAND Import diagram from file $1
 ACTION ExportDiagram
 COMMAND Export diagram
 COMMAND Export diagram in file $1
+
+ACTION Debug
+COMMAND Debug

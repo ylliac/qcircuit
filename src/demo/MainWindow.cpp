@@ -19,6 +19,9 @@
 #include "../common/Console.h"
 #include "../common/Test.h"
 
+#include "../descriptor/ComponentClassRepository.h"
+#include "../descriptor/QtComponentClassDescriptor.h"
+
 #include <QtCore/QtConcurrentRun>
 
 #include <iostream>
@@ -31,13 +34,14 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     //------------------------------------------------------------------
     // CREATE CIRCUIT 
     //------------------------------------------------------------------
-
+    ComponentClassRepository repository;
+    repository.addComponentClass(new QtComponentClassDescriptor(Timer::staticMetaObject));
+    repository.addComponentClass(new QtComponentClassDescriptor(Console::staticMetaObject));
+    repository.addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
+    repository.addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
+    
     NetworkLoaderFromFBP loader;
-    loader.addComponentClass("Timer", Timer::staticMetaObject);
-    loader.addComponentClass("Console", Console::staticMetaObject);
-    loader.addComponentClass("UDPEmitter", UDPEmitter::staticMetaObject);
-    loader.addComponentClass("UDPReceiver", UDPReceiver::staticMetaObject);
-    m_Network = loader.loadFromFile("../source/resources/demo.fbp");
+    m_Network = loader.loadFromFile("../source/resources/demo.fbp", &repository);
     m_Network->setParent(this);
 
     connect(ui->buttonTrigger, SIGNAL(clicked()), this, SLOT(launchNetwork()));

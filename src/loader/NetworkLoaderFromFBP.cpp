@@ -9,6 +9,8 @@
 
 #include "../core/FBPComponent.h"
 #include "../core/FBPNetwork.h"
+#include "descriptor/ComponentClassDescriptor.h"
+#include "descriptor/ComponentClassRepository.h"
 
 #include <iostream>
 
@@ -26,7 +28,7 @@ NetworkLoaderFromFBP::~NetworkLoaderFromFBP()
 {
 }
 
-FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath) const
+FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassRepository* repository) const
 {
     FBPNetwork* result = new FBPNetwork();
 
@@ -75,11 +77,14 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath) const
             QString componentName = componentDeclarationExp.cap(1);
             QString componentClass = componentDeclarationExp.cap(2);
 
-            if(m_ComponentClasses.contains(componentClass))
+            const ComponentClassDescriptor* descriptor = repository->findComponentClass(componentClass);
+            if(descriptor != NULL)
             {
-                const QMetaObject metaObject = m_ComponentClasses.value(componentClass);
-                FBPComponent* newComponent = qobject_cast<FBPComponent*>(metaObject.newInstance());
-                result->addComponent(newComponent, componentName);
+                FBPComponent* newComponent = descriptor->newComponent();
+                if(newComponent != NULL)
+                {
+                    result->addComponent(newComponent, componentName);
+                }
             }
             else{
                 std::cerr << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
@@ -88,10 +93,5 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath) const
     }
 
     return result;
-}
-
-void NetworkLoaderFromFBP::addComponentClass(QString className, QMetaObject metaObject)
-{
-    m_ComponentClasses.insert(className, metaObject);
 }
 

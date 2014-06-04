@@ -28,6 +28,7 @@
 #include "action/SetBlockName.h"
 #include "action/ImportDiagram.h"
 #include "action/ExportDiagram.h"
+#include "action/Debug.h"
 #include "toast/Toast.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
@@ -98,6 +99,9 @@ void FBPEditor::initialize() {
     //Export diagram
     ExportDiagram* exportDiagram = new ExportDiagram(this);
     m_ScriptEngine->registerAction("ExportDiagram", exportDiagram);
+    //Debug
+    Debug* debug = new Debug(this);
+    m_ScriptEngine->registerAction("Debug", debug);
 
     //------------------------------------------------------------------
     // SCRIPT COMMANDS 
