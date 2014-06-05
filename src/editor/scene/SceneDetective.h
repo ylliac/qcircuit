@@ -24,6 +24,7 @@ public:
     
     static QList<ArrowItem*> getArrows(QGraphicsScene* scene);    
     static QList<ArrowItem*> getConnectedArrows(QGraphicsScene* scene, BlockItem* block);
+    static QList<ArrowItem*> getSelectedArrows(QGraphicsScene* scene);
     
     static QString newUniqueNonEmptyBlockName(QGraphicsScene* scene, QString name);
 };

@@ -91,6 +91,23 @@ QList<ArrowItem*> SceneDetective::getConnectedArrows(QGraphicsScene* scene, Bloc
     return result;
 }
 
+QList<ArrowItem*> SceneDetective::getSelectedArrows(QGraphicsScene* scene)
+{
+    QList<ArrowItem*> result;
+            
+    QList<QGraphicsItem*> items = scene->selectedItems();
+    foreach(QGraphicsItem* item, items)
+    {
+        ArrowItem* arrow = dynamic_cast<ArrowItem*>(item);
+        if(arrow != NULL)
+        {
+            result.append(arrow);
+        }
+    }
+    
+    return result;
+}
+
 QString SceneDetective::newUniqueNonEmptyBlockName(QGraphicsScene* scene, QString name)
 {
     QString newName = name;

@@ -20,6 +20,7 @@
 #include "cornermenu/CornerMenu.h"
 #include "notifications/NotificationPanel.h"
 #include "notifications/block/BlockNotification.h"
+#include "notifications/arrow/ArrowNotification.h"
 #include "notifications/search/SearchNotification.h"
 #include "action/CreateNewBlock.h"
 #include "action/CreateNewArrow.h"
@@ -118,10 +119,15 @@ void FBPEditor::initialize() {
     //------------------------------------------------------------------
     // NOTIFICATIONS
     //------------------------------------------------------------------
+    //Search
     SearchNotification* searchNotification = new SearchNotification(this);
     m_NotificationPanel->addNotification(searchNotification);
+    //Selected block
     BlockNotification* blockNotification = new BlockNotification(this);
     m_NotificationPanel->addNotification(blockNotification);
+    //Selected arrow
+    ArrowNotification* arrowNotification = new ArrowNotification(this);
+    m_NotificationPanel->addNotification(arrowNotification);
     
     //------------------------------------------------------------------
     // CORNER MENU 

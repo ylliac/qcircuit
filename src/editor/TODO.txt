@@ -37,6 +37,9 @@ Principes :
     -> rechercher dans le repository des descriptions de blocks 
     -> rechercher dans les commandes et quand on clique sur une commande, proposer une fenêtre avec la commande ecrite et des cases à remplir à la place des arguments
     
+- S'inspirer de ca pour l'UI : http://www.projexsoftware.com/wp-content/uploads/slider02.png
+
+- Utiliser la Boost Graph Library pour implémenter les layout de graph : http://www.boost.org/doc/libs/1_55_0/libs/graph/doc/table_of_contents.html
 
 - Utiliser les polices de caractères téléchargées
 
