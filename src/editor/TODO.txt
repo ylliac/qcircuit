@@ -30,6 +30,10 @@ Principes :
 
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
+    -> revoir le layout des boutons
+
+- Dans la notification des blocks, déplacer le bouton delete à côté du titre comme dans la notification des arrows
+
 - Faire une notification pour modifier la classe d'un block
 
 - Brancher la barre de recherche

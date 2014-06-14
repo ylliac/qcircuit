@@ -5,11 +5,20 @@ COMMAND Create a new block with name $1 and class $2
 ACTION CreateArrow
 COMMAND Create a new arrow from block $1 port $2 to block $3 port $4
 
+ACTION SetSelectedArrowFromPortName
+COMMAND Rename selected arrow from port in $1
+
+ACTION SetSelectedArrowToPortName
+COMMAND Rename selected arrow to port in $1
+
 ACTION DeleteBlock
 COMMAND Delete the block $1
 
 ACTION DeleteSelectedBlocks
 COMMAND Delete selected blocks
+
+ACTION DeleteSelectedArrows
+COMMAND Delete selected arrows
 
 ACTION SetBlockName
 COMMAND Rename block $1 in block $2
