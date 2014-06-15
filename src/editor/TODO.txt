@@ -28,12 +28,6 @@ Principes :
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-- Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
-    -> revoir le layout des boutons
-
-- Dans la notification des blocks, déplacer le bouton delete à côté du titre comme dans la notification des arrows
-
 - Faire une notification pour modifier la classe d'un block
 
 - Brancher la barre de recherche
@@ -49,7 +43,7 @@ Principes :
 
 - BUG : quand on met un block dans la zone de gauche en dessous des notifications, on peut pas le resélectionner
 - BUG : quand on déplace deux bloc connectés en dehors de la scène, l'arrow disparaît
-
+- BUG : quand on sélectionne (un block et une arrow) avec une selection rectangle puis seulement une arrow, il y a des bugs graphiques
 
 
 //////// Bonne idées ////////////////////////////////////////////////////////////////////////////////////

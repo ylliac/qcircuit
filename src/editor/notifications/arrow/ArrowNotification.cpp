@@ -139,7 +139,7 @@ void ArrowNotification::onSelectionChanged()
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         
         if(!futureState){
-            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));    
+            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));       
         }
     }
 }

@@ -25,8 +25,12 @@ public:
     virtual ~NotificationPanel();
     
     void addNotification(QWidget* notification);
+
+    virtual bool eventFilter(QObject * watched, QEvent * event);
     
 private:
+    void updateSize();
+    
     Ui::NotificationPanel* ui;    
     FBPEditor* m_Editor; 
     QVBoxLayout* m_Layout;
