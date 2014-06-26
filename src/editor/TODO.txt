@@ -27,7 +27,7 @@ Principes :
     //   - Enregistrer un script (ou macro) en live dans le logiciel
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+- Reprendre l'UI pour s'inspirer de ca !!!!!! : http://www.google.com/design/#resources
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
 - Faire une notification pour modifier la classe d'un block
