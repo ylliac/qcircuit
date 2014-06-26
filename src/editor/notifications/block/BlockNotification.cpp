@@ -115,7 +115,7 @@ void BlockNotification::onSelectionChanged()
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         
         if(!futureState){
-            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));    
+            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));      
         }
     }
 }
@@ -126,7 +126,6 @@ void BlockNotification::setReadOnly(bool readOnly)
     ui->editName->setReadOnly(readOnly);
     
     ui->buttonEdit->setVisible(readOnly);
-    ui->buttonDelete->setVisible(readOnly);
     
     ui->buttonValidate->setVisible(!readOnly);
     ui->buttonCancel->setVisible(!readOnly);

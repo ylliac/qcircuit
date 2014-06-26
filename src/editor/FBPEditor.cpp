@@ -37,6 +37,9 @@
 #include "../common/Console.h"
 #include "../common/UDPEmitter.h"
 #include "../common/UDPReceiver.h"
+#include "action/SetSelectedArrowFromPortName.h"
+#include "action/SetSelectedArrowToPortName.h"
+#include "action/DeleteSelectedArrows.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
@@ -101,6 +104,15 @@ void FBPEditor::initialize() {
     //New arrow
     CreateNewArrow* newArrow = new CreateNewArrow(this);
     m_ScriptEngine->registerAction("CreateArrow", newArrow);
+    //Rename selected arrow from port
+    SetSelectedArrowFromPortName* setSelectedArrowFromPortName = new SetSelectedArrowFromPortName(this);
+    m_ScriptEngine->registerAction("SetSelectedArrowFromPortName", setSelectedArrowFromPortName);
+    //Rename selected arrow to port
+    SetSelectedArrowToPortName* setSelectedArrowToPortName = new SetSelectedArrowToPortName(this);
+    m_ScriptEngine->registerAction("SetSelectedArrowToPortName", setSelectedArrowToPortName);
+    //Delete selected arrows
+    DeleteSelectedArrows* deleteSelectedArrows = new DeleteSelectedArrows(this);
+    m_ScriptEngine->registerAction("DeleteSelectedArrows", deleteSelectedArrows);
     //Import diagram
     ImportDiagram* importDiagram = new ImportDiagram(this);
     m_ScriptEngine->registerAction("ImportDiagram", importDiagram);

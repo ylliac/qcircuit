@@ -29,7 +29,8 @@ m_Editor(editor)
 {
     ui->setupUi(this);
     
-    setReadOnly(true);  
+    setReadOnlyFrom(true);  
+    setReadOnlyTo(true);  
     setVisible(false);  
     
     CONNECT(m_Editor->getScene(), SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));    
@@ -40,37 +41,60 @@ ArrowNotification::~ArrowNotification()
     delete ui;
 }
 
-void ArrowNotification::on_buttonEdit_clicked()
+void ArrowNotification::on_buttonEditFrom_clicked()
 {
-    setReadOnly(false);
+    setReadOnlyFrom(false);
 }
 
-void ArrowNotification::on_buttonValidate_clicked()
+void ArrowNotification::on_buttonEditTo_clicked()
+{
+    setReadOnlyTo(false);
+}
+
+void ArrowNotification::on_buttonValidateFrom_clicked()
 {
     setSelectedFromPortName(ui->editFrom->text());    
-    setReadOnly(true);
+    setReadOnlyFrom(true);
 }
 
-void ArrowNotification::on_buttonCancel_clicked()
+void ArrowNotification::on_buttonValidateTo_clicked()
+{
+    setSelectedToPortName(ui->editTo->text());    
+    setReadOnlyTo(true);
+}
+
+void ArrowNotification::on_buttonCancelFrom_clicked()
 {    
-    setReadOnly(true);
+    setReadOnlyFrom(true);
+}
+
+void ArrowNotification::on_buttonCancelTo_clicked()
+{    
+    setReadOnlyTo(true);
 }
 
 void ArrowNotification::on_buttonDelete_clicked()
 {
-    deleteSelectedBlock();
+    deleteSelectedArrows();
 }
 
 void ArrowNotification::on_editFrom_returnPressed()
 {
     setSelectedFromPortName(ui->editFrom->text());    
-    setReadOnly(true);
+    setReadOnlyFrom(true);
+}
+
+void ArrowNotification::on_editTo_returnPressed()
+{
+    setSelectedToPortName(ui->editTo->text());    
+    setReadOnlyTo(true);
 }
 
 void ArrowNotification::onSelectionChanged()
 {
     //Cancel edition
-    setReadOnly(true);
+    setReadOnlyFrom(true);
+    setReadOnlyTo(true);
     
     //Hide or Display 
     bool currentState = isVisible();
@@ -115,21 +139,31 @@ void ArrowNotification::onSelectionChanged()
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         
         if(!futureState){
-            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));    
+            CONNECT(animation, SIGNAL(finished()), this, SLOT(hide()));       
         }
     }
 }
 
-void ArrowNotification::setReadOnly(bool readOnly)
+void ArrowNotification::setReadOnlyFrom(bool readOnly)
 {
     ui->editFrom->setText(selectedFromPortName());
     ui->editFrom->setReadOnly(readOnly);
     
-    ui->buttonEdit->setVisible(readOnly);
-    ui->buttonDelete->setVisible(readOnly);
+    ui->buttonEditFrom->setVisible(readOnly);
     
-    ui->buttonValidate->setVisible(!readOnly);
-    ui->buttonCancel->setVisible(!readOnly);
+    ui->buttonValidateFrom->setVisible(!readOnly);
+    ui->buttonCancelFrom->setVisible(!readOnly);
+}
+
+void ArrowNotification::setReadOnlyTo(bool readOnly)
+{
+    ui->editTo->setText(selectedToPortName());
+    ui->editTo->setReadOnly(readOnly);
+    
+    ui->buttonEditTo->setVisible(readOnly);
+    
+    ui->buttonValidateTo->setVisible(!readOnly);
+    ui->buttonCancelTo->setVisible(!readOnly);
 }
 
 QString ArrowNotification::selectedFromPortName()
@@ -145,24 +179,46 @@ QString ArrowNotification::selectedFromPortName()
     return result;
 }
 
+QString ArrowNotification::selectedToPortName()
+{
+    QString result;
+    
+    QList<ArrowItem*> selectedArrows = SceneDetective::getSelectedArrows(m_Editor->getScene());
+    if(selectedArrows.size() == 1)
+    {
+        result = selectedArrows.first()->getInputPortName();
+    }
+    
+    return result;
+}
+
 void ArrowNotification::setSelectedFromPortName(QString name)
 {    
     QList<ArrowItem*> selectedArrows = SceneDetective::getSelectedArrows(m_Editor->getScene());
     if(selectedArrows.size() == 1)
     {
-        //TODO ACY
-//        m_Editor->runScriptCommand(
-//            QString("Rename block %1 in block %2")
-//            .arg(selectedBlocks.first()->name())
-//            .arg(name)
-//        );
-        m_Editor->info("Renaiming is not implemented yet.");
+        m_Editor->runScriptCommand(
+            QString("Rename selected arrow from port in %1")
+            .arg(name)
+        );
     }
 }
 
-void ArrowNotification::deleteSelectedBlock()
+void ArrowNotification::setSelectedToPortName(QString name)
+{    
+    QList<ArrowItem*> selectedArrows = SceneDetective::getSelectedArrows(m_Editor->getScene());
+    if(selectedArrows.size() == 1)
+    {
+        m_Editor->runScriptCommand(
+            QString("Rename selected arrow to port in %1")
+            .arg(name)
+        );
+    }
+}
+
+void ArrowNotification::deleteSelectedArrows()
 {
     m_Editor->runScriptCommand(
-        QString("Delete selected blocks")
+        QString("Delete selected arrows")
     );
 }

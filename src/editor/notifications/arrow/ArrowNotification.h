@@ -24,20 +24,30 @@ public:
     virtual ~ArrowNotification();
     
 private slots:
-    void on_buttonEdit_clicked();
-    void on_buttonValidate_clicked();
-    void on_buttonCancel_clicked();
-    void on_buttonDelete_clicked();
+    void on_buttonEditFrom_clicked();
+    void on_buttonValidateFrom_clicked();
+    void on_buttonCancelFrom_clicked();
     void on_editFrom_returnPressed();
+    
+    void on_buttonEditTo_clicked();
+    void on_buttonValidateTo_clicked();
+    void on_buttonCancelTo_clicked();
+    void on_editTo_returnPressed();
+
+    void on_buttonDelete_clicked();    
     void onSelectionChanged();
     
 private:
-    void setReadOnly(bool readOnly);
+    void setReadOnlyFrom(bool readOnly);
+    void setReadOnlyTo(bool readOnly);
     
     QString selectedFromPortName();
     void setSelectedFromPortName(QString name);
     
-    void deleteSelectedBlock();
+    QString selectedToPortName();
+    void setSelectedToPortName(QString name);
+    
+    void deleteSelectedArrows();
     
 private:
     Ui::ArrowNotification* ui;   

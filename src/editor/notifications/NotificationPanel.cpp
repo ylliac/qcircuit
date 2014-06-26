@@ -10,6 +10,8 @@
 
 #include <QtGui/QLabel>
 
+#include <iostream>
+
 #include "editor/FBPEditor.h"
 
 NotificationPanel::NotificationPanel(FBPEditor* editor) :
@@ -19,17 +21,18 @@ m_Editor(editor)
     ui->setupUi(this);
     
     int fixedWidth = 300;
+    int fixedHeight = parentWidget()->height();
     
     //Size
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setMinimumWidth(fixedWidth);
-    setGeometry(0,0,fixedWidth,10000);
+    setGeometry(0,0,fixedWidth,fixedHeight);
         
     //Layout
     m_Layout = new QVBoxLayout();
     m_Layout->setAlignment(Qt::AlignTop);
-    setLayout(m_Layout);
-    
+    setLayout(m_Layout);    
+        
     //Style
     setStyleSheet(
             "QFrame{"
@@ -82,6 +85,8 @@ m_Editor(editor)
             "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #FFOECE, stop: 1 #FFFFFF);"
             "}"
     );
+    
+    parent()->installEventFilter(this);
 }
 
 NotificationPanel::~NotificationPanel() {
@@ -92,4 +97,19 @@ void NotificationPanel::addNotification(QWidget* notification)
     m_Layout->addWidget(notification);
     m_Layout->setStretchFactor(notification, 0);
     m_Layout->setSpacing(0);
+}
+
+bool NotificationPanel::eventFilter(QObject *, QEvent * event)
+{
+    if (event->type() == QEvent::Resize)
+    {
+        updateSize();
+    }
+    return false;
+}
+
+void NotificationPanel::updateSize()
+{
+    int fixedHeight = parentWidget()->height();
+    setGeometry(0,0,width(),fixedHeight);
 }

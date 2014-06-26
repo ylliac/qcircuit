@@ -30,8 +30,10 @@ void DeleteSelectedBlocks::execute(QString, QString, QString, QString, QString)
     QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(scene);
     foreach(BlockItem* block, selectedBlocks)
     {
-        DeleteBlock deleteAction(getEditor());
-        deleteAction.execute(block->name());
+        getEditor()->runScriptCommand(
+            QString("Delete the block %1")
+            .arg(block->name())
+            );        
     }
 }
 
