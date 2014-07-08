@@ -27,6 +27,11 @@ Principes :
     //   - Enregistrer un script (ou macro) en live dans le logiciel
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+- Implémenter un système de bibliothèque de blocks. Pour C++, utiliser le système des plugins Qt pour trouver les blocks disponibles.
+Par ex : BlockProvider (interface) 
+                                        <-- QtPluginBlockProvider (implémentation basée sur les plugins Qt)
+                                        <-- DemoBlockProvider (implémentation avec une liste de blocks en dur)
+
 - Reprendre l'UI pour s'inspirer de ca !!!!!! : http://www.google.com/design/#resources
 
 - Faire une notification pour modifier les noms des ports d'entrée / sortie des ArrowItem
@@ -34,11 +39,11 @@ Principes :
 
 - Dans la notification des blocks, déplacer le bouton delete à côté du titre comme dans la notification des arrows
 
-- Faire une notification pour modifier la classe d'un block
+- Faire une notification pour modifier la classe d'un block (--> utiliser les BlockProvider)
 
 - Brancher la barre de recherche
     -> rechercher dans les blocs existant
-    -> rechercher dans le repository des descriptions de blocks 
+    -> rechercher dans le repository des descriptions de blocks (--> utiliser les BlockProvider)
     -> rechercher dans les commandes et quand on clique sur une commande, proposer une fenêtre avec la commande ecrite et des cases à remplir à la place des arguments
     
 - S'inspirer de ca pour l'UI : http://www.projexsoftware.com/wp-content/uploads/slider02.png
