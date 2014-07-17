@@ -56,6 +56,9 @@ Par ex : BlockProvider (interface)
 - BUG : quand on déplace deux bloc connectés en dehors de la scène, l'arrow disparaît
 - BUG : quand on sélectionne (un block et une arrow) avec une selection rectangle puis seulement une arrow, il y a des bugs graphiques
 
+- Utiliser les librairies Rx* : https://github.com/Reactive-Extensions/RxCpp
+https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
+
 
 //////// Bonne idées ////////////////////////////////////////////////////////////////////////////////////
 
