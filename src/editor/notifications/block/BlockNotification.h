@@ -29,6 +29,7 @@ private slots:
     void on_buttonCancel_clicked();
     void on_buttonDelete_clicked();
     void on_editName_returnPressed();
+    void on_editType_currentIndexChanged(const QString& text);
     void onSelectionChanged();
     
 private:
@@ -36,6 +37,9 @@ private:
     
     QString selectedBlockName();
     void setSelectedBlockName(QString name);
+    
+    QString selectedBlockClass();
+    void setSelectedBlockClass(QString className);
     
     void deleteSelectedBlock();
     

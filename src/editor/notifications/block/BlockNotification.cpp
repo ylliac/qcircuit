@@ -8,6 +8,8 @@
 #include "BlockNotification.h"
 #include "ui_BlockNotification.h"
 
+#include <iostream>
+
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsOpacityEffect>
 #include <QtCore/QPropertyAnimation>
@@ -22,6 +24,7 @@
 #include "editor/action/DeleteSelectedBlocks.h"
 #include "editor/action/SetBlockName.h"
 #include "AppendToTextEdit.h"
+#include "descriptor/ComponentClassRepository.h"
 
 BlockNotification::BlockNotification(FBPEditor* editor) :
 QWidget(editor), ui(new Ui::BlockNotification),
@@ -29,9 +32,15 @@ m_Editor(editor)
 {
     ui->setupUi(this);
     
+    //Initialize component classes choices
+    QStringList classNames = m_Editor->getComponentClassRepository()->findAllComponentClassNames();
+    //Add the empty choice
+    classNames.insert(0, "");
+    ui->editType->insertItems(0, classNames);
+        
     setReadOnly(true);  
     setVisible(false);  
-    
+        
     CONNECT(m_Editor->getScene(), SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));    
 }
 
@@ -67,10 +76,18 @@ void BlockNotification::on_editName_returnPressed()
     setReadOnly(true);
 }
 
+void BlockNotification::on_editType_currentIndexChanged(const QString& text)
+{
+    setSelectedBlockClass(text);
+}
+
 void BlockNotification::onSelectionChanged()
 {
     //Cancel edition
     setReadOnly(true);
+    QString className = selectedBlockClass();
+    int index = ui->editType->findText(selectedBlockClass());
+    ui->editType->setCurrentIndex(index == -1 ? 0 : index);
     
     //Hide or Display 
     bool currentState = isVisible();
@@ -153,6 +170,32 @@ void BlockNotification::setSelectedBlockName(QString name)
             QString("Rename block %1 in block %2")
             .arg(selectedBlocks.first()->name())
             .arg(name)
+        );
+    }
+}
+
+QString BlockNotification::selectedBlockClass()
+{
+    QString result;
+    
+    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Editor->getScene());
+    if(selectedBlocks.size() == 1)
+    {
+        result = selectedBlocks.first()->className();
+    }
+    
+    return result;
+}
+    
+void BlockNotification::setSelectedBlockClass(QString className)
+{
+    QList<BlockItem*> selectedBlocks = SceneDetective::getSelectedBlocks(m_Editor->getScene());
+    if(selectedBlocks.size() == 1)
+    {
+        m_Editor->runScriptCommand(
+            QString("Set the class %2 to block %1")
+            .arg(selectedBlocks.first()->name())    
+            .arg(className)
         );
     }
 }

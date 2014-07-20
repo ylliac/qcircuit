@@ -12,6 +12,8 @@
 	<file>open_iconic/png/dashboard-4x.png</file>    
 	<file>open_iconic/png/share-boxed-4x.png</file> 
 	<file>open_iconic/png/grid-four-up-4x.png</file> 
+	<file>open_iconic/png/chevron-bottom-4x.png</file> 
+	<file>open_iconic/png/chevron-top-4x.png</file> 
 	<file>customicon/import.png</file> 
   </qresource>
 </RCC>

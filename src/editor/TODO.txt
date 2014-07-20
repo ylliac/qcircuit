@@ -41,6 +41,8 @@ Par ex : BlockProvider (interface)
 - Dans la notification des blocks, déplacer le bouton delete à côté du titre comme dans la notification des arrows
 
 - Faire une notification pour modifier la classe d'un block (--> utiliser les BlockProvider)
+        --> A l'avenir, remplacer la combobox par un bouton qui affiche un dialogue avec les blocks dispo et leur description
+            ou bien mettre dans la liste de la combobox la description des blocks
 
 - Brancher la barre de recherche
     -> rechercher dans les blocs existant
