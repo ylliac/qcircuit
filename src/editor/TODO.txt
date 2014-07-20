@@ -31,6 +31,7 @@ Principes :
 Par ex : BlockProvider (interface) 
                                         <-- QtPluginBlockProvider (implémentation basée sur les plugins Qt)
                                         <-- DemoBlockProvider (implémentation avec une liste de blocks en dur)
+     ---> Deja fait avec ComponentClassDescriptor et ComponentClassDescriptorRepository ?
 
 - Reprendre l'UI pour s'inspirer de ca !!!!!! : http://www.google.com/design/#resources
 
