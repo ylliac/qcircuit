@@ -26,13 +26,22 @@ int Counter::count()
 void Counter::increase()
 {
     counter.ref();
+    
+    //TODO ACY
+    std::cout << "A component started" << std::endl;
 }
 
 void Counter::decrease()
 {    
     bool isZero = !counter.deref();
     
-    if(isZero){
+    //TODO ACY
+    std::cout << "A component finished" << std::endl;
+    
+    if(isZero){    
+        //TODO ACY
+        std::cout << "The network is empty" << std::endl;
+        
         emit zero();
     }
 }

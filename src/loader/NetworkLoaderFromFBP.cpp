@@ -9,6 +9,7 @@
 
 #include "../core/FBPComponent.h"
 #include "../core/FBPNetwork.h"
+#include "../core/IIP.h"
 #include "descriptor/ComponentClassDescriptor.h"
 #include "descriptor/ComponentClassRepository.h"
 
@@ -38,6 +39,9 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
     //Example : SourceComponentName SourceComponentOutput -> TargetComponentInput TargetComponentName
     QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
+    //Example : "IIP" -> TargetComponentInput TargetComponentName
+    QRegExp IIPDeclarationExp("^\\s*\"([^\\s]+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+
     QString content;
     QFile file(filePath);    
     if (file.open(QIODevice::ReadOnly)) {
@@ -45,6 +49,8 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
         content = in.readAll();
         file.close();
     }
+    
+    int iipIndex = 1;
     
     QStringList instructions = content.split(",");
     foreach(QString instruction, instructions)
@@ -67,6 +73,33 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
             if(!check)
             {
                 std::cerr << "ERROR - Can't add connection: " << source.toStdString() << " --> " << target.toStdString() << std::endl;                        
+            }
+        }
+        //------------------------------------------------------------------
+        // IIP
+        //------------------------------------------------------------------        
+        if (IIPDeclarationExp.exactMatch(instruction))
+        {
+            QString sourceComponentName = QString("IIP%1").arg(iipIndex++); 
+            QString iips = IIPDeclarationExp.cap(1);
+            QString targetComponentInput = IIPDeclarationExp.cap(2);
+            QString targetComponentName = IIPDeclarationExp.cap(3);
+
+            QList<QVariant> initialPackets;
+            QStringList iipList = iips.split(";");
+            foreach(QString iip, iipList)
+            {
+                initialPackets.append(QVariant::fromValue(iip));
+            }
+            IIP* newIIP = new IIP(initialPackets);
+            result->addComponent(newIIP, sourceComponentName);
+                        
+            QString source = QString("%1.%2").arg(sourceComponentName).arg("OUT");
+            QString target = QString("%1.%2").arg(targetComponentName).arg(targetComponentInput);
+            bool check = result->connect(source, target);
+            if(!check)
+            {
+                std::cerr << "ERROR - Can't add iip: " << iips.toStdString() << " --> " << target.toStdString() << std::endl;                        
             }
         }
         //------------------------------------------------------------------

@@ -23,7 +23,8 @@ public:
 protected:
     virtual void execute();
     
-    QVariant m_Value;
+private:
+    QVariant value;
 };
 
 #endif	/* VALUE_H */

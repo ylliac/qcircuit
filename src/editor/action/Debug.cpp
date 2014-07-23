@@ -18,7 +18,6 @@
 #include "../common/UDPEmitter.h"
 #include "../common/UDPReceiver.h"
 #include "../common/Console.h"
-#include "../common/Test.h"
 
 #include "descriptor/ComponentClassRepository.h"
 #include "descriptor/QtComponentClassDescriptor.h"

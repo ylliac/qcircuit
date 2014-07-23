@@ -33,12 +33,12 @@ void Value::execute()
 
 QVariant Value::get()
 {
-    return m_Value;
+    return value;
 }
 
 void Value::set(QVariant value)
 {
-    m_Value = value;
+    this->value = value;
     send("OUT", value);
 }
 
