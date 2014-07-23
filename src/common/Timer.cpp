@@ -49,8 +49,5 @@ void Timer::execute()
             packetCount++;
         }
     }  
-    
-    //EOF
-    send("TIME", QVariant());
 }
 

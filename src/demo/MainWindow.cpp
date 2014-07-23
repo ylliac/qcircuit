@@ -18,6 +18,7 @@
 #include "../common/UDPReceiver.h"
 #include "../common/Console.h"
 #include "../common/Test.h"
+#include "../common/Value.h"
 
 #include "../descriptor/ComponentClassRepository.h"
 #include "../descriptor/QtComponentClassDescriptor.h"
@@ -39,9 +40,10 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     repository.addComponentClass(new QtComponentClassDescriptor(Console::staticMetaObject));
     repository.addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
     repository.addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
+    repository.addComponentClass(new QtComponentClassDescriptor(Value::staticMetaObject));
     
     NetworkLoaderFromFBP loader;
-    m_Network = loader.loadFromFile("../source/resources/demo.fbp", &repository);
+    m_Network = loader.loadFromFile("../source/resources/neural_network.fbp", &repository);
     m_Network->setParent(this);
 
     connect(ui->buttonTrigger, SIGNAL(clicked()), this, SLOT(launchNetwork()));

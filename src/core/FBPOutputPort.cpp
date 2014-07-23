@@ -21,3 +21,8 @@ void FBPOutputPort::send(QVariant value)
     emit sent(value);
 }
 
+void FBPOutputPort::close()
+{
+    send(QVariant());
+}
+

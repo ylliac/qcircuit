@@ -1,0 +1,11 @@
+Source1 (Timer),
+Source2 (Timer),
+In1 (Value),
+In2 (Value),
+Out (Value),
+Display (Console),
+Source1 TIME -> IN In1,
+Source2 TIME -> IN In2,
+In1 OUT -> IN Out,
+In2 OUT -> IN Out,
+Out OUT -> MESSAGE Display

@@ -21,6 +21,7 @@ public:
     
 public slots:
     void send(QVariant value);
+    void close();
     
 signals:
     void sent(QVariant value);

@@ -56,6 +56,7 @@ protected:
     bool receive(QString name, QVariant& outData);
     int received(QString name);
     void send(QString name, QVariant value);
+    void close(QString name);
     
     void setSelfStarting(bool value);
         

@@ -115,6 +115,12 @@ void FBPComponent::execute0()
     
     execute();
     
+    //At the end of execution, close the remaining output ports
+    foreach(FBPOutputPort* outputPort, outputPorts.values())
+    {
+        outputPort->close();
+    }
+    
     state = FINISHED;
     emit finished();
 }
@@ -138,6 +144,11 @@ int FBPComponent::received(QString name)
 void FBPComponent::send(QString name, QVariant value)
 {
     getOutputPort(name)->send(value);
+}
+
+void FBPComponent::close(QString name)
+{
+    getOutputPort(name)->close();
 }
 
 bool FBPComponent::isSelfStarting()

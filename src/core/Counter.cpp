@@ -7,6 +7,8 @@
 
 #include "Counter.h"
 
+#include <iostream>
+
 Counter::Counter(QObject* parent)
 : QObject(parent)
 {
