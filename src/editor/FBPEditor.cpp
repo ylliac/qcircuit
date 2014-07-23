@@ -27,9 +27,13 @@
 #include "action/DeleteBlock.h"
 #include "action/DeleteSelectedBlocks.h"
 #include "action/SetBlockName.h"
+#include "action/SetBlockClass.h"
 #include "action/ImportDiagram.h"
 #include "action/ExportDiagram.h"
 #include "action/Debug.h"
+#include "action/SetSelectedArrowFromPortName.h"
+#include "action/SetSelectedArrowToPortName.h"
+#include "action/DeleteSelectedArrows.h"
 #include "toast/Toast.h"
 #include "../descriptor/ComponentClassRepository.h"
 #include "../descriptor/QtComponentClassDescriptor.h"
@@ -37,9 +41,6 @@
 #include "../common/Console.h"
 #include "../common/UDPEmitter.h"
 #include "../common/UDPReceiver.h"
-#include "action/SetSelectedArrowFromPortName.h"
-#include "action/SetSelectedArrowToPortName.h"
-#include "action/DeleteSelectedArrows.h"
 
 FBPEditor::FBPEditor(QWidget* parent, Qt::WindowFlags windowFlag)
 : QMainWindow(parent, windowFlag), ui(new Ui::FBPEditor), m_Scene(new EditorScene(this)), m_ScriptEngine(new ScriptEngine(this)) {
@@ -64,7 +65,6 @@ FBPEditor::~FBPEditor() {
 }
 
 void FBPEditor::initialize() {
-
     //Custom windows
     setWindowFlags(Qt::CustomizeWindowHint);    
     setWindowTitle("FBP Editor");
@@ -85,6 +85,14 @@ void FBPEditor::initialize() {
     // CONFIGURATION 
     //------------------------------------------------------------------
     //TODO
+    
+    //------------------------------------------------------------------
+    // COMPONENT CLASSES 
+    //------------------------------------------------------------------
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Timer::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Console::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
+    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
 
     //------------------------------------------------------------------
     // ACTIONS 
@@ -101,6 +109,9 @@ void FBPEditor::initialize() {
     //Set block name
     SetBlockName* setBlockName = new SetBlockName(this);
     m_ScriptEngine->registerAction("SetBlockName", setBlockName);
+    //Set block class
+    SetBlockClass* setBlockClass = new SetBlockClass(this);
+    m_ScriptEngine->registerAction("SetBlockClass", setBlockClass);
     //New arrow
     CreateNewArrow* newArrow = new CreateNewArrow(this);
     m_ScriptEngine->registerAction("CreateArrow", newArrow);
@@ -145,14 +156,6 @@ void FBPEditor::initialize() {
     // CORNER MENU 
     //------------------------------------------------------------------
     new CornerMenu(this);
-    
-    //------------------------------------------------------------------
-    // COMPONENT CLASSES 
-    //------------------------------------------------------------------
-    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Timer::staticMetaObject));
-    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(Console::staticMetaObject));
-    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
-    m_ComponentClasses->addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
 }
 
 ComponentClassRepository* FBPEditor::getComponentClassRepository()

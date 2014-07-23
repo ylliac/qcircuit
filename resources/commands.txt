@@ -23,6 +23,10 @@ COMMAND Delete selected arrows
 ACTION SetBlockName
 COMMAND Rename block $1 in block $2
 
+ACTION SetBlockClass
+COMMAND Set the class $2 to block $1
+COMMAND Set the class  to block $1
+
 ACTION ImportDiagram
 COMMAND Import diagram
 COMMAND Import diagram from file $1

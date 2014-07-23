@@ -9,6 +9,7 @@
 #define	COMPONENTCLASSREPOSITORY_H
 
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QMap>
 
 class ComponentClassDescriptor;
@@ -20,6 +21,8 @@ public:
     
     void addComponentClass(ComponentClassDescriptor* componentClass);
     ComponentClassDescriptor* findComponentClass(QString className);
+    QList<ComponentClassDescriptor*> findAllComponentClasses();
+    QStringList findAllComponentClassNames();
     
 private:
     QMap<QString, ComponentClassDescriptor*> m_ComponentClasses;
