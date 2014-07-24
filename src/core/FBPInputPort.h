@@ -10,31 +10,43 @@
 
 #include <QtCore/QVariant>
 #include <QtCore/QQueue>
+#include <QtCore/QAtomicInt>
 
 #include "FBPPort.h"
 #include "BlockingQueue.h"
 
-class FBPInputPort : public FBPPort{
+class FBPComponent;
+
+class FBPInputPort : public FBPPort {
     Q_OBJECT
-        
+
 public:
-    FBPInputPort(QString name);
+    FBPInputPort(QString name, FBPComponent* parent);
     virtual ~FBPInputPort();
-    
+
     int size() const;
-    QVariant pop();
-    
+    bool receive(QVariant& outData);
+
     void initialize(QVariant value);
     
-public slots:
-    void onReceive(QVariant value);
+    void increaseSenderCount();
+    void decreaseSenderCount();
     
-signals:
-    void received(QVariant value);
+    //Drained: empty && closed
+    bool isDrained();
+    bool isEmpty();
+    //Closed: sender count == 0
+    bool isClosed();
     
+    void send(QVariant value);
+
 private:
     BlockingQueue<QVariant> receivedQueue;
     bool iip;
+
+    FBPComponent* parent;
+    
+    int senderCount;
 };
 
 #include "BlockingQueue.cpp"

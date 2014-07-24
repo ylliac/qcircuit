@@ -23,6 +23,7 @@ public:
     bool enqueue(Data data);
     bool dequeue(Data& value, unsigned long time = ULONG_MAX);
     int size() const;
+    bool empty() const;
     void clear();
 
 private:

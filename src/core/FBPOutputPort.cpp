@@ -16,13 +16,32 @@ FBPOutputPort::~FBPOutputPort()
 {
 }
 
+void FBPOutputPort::connect(FBPInputPort* receiver)
+{
+    receiver->increaseSenderCount();
+    receivers.insert(receiver);
+}
+
+void FBPOutputPort::disconnect(FBPInputPort* receiver)
+{
+    receiver->decreaseSenderCount();
+    receivers.remove(receiver);
+}
+
 void FBPOutputPort::send(QVariant value)
 {
-    emit sent(value);
+    foreach(FBPInputPort* receiver, receivers)
+    {
+        receiver->send(value);
+    }
 }
 
 void FBPOutputPort::close()
 {
-    send(QVariant());
+    foreach(FBPInputPort* receiver, receivers)
+    {
+        disconnect(receiver);
+    }
+    receivers.clear();
 }
 

@@ -8,10 +8,14 @@
 #ifndef FBPNETWORK_H
 #define	FBPNETWORK_H
 
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
+
 #include "FBPComponent.h"
 #include "Counter.h"
+#include "FBPComponentListener.h"
 
-class FBPNetwork : public FBPComponent {
+class FBPNetwork : public FBPComponent, public FBPComponentListener {
     Q_OBJECT
     
 public:
@@ -35,12 +39,15 @@ public:
     bool connect(QString source, QString outPortName, QString target, QString inPortName);
     bool connect(QString source, QString target);
     
-    bool connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName);
-    bool connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName);
-    bool connectSubInToOut(QString inPortName, QString outPortName);
+    //TODO ACY A implémenter
+//    bool connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName);
+//    bool connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName);
+//    bool connectSubInToOut(QString inPortName, QString outPortName);
     
-    bool connectFromSignal(const QObject* sender, const char* signal, QString inPortName);
-    bool connectToSlot(QString outPortName, const QObject* target, const char* slot);
+    //MONITORING
+    
+    virtual void componentActivated(FBPComponent* component);
+    virtual void componentFinished(FBPComponent* component);
             
 protected:
     virtual void execute();
@@ -53,6 +60,9 @@ private:
     QMap<QString, FBPComponent*> componentMap;
     Counter* activeComponentCounter;
     bool isDefined;
+    
+    QMutex mutex;
+    QWaitCondition monitor;
 
 };
 

@@ -7,8 +7,10 @@
 
 #include "FBPInputPort.h"
 
-FBPInputPort::FBPInputPort(QString name) 
-: FBPPort(name), iip(false)
+#include "FBPComponent.h"
+
+FBPInputPort::FBPInputPort(QString name, FBPComponent* parent) 
+: FBPPort(name), parent(parent), senderCount(0)
 {
 }
 
@@ -18,23 +20,20 @@ FBPInputPort::~FBPInputPort()
 
 void FBPInputPort::initialize(QVariant value)
 {
-    iip = true;
     receivedQueue.clear();    
-    receivedQueue.enqueue(value);
+    receivedQueue.enqueue(value);     
 }
 
-QVariant FBPInputPort::pop()
+bool FBPInputPort::receive(QVariant& outData)
 {    
-    QVariant value;
-    bool check = receivedQueue.dequeue(value);
-    if(check)
+    bool result = false;
+    
+    if(!isEmpty() || !isClosed())
     {
-        return value;
+        result = receivedQueue.dequeue(outData);        
     }
-    else
-    {
-        return QVariant();
-    }    
+    
+    return result;
 }
 
 int FBPInputPort::size() const
@@ -42,13 +41,39 @@ int FBPInputPort::size() const
     return receivedQueue.size();
 }
 
-void FBPInputPort::onReceive(QVariant value)
+void FBPInputPort::send(QVariant value)
+{    
+    receivedQueue.enqueue(value);    
+    parent->activate();
+}
+
+bool FBPInputPort::isDrained()
 {
-    //Input port with IIP can't be connected to another component
-    Q_ASSERT(!iip);
+    return isEmpty() && isClosed();
+}
     
-    receivedQueue.enqueue(value);
+bool FBPInputPort::isEmpty()
+{
+    return receivedQueue.empty();
+}
+ 
+bool FBPInputPort::isClosed()
+{
+    return senderCount == 0;
+}
     
-    emit received(value);
+void FBPInputPort::increaseSenderCount()
+{
+    senderCount++;
+}
+
+void FBPInputPort::decreaseSenderCount()
+{
+    senderCount--;
+    
+    if(isDrained())
+    {
+        receivedQueue.close();
+    }
 }
 

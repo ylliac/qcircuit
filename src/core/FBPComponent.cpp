@@ -15,6 +15,10 @@
 #include <QtCore/QEventLoop>
 #include <iostream>
 
+#include "FBPInputPort.h"
+#include "FBPOutputPort.h"
+#include "FBPComponentListener.h"
+
 FBPComponent::FBPComponent(QObject* parent)
 : QObject(parent),
 selfStarting(false),
@@ -59,11 +63,8 @@ FBPComponent::~FBPComponent()
 
 FBPInputPort* FBPComponent::addInputPort(QString name)
 {
-    FBPInputPort* port = new FBPInputPort(name);
+    FBPInputPort* port = new FBPInputPort(name, this);
     inputPorts.insert(port->getName(), port);
-
-    bool check = QObject::connect(port, SIGNAL(received(QVariant)), this, SLOT(activate()));
-    Q_ASSERT(check);
 
     return port;
 }
@@ -110,8 +111,14 @@ void FBPComponent::activate()
 
 void FBPComponent::execute0()
 {
+    //TODO ACY 
+//    std::cout << "START: " << objectName().toStdString() << std::endl;
+    
     state = ACTIVATED;
-    emit activated();
+    foreach(FBPComponentListener* listener, listeners)
+    {
+        listener->componentActivated(this);
+    }
     
     execute();
     
@@ -121,19 +128,25 @@ void FBPComponent::execute0()
         outputPort->close();
     }
     
+    //TODO ACY 
+//    std::cout << "FINISH: " << objectName().toStdString() << std::endl;
+    
     state = FINISHED;
-    emit finished();
+    foreach(FBPComponentListener* listener, listeners)
+    {
+        listener->componentFinished(this);
+    }
 }
 
 QVariant FBPComponent::receive(QString name)
 {
-    return getInputPort(name)->pop();
+    QVariant outData;
+    getInputPort(name)->receive(outData);
 }
 
 bool FBPComponent::receive(QString name, QVariant& outData)
 {
-    outData = getInputPort(name)->pop();
-    return outData.isValid();
+    return getInputPort(name)->receive(outData);
 }
 
 int FBPComponent::received(QString name)
@@ -178,6 +191,16 @@ bool FBPComponent::isActive()
 bool FBPComponent::isFinished()
 {
     return state == FINISHED;
+}
+    
+void FBPComponent::addListener(FBPComponentListener* listener)
+{
+    listeners.insert(listener);
+}
+    
+void FBPComponent::removeListener(FBPComponentListener* listener)
+{
+    listeners.remove(listener);    
 }
 
 

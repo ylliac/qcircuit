@@ -12,8 +12,9 @@
 #include <QtCore/QQueue>
 #include <QtCore/QVariant>
 
-#include "FBPInputPort.h"
-#include "FBPOutputPort.h"
+class FBPInputPort;
+class FBPOutputPort;
+class FBPComponentListener;
 
 class FBPComponent : public QObject {
     Q_OBJECT
@@ -36,18 +37,17 @@ public:
     FBPInputPort* getInputPort(QString name);
     FBPOutputPort* getOutputPort(QString name);
     
-    bool isSelfStarting();
+    bool isSelfStarting();    
+    void setSelfStarting(bool value);
     
     bool isActive();
     bool isFinished();
     void wait();
     
-public slots:
     void activate();
     
-signals:
-    void activated();
-    void finished();
+    void addListener(FBPComponentListener* listener);
+    void removeListener(FBPComponentListener* listener);
     
 protected:
     virtual void execute()=0;    
@@ -57,8 +57,6 @@ protected:
     int received(QString name);
     void send(QString name, QVariant value);
     void close(QString name);
-    
-    void setSelfStarting(bool value);
         
 private:
     void execute0();    
@@ -69,6 +67,8 @@ private:
     
     QFuture<void> future;
     State state;
+    
+    QSet<FBPComponentListener*> listeners;
 };
 
 #endif	/* FBPCOMPONENT_H */

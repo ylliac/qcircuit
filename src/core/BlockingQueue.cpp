@@ -87,6 +87,12 @@ bool BlockingQueue<Data>::dequeue(Data& value, unsigned long time)
 }
 
 template<typename Data>
+bool BlockingQueue<Data>::empty() const
+{
+    return queue.empty();
+}
+
+template<typename Data>
 void BlockingQueue<Data>::clear()
 {
     QMutexLocker locker(&mutex);

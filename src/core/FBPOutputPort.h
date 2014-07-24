@@ -9,8 +9,10 @@
 #define	FBPOUTPUTPORT_H
 
 #include <QtCore/QVariant>
+#include <QtCore/QSet>
 
 #include "FBPPort.h"
+#include "FBPInputPort.h"
 
 class FBPOutputPort : public FBPPort{
     Q_OBJECT
@@ -19,12 +21,14 @@ public:
     FBPOutputPort(QString name);
     virtual ~FBPOutputPort();
     
-public slots:
+    void connect(FBPInputPort* receiver);
+    void disconnect(FBPInputPort* receiver);
+    
     void send(QVariant value);
     void close();
-    
-signals:
-    void sent(QVariant value);
+
+private:
+    QSet<FBPInputPort*> receivers; 
 };
 
 #endif	/* FBPOUTPUTPORT_H */

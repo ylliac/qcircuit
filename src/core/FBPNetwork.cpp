@@ -12,6 +12,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QEventLoop>
 
+#include "FBPInputPort.h"
+#include "FBPOutputPort.h"
+
 FBPNetwork::FBPNetwork(QObject* parent)
 : FBPComponent(parent), isDefined(false)
 {
@@ -42,13 +45,18 @@ void FBPNetwork::execute()
     //------------------------------------------------------------------
     initiate();
 
-    // Event loop (used to enable the signal / slot mechanism)
-    // Stop when no component is active
+    // Wait until no component is active
     //------------------------------------------------------------------
-    QEventLoop eventLoop;
-    bool check = QObject::connect(activeComponentCounter, SIGNAL(zero()), &eventLoop, SLOT(quit()));
-    Q_ASSERT(check);
-    eventLoop.exec();
+    QMutexLocker locker(&mutex);
+    monitor.wait(&mutex);
+    
+    // Cleanup
+    //------------------------------------------------------------------
+    foreach(FBPComponent* component, componentMap.values())
+    {
+        component->removeListener(this);
+    }
+    componentMap.clear();
 }
 
 void FBPNetwork::define()
@@ -71,10 +79,7 @@ void FBPNetwork::addComponent(FBPComponent* component, QString name)
     Q_ASSERT(!componentMap.contains(name));
     componentMap.insert(name, component);
     
-    bool check = QObject::connect(component, SIGNAL(activated()), activeComponentCounter, SLOT(increase()));
-    Q_ASSERT(check);
-    check = QObject::connect(component, SIGNAL(finished()), activeComponentCounter, SLOT(decrease()));
-    Q_ASSERT(check);
+    component->addListener(this);
 }
 
 bool FBPNetwork::initialize(QVariant value, FBPComponent* target, QString inPortName)
@@ -85,6 +90,8 @@ bool FBPNetwork::initialize(QVariant value, FBPComponent* target, QString inPort
     }
     
     input->initialize(value);
+    target->setSelfStarting(true);
+    
     return true;
 }
 
@@ -123,73 +130,55 @@ bool FBPNetwork::connect(FBPComponent* source, QString outPortName, FBPComponent
         return false;
     }
     
-    return QObject::connect(output, SIGNAL(sent(QVariant)), input, SLOT(onReceive(QVariant)), Qt::DirectConnection);
+    output->connect(input);
+    return true;
 }
 
-bool FBPNetwork::connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName)
-{
-    FBPInputPort* subInput = getInputPort(inPortName);
-    if(subInput == NULL){
-        return false;
-    }
-    
-    FBPInputPort* componentInput = target->getInputPort(targetPortName);
-    if(componentInput == NULL){
-        return false;
-    }
-    
-    return QObject::connect(subInput, SIGNAL(received(QVariant)), componentInput, SLOT(onReceive(QVariant)), Qt::DirectConnection);
-}
-    
-bool FBPNetwork::connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName)
-{    
-    FBPOutputPort* componentOutput = source->getOutputPort(sourcePortName);
-    if(componentOutput == NULL){
-        return false;
-    }
-    
-    FBPOutputPort* subOutput = getOutputPort(outPortName);
-    if(subOutput == NULL){
-        return false;
-    }
-    
-    return QObject::connect(componentOutput, SIGNAL(sent(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
-}
-
-bool FBPNetwork::connectSubInToOut(QString inPortName, QString outPortName)
-{
-    FBPInputPort* subInput = getInputPort(inPortName);
-    if(subInput == NULL){
-        return false;
-    }
-    
-    FBPOutputPort* subOutput = getOutputPort(outPortName);
-    if(subOutput == NULL){
-        return false;
-    }
-    
-    return QObject::connect(subInput, SIGNAL(received(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
-}
-
-bool FBPNetwork::connectFromSignal(const QObject* sender, const char* signal, QString inPortName)
-{
-    FBPInputPort* input = getInputPort(inPortName);
-    if(input == NULL){
-        return false;
-    }
-    
-    return QObject::connect(sender, signal, input, SLOT(onReceive(QVariant)));
-}
-
-bool FBPNetwork::connectToSlot(QString outPortName, const QObject* target, const char* slot)
-{
-    FBPOutputPort* output = getOutputPort(outPortName);
-    if(output == NULL){
-        return false;
-    }
-    
-    return QObject::connect(output, SIGNAL(sent(QVariant)), target, slot);
-}
+//TODO ACY A implémenter 
+//bool FBPNetwork::connectSubIn(QString inPortName, FBPComponent* target, QString targetPortName)
+//{
+//    FBPInputPort* subInput = getInputPort(inPortName);
+//    if(subInput == NULL){
+//        return false;
+//    }
+//    
+//    FBPInputPort* componentInput = target->getInputPort(targetPortName);
+//    if(componentInput == NULL){
+//        return false;
+//    }
+//    
+//    return QObject::connect(subInput, SIGNAL(received(QVariant)), componentInput, SLOT(onReceive(QVariant)), Qt::DirectConnection);
+//}
+//    
+//bool FBPNetwork::connectSubOut(FBPComponent* source, QString sourcePortName, QString outPortName)
+//{    
+//    FBPOutputPort* componentOutput = source->getOutputPort(sourcePortName);
+//    if(componentOutput == NULL){
+//        return false;
+//    }
+//    
+//    FBPOutputPort* subOutput = getOutputPort(outPortName);
+//    if(subOutput == NULL){
+//        return false;
+//    }
+//    
+//    return QObject::connect(componentOutput, SIGNAL(sent(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
+//}
+//
+//bool FBPNetwork::connectSubInToOut(QString inPortName, QString outPortName)
+//{
+//    FBPInputPort* subInput = getInputPort(inPortName);
+//    if(subInput == NULL){
+//        return false;
+//    }
+//    
+//    FBPOutputPort* subOutput = getOutputPort(outPortName);
+//    if(subOutput == NULL){
+//        return false;
+//    }
+// 
+//    return QObject::connect(subInput, SIGNAL(received(QVariant)), subOutput, SLOT(send(QVariant)), Qt::DirectConnection);
+//}
 
 bool FBPNetwork::connect(QString source, QString outPortName, QString target, QString inPortName)
 {    
@@ -242,6 +231,21 @@ void FBPNetwork::initiate()
         {            
             component->activate();
         }
+    }
+}
+
+void FBPNetwork::componentActivated(FBPComponent* component)
+{
+    activeComponentCounter->increase();
+}
+
+void FBPNetwork::componentFinished(FBPComponent* component)
+{
+    bool empty = activeComponentCounter->decrease();
+    if(empty)
+    {
+        QMutexLocker locker(&mutex);
+        monitor.wakeAll();
     }
 }
 

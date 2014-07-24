@@ -21,12 +21,8 @@ public:
     
     int count();
 
-public slots:
     void increase();
-    void decrease();
-    
-signals:
-    void zero();
+    bool decrease();
 
 private:
     QAtomicInt counter;
