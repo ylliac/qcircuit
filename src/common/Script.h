@@ -1,34 +1,37 @@
-///* 
-// * File:   Script.h
-// * Author: acailly
-// *
-// * Created on 12 février 2014, 18:25
-// */
-//
-//#ifndef SCRIPT_H
-//#define	SCRIPT_H
-//
-//#include "../core/QComponent.h"
-//
-//#include <QtScript/QScriptEngine>
-//
-//class Script : public QComponent{
-//    Q_OBJECT
-//    Q_CLASSINFO("SCRIPT", "IN")
-//    Q_CLASSINFO("IN", "IN")
-//    Q_CLASSINFO("OUT", "OUT")
-//    
-//public:    
-//    Q_INVOKABLE Script();
-//    virtual ~Script();
-//    
-//protected:
-//    virtual void Process_(DspSignalBus& inputs, DspSignalBus& outputs);
-//    
-//private:
-//    QScriptEngine scriptEngine;
-//    QString script;
-//};
-//
-//#endif	/* SCRIPT_H */
-//
+/* 
+ * File:   Script.h
+ * Author: acailly
+ *
+ * Created on 12 février 2014, 18:25
+ */
+
+#ifndef SCRIPT_H
+#define	SCRIPT_H
+
+#include "../core/FBPComponent.h"
+
+#include <QtScript/QScriptEngine>
+#include <QtScript/QScriptValue>
+#include <QtScript/QScriptContext>
+
+class Script : public FBPComponent {
+    Q_OBJECT
+    
+public:
+    Q_INVOKABLE Script();
+    virtual ~Script();
+    
+    Q_INVOKABLE int test();
+//    Q_INVOKABLE QVariant receiveValue(QString name);
+    Q_INVOKABLE QVariant receiveValue();
+    Q_INVOKABLE void sendValue(QString name, QVariant value);
+    
+protected:
+    virtual void execute();
+    
+private:    
+    QScriptEngine scriptEngine;
+};
+
+#endif	/* SCRIPT_H */
+

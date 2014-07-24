@@ -18,6 +18,7 @@
 #include "../common/UDPReceiver.h"
 #include "../common/Console.h"
 #include "../common/Value.h"
+#include "../common/Script.h"
 
 #include "../descriptor/ComponentClassRepository.h"
 #include "../descriptor/QtComponentClassDescriptor.h"
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     repository.addComponentClass(new QtComponentClassDescriptor(UDPEmitter::staticMetaObject));
     repository.addComponentClass(new QtComponentClassDescriptor(UDPReceiver::staticMetaObject));
     repository.addComponentClass(new QtComponentClassDescriptor(Value::staticMetaObject));
+    repository.addComponentClass(new QtComponentClassDescriptor(Script::staticMetaObject));
     
     NetworkLoaderFromFBP loader;
 //    m_Network = loader.loadFromFile("../source/resources/demo.fbp", &repository);
