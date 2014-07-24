@@ -28,6 +28,8 @@ Script::~Script()
 
 void Script::execute()
 {   
+    //From http://www.qtcentre.org/threads/10425-QtScript-newFunction-won-t-work
+    
     QScriptValue that = scriptEngine.newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects
 		| QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
     scriptEngine.globalObject().setProperty("self",that);
