@@ -224,27 +224,32 @@ bool FBPNetwork::connect(QString source, QString target)
 
 void FBPNetwork::initiate()
 {
+    //Lock because we don't want the active component counter go back to 0 while we are initiating 
+    QMutexLocker locker(&mutex);
     QList<FBPComponent*> components = componentMap.values();
     foreach(FBPComponent* component, components)
     {
         if(component->isSelfStarting())
-        {            
-            component->activate();
+        {                        
+            component->activate();            
         }
     }
 }
 
 void FBPNetwork::componentActivated(FBPComponent* component)
 {
+    //Don't lock here because we don't want the active component counter go back to 0 while we are initiating  
+    
     activeComponentCounter->increase();
 }
 
 void FBPNetwork::componentFinished(FBPComponent* component)
 {
+    QMutexLocker locker(&mutex);
+    
     bool empty = activeComponentCounter->decrease();
     if(empty)
     {
-        QMutexLocker locker(&mutex);
         monitor.wakeAll();
     }
 }
