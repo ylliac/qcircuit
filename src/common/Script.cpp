@@ -26,6 +26,12 @@ Script::Script()
     addInputPort("SCRIPT");
 
     //TODO ACY Gérer des ports d'entrée et sortie variable
+    //TODO ACY Peut être que le contenu du script ne doit pas être chargé à partir du port input script mais plutot 
+    //à partir de la déclaration du composant. 
+    //Exemple : 
+    //  - Script (script:"val packet = ...")
+    //  - Script (script:script.js)
+    //  - Script (script:script.lua)
     addInputPort("IN");
     addOutputPort("OUT");
 }
