@@ -62,6 +62,8 @@ Par ex : BlockProvider (interface)
 - Utiliser les librairies Rx* : https://github.com/Reactive-Extensions/RxCpp
 https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
 
+- Utiliser le moteur de script Lua : http://www.nongnu.org/libqtlua/
+
 
 //////// Bonne idées ////////////////////////////////////////////////////////////////////////////////////
 
