@@ -39,7 +39,7 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
     QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
     //Example : "IIP" -> TargetComponentInput TargetComponentName
-    QRegExp IIPDeclarationExp("^\\s*\"([^\\s]+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+    QRegExp IIPDeclarationExp("^\\s*\"(*+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
     QString content;
     QFile file(filePath);    
@@ -49,11 +49,9 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
         file.close();
     }
         
-    QStringList instructions = content.split(",");
+    QStringList instructions = content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     foreach(QString instruction, instructions)
-    {
-        instruction = instruction.replace("\n", " ");
-                
+    {               
         //------------------------------------------------------------------
         // CONNEXION 
         //------------------------------------------------------------------        
@@ -110,6 +108,13 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
             else{
                 std::cerr << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
             }
+        }
+        //------------------------------------------------------------------
+        // IGNORED 
+        //------------------------------------------------------------------
+        else
+        {
+            std::cerr << "WARNING - Ignored instruction: " << instruction.toStdString() << "." << std::endl;                        
         }
     }
 

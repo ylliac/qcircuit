@@ -29,21 +29,16 @@ Script::~Script()
 void Script::execute()
 {   
     //From http://www.qtcentre.org/threads/10425-QtScript-newFunction-won-t-work
-    
+        
     QScriptValue that = scriptEngine.newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects
 		| QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
     scriptEngine.globalObject().setProperty("self",that);
-//    QScriptValue val = scriptEngine.evaluate("component.test();");
-//    std::cout << val.toNumber() << std::endl;
-    QScriptValue val = scriptEngine.evaluate("self.receiveValue();");
-    std::cout << val.toString().toStdString() << std::endl;
+    scriptEngine.evaluate("function receive(str){return self.receiveValue(str);};");
+    scriptEngine.evaluate("function send(str, val){return self.sendValue(str, val);};");
     
-    
-//    QScriptValue receiveFunction = scriptEngine.newFunction(scriptReceive);
-//    scriptEngine.globalObject().setProperty("receive", receiveFunction);
-//    
-//    QScriptValue sendFunction = scriptEngine.newFunction(scriptSend);
-//    scriptEngine.globalObject().setProperty("send", sendFunction);
+    //TODO ACY SUPPR
+//    QScriptValue val = scriptEngine.evaluate("receive('SCRIPT');");
+//    std::cout << "VAL = " << val.toVariant().toString().toStdString() << std::endl;
     
     //------------------------------------------------------------------
     // READ SCRIPT FILE 
@@ -60,17 +55,9 @@ void Script::execute()
     scriptEngine.evaluate(scriptPacket.toString());
 }
 
-//TODO ACY SUPPR
-int Script::test()
+QVariant Script::receiveValue(QString name)
 {
-    return 12;
-}
-
-//QVariant Script::receiveValue(QString name)
-QVariant Script::receiveValue()
-{
-//    return receive(name);
-    return receive("SCRIPT");
+    return receive(name);
 }
     
 void Script::sendValue(QString name, QVariant value)

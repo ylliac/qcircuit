@@ -21,9 +21,7 @@ public:
     Q_INVOKABLE Script();
     virtual ~Script();
     
-    Q_INVOKABLE int test();
-//    Q_INVOKABLE QVariant receiveValue(QString name);
-    Q_INVOKABLE QVariant receiveValue();
+    Q_INVOKABLE QVariant receiveValue(QString name);
     Q_INVOKABLE void sendValue(QString name, QVariant value);
     
 protected:

@@ -1,6 +1,6 @@
-Source (Timer),
-Send (UDPEmitter),
-Receive (UDPReceiver),
-Display (Console),
-Source TIME -> IN Send,
+Source (Timer)
+Send (UDPEmitter)
+Receive (UDPReceiver)
+Display (Console)
+Source TIME -> IN Send
 Receive OUT -> MESSAGE Display

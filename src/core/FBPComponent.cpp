@@ -142,6 +142,7 @@ QVariant FBPComponent::receive(QString name)
 {
     QVariant outData;
     getInputPort(name)->receive(outData);
+    return outData;
 }
 
 bool FBPComponent::receive(QString name, QVariant& outData)
