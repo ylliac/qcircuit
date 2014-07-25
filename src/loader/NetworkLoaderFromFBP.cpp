@@ -36,10 +36,10 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
     QRegExp componentDeclarationExp("^\\s*([^\\s]+)\\s*\\(\\s*([^\\s]+)\\s*\\)\\s*$");
 
     //Example : SourceComponentName SourceComponentOutput -> TargetComponentInput TargetComponentName
-    QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+    QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");               
 
     //Example : "IIP" -> TargetComponentInput TargetComponentName
-    QRegExp IIPDeclarationExp("^\\s*\"(*+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+    QRegExp IIPDeclarationExp("^\\s*\"(.+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
     QString content;
     QFile file(filePath);    
@@ -73,7 +73,7 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
         //------------------------------------------------------------------
         // IIP
         //------------------------------------------------------------------        
-        if (IIPDeclarationExp.exactMatch(instruction))
+        else if (IIPDeclarationExp.exactMatch(instruction))
         {
             QString iipContent = IIPDeclarationExp.cap(1);
             QString targetComponentInput = IIPDeclarationExp.cap(2);
@@ -114,7 +114,7 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
         //------------------------------------------------------------------
         else
         {
-            std::cerr << "WARNING - Ignored instruction: " << instruction.toStdString() << "." << std::endl;                        
+            std::cerr << "WARNING - Ignored instruction: [" << instruction.toStdString() << "]." << std::endl;                        
         }
     }
 

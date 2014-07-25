@@ -35,10 +35,12 @@ void ParseLine::execute()
     //------------------------------------------------------------------
     // READ THE LINE
     //------------------------------------------------------------------
-    QString inLine = receive("LINE").toString();
-    QString outKey = receive("KEY").toString();
+    QVariant inLine;
+    receive("LINE", inLine);
+    QVariant outKey;
+    receive("KEY", outKey);
         
-    QStringList splittedLine = inLine.split("=");
+    QStringList splittedLine = inLine.toString().split("=");
 
     //------------------------------------------------------------------
     // SEND THE KEY AND THE VALUE 

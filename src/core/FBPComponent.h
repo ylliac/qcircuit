@@ -52,7 +52,6 @@ public:
 protected:
     virtual void execute()=0;    
     
-    QVariant receive(QString name);
     bool receive(QString name, QVariant& outData);
     int received(QString name);
     void send(QString name, QVariant value);

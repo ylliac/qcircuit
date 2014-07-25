@@ -68,10 +68,12 @@ void ImportDiagram::execute(QString inputFileName, QString, QString, QString, QS
     //Example : SourceBlockName SourceBlockOutput -> TargetBlockInput TargetBlockName
     QRegExp arrowDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
 
-    QStringList instructions = content.split(",");
+    QStringList instructions = content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
 
     foreach(QString instruction, instructions)
     {
+        //TODO ACY Gérer les IIP
+        
         //Import block
         if (blockDeclarationExp.exactMatch(instruction))
         {

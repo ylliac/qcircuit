@@ -15,9 +15,17 @@ Script::Script()
 {
     setObjectName(metaObject()->className());
 
+    //From http://www.qtcentre.org/threads/10425-QtScript-newFunction-won-t-work
+        
+    QScriptValue that = scriptEngine.newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects
+		| QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+    scriptEngine.globalObject().setProperty("self",that);
+    scriptEngine.evaluate("function receive(str){return self.receiveValue(str);};");
+    scriptEngine.evaluate("function send(str, val){return self.sendValue(str, val);};");
 
     addInputPort("SCRIPT");
 
+    //TODO ACY Gérer des ports d'entrée et sortie variable
     addInputPort("IN");
     addOutputPort("OUT");
 }
@@ -27,27 +35,12 @@ Script::~Script()
 }
 
 void Script::execute()
-{   
-    //From http://www.qtcentre.org/threads/10425-QtScript-newFunction-won-t-work
-        
-    QScriptValue that = scriptEngine.newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects
-		| QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
-    scriptEngine.globalObject().setProperty("self",that);
-    scriptEngine.evaluate("function receive(str){return self.receiveValue(str);};");
-    scriptEngine.evaluate("function send(str, val){return self.sendValue(str, val);};");
-    
-    //TODO ACY SUPPR
-//    QScriptValue val = scriptEngine.evaluate("receive('SCRIPT');");
-//    std::cout << "VAL = " << val.toVariant().toString().toStdString() << std::endl;
-    
+{           
     //------------------------------------------------------------------
     // READ SCRIPT FILE 
     //------------------------------------------------------------------
     QVariant scriptPacket;
     receive("SCRIPT", scriptPacket);
-    
-    //TODO ACY TEST    
-    std::cout << scriptPacket.toString().toStdString() << std::endl;
     
     //------------------------------------------------------------------
     // EXECUTE THE SCRIPT 
@@ -56,11 +49,13 @@ void Script::execute()
 }
 
 QVariant Script::receiveValue(QString name)
-{
-    return receive(name);
+{    
+    QVariant result;
+    receive(name, result);
+    return result;
 }
     
 void Script::sendValue(QString name, QVariant value)
-{
-    sendValue(name, value);
+{    
+    send(name, value);
 }

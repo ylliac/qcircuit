@@ -33,10 +33,11 @@ AppendToTextEdit::~AppendToTextEdit()
 
 void AppendToTextEdit::execute()
 {
-    QString inData = receive("IN").toString();
-    m_TextEdit->addItem(inData);    
+    QVariant inData;
+    receive("IN", inData);
+    m_TextEdit->addItem(inData.toString());    
         
     //TODO ACY TEST LOG
-    std::cout << "AppendToTextEdit just dispayed the data: " << inData.toStdString() << std::endl;    
+    std::cout << "AppendToTextEdit just dispayed the data: " << inData.toString().toStdString() << std::endl;    
 }
 

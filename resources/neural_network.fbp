@@ -8,6 +8,6 @@ Script (Script)
 Source TIME -> IN In2
 In1 OUT -> IN Out
 In2 OUT -> IN Out
-"var packet = receive('IN'); send('OUT', packet);" -> SCRIPT Script
+"var packet = receive('IN'); while(packet){ send('OUT', packet); packet = receive('IN');}" -> SCRIPT Script
 Out OUT -> IN Script
 Script OUT -> MESSAGE Console

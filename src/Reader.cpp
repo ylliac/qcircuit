@@ -31,8 +31,9 @@ void Reader::execute()
     //------------------------------------------------------------------
     // READ 
     //------------------------------------------------------------------    
-    int inValue = receive("IN").toInt();
+    QVariant inValue;
+    receive("IN", inValue);
     
     //TODO ACY TEST LOG
-    std::cout << "Reader just read the number: " << inValue << std::endl;        
+    std::cout << "Reader just read the number: " << inValue.toInt() << std::endl;        
 }
