@@ -1,0 +1,31 @@
+Qt.include("rx.all.js")
+
+function init() {
+	addInputPort('IN');
+	addOutputPort('OUT');
+};
+
+function execute() {
+	
+	echo('Test RxJs');
+	
+	var array = [1,2,3];
+	var source = Rx.Observable.fromArray(array);
+	var subscription = source.subscribe(
+    function (x) {
+        echo('Next: ' + x);
+    },
+    function (err) {
+        echo('Error: ' + err);   
+    },
+    function () {
+        echo('Completed');   
+    });
+
+
+	var packet = receive('IN');
+	while(packet){
+		send('OUT', packet);
+		packet = receive('IN');
+	}
+};

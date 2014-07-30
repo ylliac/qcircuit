@@ -104,7 +104,13 @@ FBPOutputPort* FBPComponent::getOutputPort(QString name)
 void FBPComponent::activate()
 {        
     if (state == NOT_STARTED)
-    {
+    {   
+        state = ACTIVATED;
+        foreach(FBPComponentListener* listener, listeners)
+        {
+            listener->componentActivated(this);
+        }
+        
         future = QtConcurrent::run(this, &FBPComponent::execute0);
     }
 }
@@ -113,12 +119,8 @@ void FBPComponent::execute0()
 {
     //TODO ACY 
 //    std::cout << "START: " << objectName().toStdString() << std::endl;
-    
-    state = ACTIVATED;
-    foreach(FBPComponentListener* listener, listeners)
-    {
-        listener->componentActivated(this);
-    }
+        
+    Q_ASSERT(state == ACTIVATED);
     
     execute();
     

@@ -7,8 +7,9 @@
 
 #include "NetworkLoaderFromFBP.h"
 
-#include "../core/FBPComponent.h"
-#include "../core/FBPNetwork.h"
+#include "core/FBPComponent.h"
+#include "core/FBPNetwork.h"
+#include "common/Script.h"
 #include "descriptor/ComponentClassDescriptor.h"
 #include "descriptor/ComponentClassRepository.h"
 
@@ -18,6 +19,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 #include <QtCore/QStringList>
 
 NetworkLoaderFromFBP::NetworkLoaderFromFBP()
@@ -28,7 +30,7 @@ NetworkLoaderFromFBP::~NetworkLoaderFromFBP()
 {
 }
 
-FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassRepository* repository) const
+FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString networkFilePath, ComponentClassRepository* repository) const
 {
     FBPNetwork* result = new FBPNetwork();
 
@@ -39,14 +41,17 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
     QRegExp relationDeclarationExp("^\\s*([^\\s]+)\\s+([^\\s]+)\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");               
 
     //Example : "IIP" -> TargetComponentInput TargetComponentName
-    QRegExp IIPDeclarationExp("^\\s*\"(.+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+    QRegExp iipDeclarationExp("^\\s*\"(.+)\"\\s*-+>\\s*([^\\s]+)\\s*([^\\s]+)\\s*$");
+    
+    //Example : script:file.script
+    QRegExp scriptExp("^\\s*script:\\s*(.+)\\s*$");
 
     QString content;
-    QFile file(filePath);    
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
+    QFile networkFile(networkFilePath);    
+    if (networkFile.open(QIODevice::ReadOnly)) {
+        QTextStream in(&networkFile);
         content = in.readAll();
-        file.close();
+        networkFile.close();
     }
         
     QStringList instructions = content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
@@ -73,11 +78,11 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
         //------------------------------------------------------------------
         // IIP
         //------------------------------------------------------------------        
-        else if (IIPDeclarationExp.exactMatch(instruction))
+        else if (iipDeclarationExp.exactMatch(instruction))
         {
-            QString iipContent = IIPDeclarationExp.cap(1);
-            QString targetComponentInput = IIPDeclarationExp.cap(2);
-            QString targetComponentName = IIPDeclarationExp.cap(3);
+            QString iipContent = iipDeclarationExp.cap(1);
+            QString targetComponentInput = iipDeclarationExp.cap(2);
+            QString targetComponentName = iipDeclarationExp.cap(3);
 
             QVariant iip = QVariant::fromValue(iipContent);
                         
@@ -96,17 +101,52 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString filePath, ComponentClassR
             QString componentName = componentDeclarationExp.cap(1);
             QString componentClass = componentDeclarationExp.cap(2);
 
-            const ComponentClassDescriptor* descriptor = repository->findComponentClass(componentClass);
-            if(descriptor != NULL)
+            //Special case for scripts
+            if(scriptExp.exactMatch(componentClass))
             {
-                FBPComponent* newComponent = descriptor->newComponent();
-                if(newComponent != NULL)
+                QString scriptFilePath = scriptExp.cap(1);
+                if(!QFileInfo(scriptFilePath).exists())
                 {
-                    result->addComponent(newComponent, componentName);
+                    scriptFilePath = QFileInfo(networkFilePath).absoluteDir().filePath(scriptFilePath);
+                }
+                QFile scriptFile(scriptFilePath);
+                
+                if(scriptFile.exists())
+                {
+                    QString script;
+                    if (scriptFile.open(QIODevice::ReadOnly)) {
+                        QTextStream in(&scriptFile);
+                        script = in.readAll();
+                        networkFile.close();
+                    }
+                    
+                    FBPComponent* newComponent = new Script(script);
+                    if(newComponent != NULL)
+                    {
+                        result->addComponent(newComponent, componentName);
+                        newComponent->setObjectName(QString("%1 (%2)").arg(componentName).arg(componentClass));
+                    }
+                }
+                else
+                {
+                    std::cerr << "ERROR - Script file not found: " << QFileInfo(scriptFile).absoluteFilePath().toStdString() << std::endl;                        
                 }
             }
-            else{
-                std::cerr << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
+            else
+            {
+                const ComponentClassDescriptor* descriptor = repository->findComponentClass(componentClass);
+                if(descriptor != NULL)
+                {
+                    FBPComponent* newComponent = descriptor->newComponent();
+                    if(newComponent != NULL)
+                    {
+                        result->addComponent(newComponent, componentName);
+                        newComponent->setObjectName(QString("%1 (%2)").arg(componentName).arg(componentClass));
+                    }
+                }
+                else{
+                    std::cerr << "ERROR - Component class not found: " << componentClass.toStdString() << std::endl;                        
+                }
             }
         }
         //------------------------------------------------------------------

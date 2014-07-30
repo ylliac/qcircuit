@@ -1,0 +1,12 @@
+
+function init() {
+	addInputPort('IN');
+};
+
+function execute() {
+	var packet = receive('IN');
+	while(packet){
+		send('OUT', packet);
+		packet = receive('IN');
+	}
+};

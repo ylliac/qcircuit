@@ -1,0 +1,27 @@
+
+function init() {
+	addInputPort('IN1');
+	addInputPort('W1');
+	addInputPort('IN2');
+	addInputPort('W2');
+	
+	addOutputPort('OUT');
+};
+
+function execute() {
+	
+	var w1 = receive('W1');
+	var w1 = receive('W2');
+	
+	var packet1 = receive('IN1');
+	while(packet1){
+	
+		var packet2 = receive('IN2');
+		if(packet2){
+			var result = w1 * packet1 + w2 * packet2;
+			send('OUT', result);
+		}		
+		
+		packet1 = receive('IN1');
+	}
+};

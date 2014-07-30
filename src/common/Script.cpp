@@ -11,7 +11,7 @@
 #include <iostream>
 #include <QtCore/QVariant>
 
-Script::Script()
+Script::Script(QString script)
 {
     setObjectName(metaObject()->className());
 
@@ -20,20 +20,35 @@ Script::Script()
     QScriptValue that = scriptEngine.newQObject(this, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects
 		| QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
     scriptEngine.globalObject().setProperty("self",that);
-    scriptEngine.evaluate("function receive(str){return self.receiveValue(str);};");
-    scriptEngine.evaluate("function send(str, val){return self.sendValue(str, val);};");
-
-    addInputPort("SCRIPT");
-
-    //TODO ACY Gérer des ports d'entrée et sortie variable
-    //TODO ACY Peut être que le contenu du script ne doit pas être chargé à partir du port input script mais plutot 
-    //à partir de la déclaration du composant. 
-    //Exemple : 
-    //  - Script (script:"val packet = ...")
-    //  - Script (script:script.js)
-    //  - Script (script:script.lua)
-    addInputPort("IN");
-    addOutputPort("OUT");
+    scriptEngine.evaluate("function echo(str){self.scriptEcho(str);};");
+    scriptEngine.evaluate("function addInputPort(str){self.scriptAddInputPort(str);};");
+    scriptEngine.evaluate("function addOutputPort(str){self.scriptAddOutputPort(str);};");
+    scriptEngine.evaluate("function setSelfStarting(str){self.scriptSetSelfStarting(str);};");
+    scriptEngine.evaluate("function receive(str){return self.scriptReceive(str);};");
+    scriptEngine.evaluate("function send(str, val){self.scriptSend(str, val);};");
+    
+    //------------------------------------------------------------------
+    // EVALUATE THE SCRIPT 
+    //------------------------------------------------------------------
+    QScriptSyntaxCheckResult check = scriptEngine.checkSyntax(script);
+    if(check.state() != QScriptSyntaxCheckResult::Valid)
+    {
+        std::cerr << QString("Error in script line %1, column %2: %3")
+                .arg(check.errorLineNumber())
+                .arg(check.errorColumnNumber())
+                .arg(check.errorMessage())
+                .toStdString() << std::endl;
+    }
+    else if(!scriptEngine.canEvaluate(script))
+    {
+        std::cerr << QString("Can't evaluate script: unknown error.")
+                .toStdString() << std::endl;
+    }
+    else
+    {        
+        scriptEngine.evaluate(script);
+        scriptEngine.evaluate("init()");
+    }
 }
 
 Script::~Script()
@@ -43,25 +58,39 @@ Script::~Script()
 void Script::execute()
 {           
     //------------------------------------------------------------------
-    // READ SCRIPT FILE 
-    //------------------------------------------------------------------
-    QVariant scriptPacket;
-    receive("SCRIPT", scriptPacket);
-    
-    //------------------------------------------------------------------
     // EXECUTE THE SCRIPT 
     //------------------------------------------------------------------
-    scriptEngine.evaluate(scriptPacket.toString());
+    scriptEngine.evaluate("execute();");
 }
 
-QVariant Script::receiveValue(QString name)
+QVariant Script::scriptReceive(QString name)
 {    
     QVariant result;
     receive(name, result);
     return result;
 }
     
-void Script::sendValue(QString name, QVariant value)
+void Script::scriptSend(QString name, QVariant value)
 {    
     send(name, value);
+}
+    
+void Script::scriptAddInputPort(QString name)
+{    
+    addInputPort(name);
+}
+    
+void Script::scriptAddOutputPort(QString name)
+{    
+    addOutputPort(name);
+}
+    
+void Script::scriptSetSelfStarting(bool value)
+{
+    setSelfStarting(value);
+}
+
+void Script::scriptEcho(QString message)
+{
+    std::cout << message.toStdString() << std::endl;
 }

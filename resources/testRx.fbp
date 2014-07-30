@@ -1,0 +1,12 @@
+Source (Timer)
+In1 (Value)
+In2 (Value)
+Out (Value)
+Console (Console)
+Script (script:testRx.script)
+"TEST" -> IN In1
+Source TIME -> IN In2
+In1 OUT -> IN Out
+In2 OUT -> IN Out
+Out OUT -> IN Script
+Script OUT -> MESSAGE Console

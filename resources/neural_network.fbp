@@ -1,13 +1,11 @@
-Source (Timer)
-In1 (Value)
-In2 (Value)
-Out (Value)
+In1 (script:neuron1input.script)
+In2 (script:neuron1input.script)
+Out (script:neuron2inputs.script)
 Console (Console)
-Script (Script)
-"TEST" -> IN In1
-Source TIME -> IN In2
-In1 OUT -> IN Out
-In2 OUT -> IN Out
-"var packet = receive('IN'); while(packet){ send('OUT', packet); packet = receive('IN');}" -> SCRIPT Script
-Out OUT -> IN Script
-Script OUT -> MESSAGE Console
+"1" -> IN In1
+"0" -> IN In2
+"0.5" -> W1 Out
+"0.5" -> W2 Out
+In1 OUT -> IN1 Out
+In2 OUT -> IN2 Out
+Out OUT -> MESSAGE Console

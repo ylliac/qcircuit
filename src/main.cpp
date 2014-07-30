@@ -1,4 +1,5 @@
 
+#include <QtCore/QThreadPool>
 #include <QtGui/QApplication>
 
 #include "demo/MainWindow.h"
@@ -6,6 +7,8 @@
 
 int main(int argc, char *argv[])
 {
+    QThreadPool::globalInstance()->setMaxThreadCount(10);
+    
     QApplication app(argc, argv);
     
     MainWindow mainWindow;

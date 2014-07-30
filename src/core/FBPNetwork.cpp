@@ -18,6 +18,8 @@
 FBPNetwork::FBPNetwork(QObject* parent)
 : FBPComponent(parent), isDefined(false)
 {
+    setObjectName(metaObject()->className());
+
     activeComponentCounter = new Counter(this);
 }
 

@@ -18,11 +18,15 @@ class Script : public FBPComponent {
     Q_OBJECT
     
 public:
-    Q_INVOKABLE Script();
+    Q_INVOKABLE Script(QString script);
     virtual ~Script();
     
-    Q_INVOKABLE QVariant receiveValue(QString name);
-    Q_INVOKABLE void sendValue(QString name, QVariant value);
+    Q_INVOKABLE QVariant scriptReceive(QString name);
+    Q_INVOKABLE void scriptSend(QString name, QVariant value);
+    Q_INVOKABLE void scriptAddInputPort(QString name);
+    Q_INVOKABLE void scriptAddOutputPort(QString name);
+    Q_INVOKABLE void scriptSetSelfStarting(bool value);
+    Q_INVOKABLE void scriptEcho(QString message);
     
 protected:
     virtual void execute();
