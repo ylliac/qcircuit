@@ -1,6 +1,8 @@
 
 function init() {
 	addInputPort('IN');
+	
+	addOutputPort('OUT');
 };
 
 function execute() {

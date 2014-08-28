@@ -2,10 +2,10 @@ In1 (script:neuron1input.script)
 In2 (script:neuron1input.script)
 Out (script:neuron2inputs.script)
 Console (Console)
-"1" -> IN In1
-"0" -> IN In2
-"0.5" -> W1 Out
-"0.5" -> W2 Out
+"0" -> IN In1
+"1" -> IN In2
+"0.35" -> W1 Out
+"0.81" -> W2 Out
 In1 OUT -> IN1 Out
 In2 OUT -> IN2 Out
 Out OUT -> MESSAGE Console
