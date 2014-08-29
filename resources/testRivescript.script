@@ -1,0 +1,51 @@
+Qt.include("rivescript.js")
+//TODO L'include ne fonctionne pas on dirait
+
+function init() {
+	addInputPort('IN');
+	addOutputPort('OUT');
+};
+
+function execute() {
+	
+	echo('Test Rivescript');
+	
+	var bot = new RiveScript();
+	
+	echo('1');
+	
+	// Load an individual file.
+	bot.loadFile("V:/projets/QCircuit/source/resources/testRivescript.rive", loading_done, loading_error);
+	
+	echo('2');
+	
+	// Now the replies must be sorted!
+    bot.sortReplies();
+	
+	echo('3');
+	
+	var packet = receive('IN');
+	while(packet){
+	
+		echo('Received:' + packet);
+	
+		var reply = bot.reply("local-user", packet);
+		echo("The bot says: " + reply);
+	
+		send('OUT', reply);
+		packet = receive('IN');
+	}
+};
+
+// All file loading operations are asynchronous, so you need handlers
+// to catch when they've finished. If you use loadDirectory (or loadFile
+// with multiple file names), the success function is called only when ALL
+// the files have finished loading.
+function loading_done (batch_num) {
+    echo("Batch #" + batch_num + " has finished loading!");
+}
+
+// It's good to catch errors too!
+function loading_error (batch_num, error) {
+    echo("Error when loading files: " + error);
+}

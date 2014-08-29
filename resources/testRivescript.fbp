@@ -1,0 +1,5 @@
+Console (Console)
+Bot (script:testRivescript.script)
+"TEST" -> IN Bot
+Bot OUT -> MESSAGE Console
+Bot ERROR -> MESSAGE Console

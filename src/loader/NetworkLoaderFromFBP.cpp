@@ -53,6 +53,10 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString networkFilePath, Componen
         content = in.readAll();
         networkFile.close();
     }
+    else
+    {
+        std::cerr << "ERROR - Network file not found: " << QFileInfo(networkFilePath).absoluteFilePath().toStdString() << std::endl;                        
+    }
         
     QStringList instructions = content.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     foreach(QString instruction, instructions)
@@ -117,7 +121,7 @@ FBPNetwork* NetworkLoaderFromFBP::loadFromFile(QString networkFilePath, Componen
                     if (scriptFile.open(QIODevice::ReadOnly)) {
                         QTextStream in(&scriptFile);
                         script = in.readAll();
-                        networkFile.close();
+                        scriptFile.close();
                     }
                     
                     FBPComponent* newComponent = new Script(script);

@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void scriptAddOutputPort(QString name);
     Q_INVOKABLE void scriptSetSelfStarting(bool value);
     Q_INVOKABLE void scriptEcho(QString message);
+    Q_INVOKABLE QVariant scriptReadFile(QString filePath);
     
 protected:
     virtual void execute();

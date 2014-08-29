@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags windowFlag)
     NetworkLoaderFromFBP loader;
 //    m_Network = loader.loadFromFile("../source/resources/demo.fbp", &repository);
     m_Network = loader.loadFromFile("../source/resources/neural_network.fbp", &repository);
+//    m_Network = loader.loadFromFile("../source/resources/testRivescript.fbp", &repository);
     m_Network->setParent(this);
 
     connect(ui->buttonTrigger, SIGNAL(clicked()), this, SLOT(launchNetwork()));
